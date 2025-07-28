@@ -48,9 +48,13 @@ export const useProductModal = () => {
   } = useProductSupplier()
 
   const {
-    recordsData: templatesData,
-    isLoading: loadingTemplates,
-    fetchTemplates,
+    templatesData,
+    loadingTemplates,
+    templateSearch,
+    setTemplateSearch,
+    templateOpen,
+    setTemplateOpen,
+    loadMoreTemplates,
   } = useProductTemplate()
 
   const {
@@ -75,9 +79,6 @@ export const useProductModal = () => {
     fetchSuppliers({ search: debouncedSupplierSearch, page: 1, limit: 10 })
   }, [debouncedSupplierSearch, fetchSuppliers])
 
-  useEffect(() => {
-    fetchTemplates({ search: debouncedTemplateSearch, page: 1, limit: 10 })
-  }, [debouncedTemplateSearch, fetchTemplates])
 
   const loadMoreCategories = () => {
     if (categoriesData?.data?.hasNextPage) {
@@ -100,12 +101,6 @@ export const useProductModal = () => {
     }
   }
 
-  const loadMoreTemplates = () => {
-    if (templatesData?.data?.hasNextPage) {
-      fetchTemplates({ page: templatePage + 1, search: debouncedTemplateSearch })
-      setTemplatePage(prev => prev + 1)
-    }
-  }
 
   return {
     categoriesData,
