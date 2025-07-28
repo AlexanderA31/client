@@ -11,12 +11,12 @@ export const useProductTemplate = () => {
     buildQuery,
   } = useGenericApi<I_TemplateResponse, I_Template>(TEMPLATE_ENDPOINTS_CONFIG)
 
-  const { data: templatesData, refetch } = buildQuery({ limit: 100 })
+  const { data: templatesData, refetch: fetchTemplates } = buildQuery({ limit: 100 })
 
   return {
     recordsData: templatesData?.data.items,
     isLoading,
     isError,
-    fetchTemplates: refetch,
+    fetchTemplates,
   }
 }
