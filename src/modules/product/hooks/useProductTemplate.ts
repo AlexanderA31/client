@@ -17,6 +17,10 @@ export const useProductTemplate = () => {
   });
 
   useEffect(() => {
+    setTemplatesData([]);
+  }, [templateSearch]);
+
+  useEffect(() => {
     if (templates?.data.items) {
       const newTemplates = templates.data.items.filter(
         (template) => !templatesData.some((existing) => existing.id === template.id)
