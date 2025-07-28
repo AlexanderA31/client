@@ -22,6 +22,15 @@ export const useProductModal = () => {
   const debouncedCategorySearch = useDebounce(categorySearch, 500)
   const debouncedBrandSearch = useDebounce(brandSearch, 500)
   const debouncedSupplierSearch = useDebounce(supplierSearch, 500)
+  const {
+    templatesData,
+    loadingTemplates,
+    templateSearch,
+    setTemplateSearch,
+    templateOpen,
+    setTemplateOpen,
+    loadMoreTemplates,
+  } = useProductTemplate()
   const debouncedTemplateSearch = useDebounce(templateSearch, 500)
 
   const [categoryOpen, setCategoryOpen] = useState(false)
