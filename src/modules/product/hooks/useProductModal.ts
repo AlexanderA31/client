@@ -122,7 +122,7 @@ export const useProductModal = () => {
     brandOpen,
     setBrandOpen,
     loadMoreBrands,
-    suppliersData,
+    suppliersData: suppliersData?.data?.items,
     loadingSuppliers,
     supplierSearch,
     setSupplierSearch,
