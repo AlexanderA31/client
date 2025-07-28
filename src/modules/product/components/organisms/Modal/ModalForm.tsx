@@ -257,6 +257,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                     { value: 'out_of_stock', label: 'Agotado' },
                   ]}
                   required
+                  value={watch('status')}
                   onChange={(value) => {
                     setValue('status', value, { shouldDirty: true })
                   }}
