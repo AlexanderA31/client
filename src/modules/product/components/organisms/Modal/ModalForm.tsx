@@ -9,12 +9,15 @@ import { I_Product } from '@/modules/product/types/product'
 import { ActionButton } from '@/components/layout/atoms/ActionButton'
 import { UniversalFormField } from '@/components/layout/atoms/FormFieldZod'
 import { FormFooter } from '@/modules/product/components/organisms/Modal/FormFooter'
-import { useProductForm } from '@/modules/product/hooks/useProductForm'
+import { useProductModal } from '@/modules/product/hooks/useProductModal'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet'
 import { SelectFieldZod } from '@/components/layout/atoms/SelectFieldZod'
 import { TextareaFieldZod } from '@/components/layout/atoms/TextareaFieldZod'
 import { FileUpload } from '@/components/layout/atoms/FileUpload'
+import { CategorySelector } from './CategorySelector'
+import { BrandSelector } from './BrandSelector'
+import { SupplierSelector } from './SupplierSelector'
 
 const productSchema = z.object({
   name: z.string().nonempty('El nombre es requerido'),
@@ -45,7 +48,29 @@ interface Props {
 }
 
 export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Props) {
-  const { categoryOptions, brandOptions, supplierOptions } = useProductForm()
+  const {
+    categoriesData,
+    loadingCategories,
+    categorySearch,
+    setCategorySearch,
+    categoryOpen,
+    setCategoryOpen,
+    loadMoreCategories,
+    brandsData,
+    loadingBrands,
+    brandSearch,
+    setBrandSearch,
+    brandOpen,
+    setBrandOpen,
+    loadMoreBrands,
+    suppliersData,
+    loadingSuppliers,
+    supplierSearch,
+    setSupplierSearch,
+    supplierOpen,
+    setSupplierOpen,
+    loadMoreSuppliers,
+  } = useProductModal()
   const methods = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
     mode: 'onChange',
@@ -163,9 +188,39 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   ]}
                   required
                 />
-                <SelectFieldZod control={control} name='categoryId' label='Categoría' options={categoryOptions || []} placeholder='Seleccionar categoría' />
-                <SelectFieldZod control={control} name='brandId' label='Marca' options={brandOptions || []} placeholder='Seleccionar marca' />
-                <SelectFieldZod control={control} name='supplierId' label='Proveedor' options={supplierOptions || []} placeholder='Seleccionar proveedor' />
+                <CategorySelector
+                  control={control}
+                  setValue={methods.setValue}
+                  categories={categoriesData}
+                  loadingCategories={loadingCategories}
+                  categorySearch={categorySearch}
+                  setCategorySearch={setCategorySearch}
+                  categoryOpen={categoryOpen}
+                  setCategoryOpen={setCategoryOpen}
+                  loadMoreCategories={loadMoreCategories}
+                />
+                <BrandSelector
+                  control={control}
+                  setValue={methods.setValue}
+                  brands={brandsData}
+                  loadingBrands={loadingBrands}
+                  brandSearch={brandSearch}
+                  setBrandSearch={setBrandSearch}
+                  brandOpen={brandOpen}
+                  setBrandOpen={setBrandOpen}
+                  loadMoreBrands={loadMoreBrands}
+                />
+                <SupplierSelector
+                  control={control}
+                  setValue={methods.setValue}
+                  suppliers={suppliersData}
+                  loadingSuppliers={loadingSuppliers}
+                  supplierSearch={supplierSearch}
+                  setSupplierSearch={setSupplierSearch}
+                  supplierOpen={supplierOpen}
+                  setSupplierOpen={setSupplierOpen}
+                  loadMoreSuppliers={loadMoreSuppliers}
+                />
                 <FileUpload
                   label='Foto del producto'
                   onFileSelect={(file) => console.log(file)}
