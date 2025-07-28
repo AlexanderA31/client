@@ -17,6 +17,7 @@ import { TextareaFieldZod } from '@/components/layout/atoms/TextareaFieldZod'
 import { CategorySelector } from './CategorySelector'
 import { BrandSelector } from './BrandSelector'
 import { SupplierSelector } from './SupplierSelector'
+import { TemplateSelector } from './TemplateSelector'
 import { FileUploadSection } from './FileUpload'
 
 const productSchema = z.object({
@@ -73,6 +74,13 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
     supplierOpen,
     setSupplierOpen,
     loadMoreSuppliers,
+    templatesData,
+    loadingTemplates,
+    templateSearch,
+    setTemplateSearch,
+    templateOpen,
+    setTemplateOpen,
+    loadMoreTemplates,
     fileInputRef,
     previewImage,
     isUploading,
@@ -118,6 +126,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
           categoryId: currentRecord.category?.id || '',
           brandId: currentRecord.brand?.id || '',
           supplierId: currentRecord.suppplier?.id || '',
+          templateId: currentRecord.template?.id || '',
           photo: currentRecord.photo?.id || '',
           removePhoto: false,
         });
@@ -139,6 +148,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
           categoryId: '',
           brandId: '',
           supplierId: '',
+          templateId: '',
           photo: '',
           removePhoto: false,
         });
@@ -278,6 +288,17 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   supplierOpen={supplierOpen}
                   setSupplierOpen={setSupplierOpen}
                   loadMoreSuppliers={loadMoreSuppliers}
+                />
+                <TemplateSelector
+                  control={control}
+                  setValue={methods.setValue}
+                  templates={templatesData}
+                  loadingTemplates={loadingTemplates}
+                  templateSearch={templateSearch}
+                  setTemplateSearch={setTemplateSearch}
+                  templateOpen={templateOpen}
+                  setTemplateOpen={setTemplateOpen}
+                  loadMoreTemplates={loadMoreTemplates}
                 />
                 <FileUploadSection
                   fileInputRef={fileInputRef}
