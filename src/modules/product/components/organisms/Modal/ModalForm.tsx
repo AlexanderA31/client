@@ -98,6 +98,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
       supplierId: '',
       photo: '',
       removePhoto: false,
+      templateId: '',
     },
   })
 
@@ -120,6 +121,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
           supplierId: currentRecord.suppplier?.id || '',
           photo: currentRecord.photo?.id || '',
           removePhoto: false,
+          templateId: currentRecord.template?.id || '',
         });
 
         if (currentRecord.photo) {
@@ -141,6 +143,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
           supplierId: '',
           photo: '',
           removePhoto: false,
+          templateId: '',
         });
         clearPreview()
       }
