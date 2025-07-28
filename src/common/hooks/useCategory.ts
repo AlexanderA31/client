@@ -45,15 +45,15 @@ export const useCategory = (paginationParams: UseCategoryParams = {}) => {
 
 	return {
 		// Datos del query - manteniendo los mismos nombres
-		categories: query.data,
-		loading: query.isLoading,
+		recordsData: query.data,
+		isLoading: query.isLoading,
 		error: query.error?.message,
 
 		// Funciones - manteniendo los mismos nombres
-		refetchCategories: query.refetch,
+		fetchData: query.refetch,
 
 		// Funciones CRUD - manteniendo los mismos nombres
-		createCategory: api.create,
+		createRecord: api.create,
 		updateCategory: api.update,
 		restoreCategory: api.restore,
 		softDeleteCategory: api.delete,
