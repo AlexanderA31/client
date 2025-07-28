@@ -17,10 +17,6 @@ export const useProductTemplate = () => {
   });
 
   useEffect(() => {
-    setTemplatesData([]);
-  }, [templateSearch]);
-
-  useEffect(() => {
     if (templates?.data.items) {
       const newTemplates = templates.data.items.filter(
         (template) => !templatesData.some((existing) => existing.id === template.id)
@@ -28,6 +24,11 @@ export const useProductTemplate = () => {
       setTemplatesData((prev) => [...prev, ...newTemplates]);
     }
   }, [templates]);
+
+  const fetchTemplates = ({ search, page, limit }) => {
+    setTemplateSearch(search)
+    refetchTemplates()
+  }
 
   const loadMoreTemplates = () => {
     if (
@@ -46,5 +47,6 @@ export const useProductTemplate = () => {
     templateSearch,
     setTemplateSearch,
     loadMoreTemplates,
+    fetchTemplates,
   };
 };

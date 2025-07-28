@@ -17,25 +17,17 @@ export const useProductModal = () => {
   const [categorySearch, setCategorySearch] = useState('')
   const [brandSearch, setBrandSearch] = useState('')
   const [supplierSearch, setSupplierSearch] = useState('')
-
+  const [templateSearch, setTemplateSearch] = useState('')
 
   const debouncedCategorySearch = useDebounce(categorySearch, 500)
   const debouncedBrandSearch = useDebounce(brandSearch, 500)
   const debouncedSupplierSearch = useDebounce(supplierSearch, 500)
-  const {
-    templatesData,
-    loadingTemplates,
-    templateSearch,
-    setTemplateSearch,
-    templateOpen,
-    setTemplateOpen,
-    loadMoreTemplates,
-  } = useProductTemplate()
   const debouncedTemplateSearch = useDebounce(templateSearch, 500)
 
   const [categoryOpen, setCategoryOpen] = useState(false)
   const [brandOpen, setBrandOpen] = useState(false)
   const [supplierOpen, setSupplierOpen] = useState(false)
+  const [templateOpen, setTemplateOpen] = useState(false)
 
   const {
     recordsData: categoriesData,
@@ -58,11 +50,7 @@ export const useProductModal = () => {
   const {
     templatesData,
     loadingTemplates,
-    templateSearch,
-    setTemplateSearch,
-    templateOpen,
-    setTemplateOpen,
-    loadMoreTemplates,
+    fetchTemplates,
   } = useProductTemplate()
 
   const {
@@ -88,9 +76,8 @@ export const useProductModal = () => {
   }, [debouncedSupplierSearch, fetchSuppliers])
 
   useEffect(() => {
-    loadMoreTemplates()
-  }, [debouncedTemplateSearch])
-
+    fetchTemplates({ search: debouncedTemplateSearch, page: 1, limit: 10 })
+  }, [debouncedTemplateSearch, fetchTemplates])
 
   const loadMoreCategories = () => {
     if (categoriesData?.data?.hasNextPage) {
@@ -113,6 +100,12 @@ export const useProductModal = () => {
     }
   }
 
+  const loadMoreTemplates = () => {
+    if (templatesData?.data?.hasNextPage) {
+      fetchTemplates({ page: templatePage + 1, search: debouncedTemplateSearch })
+      setTemplatePage(prev => prev + 1)
+    }
+  }
 
   return {
     categoriesData,
@@ -129,7 +122,7 @@ export const useProductModal = () => {
     brandOpen,
     setBrandOpen,
     loadMoreBrands,
-    suppliersData: suppliersData?.data?.items,
+    suppliersData,
     loadingSuppliers,
     supplierSearch,
     setSupplierSearch,
