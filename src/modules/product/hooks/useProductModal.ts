@@ -1,10 +1,10 @@
 'use client'
 
-import { useCategory } from '@/common/hooks/useCategory'
-import { useBrand } from '@/common/hooks/useBrand'
-import { useSupplier } from '@/common/hooks/useSupplier'
 import { useEffect, useState } from 'react'
 import { useDebounce } from '@/common/hooks/useDebounce'
+import { useProductCategory } from './useProductCategory'
+import { useProductBrand } from './useProductBrand'
+import { useProductSupplier } from './useProductSupplier'
 
 export const useProductModal = () => {
   const [categoryPage, setCategoryPage] = useState(1)
@@ -27,19 +27,19 @@ export const useProductModal = () => {
     recordsData: categoriesData,
     isLoading: loadingCategories,
     fetchData: fetchCategories,
-  } = useCategory()
+  } = useProductCategory()
 
   const {
     recordsData: brandsData,
     isLoading: loadingBrands,
     fetchData: fetchBrands,
-  } = useBrand()
+  } = useProductBrand()
 
   const {
     recordsData: suppliersData,
     isLoading: loadingSuppliers,
     fetchData: fetchSuppliers,
-  } = useSupplier()
+  } = useProductSupplier()
 
   useEffect(() => {
     fetchCategories({ search: debouncedCategorySearch, page: 1, limit: 10 })
