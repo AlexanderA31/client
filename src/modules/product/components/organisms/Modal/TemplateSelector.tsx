@@ -23,15 +23,17 @@ export function TemplateSelector({
   templates,
 }: Props) {
   return (
-    <SelectFieldZod
-      control={control}
-      name='templateId'
-      label='Plantilla'
-      options={templates?.map((template) => ({
-        value: template.id,
-        label: template.name,
-      }))}
-      required
-    />
+    <div>
+      <SelectFieldZod
+        control={control}
+        name='templateId'
+        label='Plantilla'
+        options={templates?.map((template) => ({
+          value: template.id,
+          label: template.name,
+        }))}
+        required
+      />
+    </div>
   )
 }
