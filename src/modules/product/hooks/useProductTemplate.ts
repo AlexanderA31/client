@@ -6,16 +6,14 @@ export const useProductTemplate = () => {
   const [templateOpen, setTemplateOpen] = useState(false);
   const [templatesData, setTemplatesData] = useState<I_Template[]>([]);
   const [templateSearch, setTemplateSearch] = useState('');
-  const { useGetTemplates } = useTemplate();
   const {
-    data: templates,
-    isLoading: loadingTemplates,
-    refetch: refetchTemplates,
-    isFetching: fetchingTemplates,
-  } = useGetTemplates({
+    template: templates,
+    loading: loadingTemplates,
+    refetchTemplate: refetchTemplates,
+  } = useTemplate({
     page: 1,
-    pageSize: 5,
-    filter: templateSearch,
+    limit: 5,
+    search: templateSearch,
   });
 
   useEffect(() => {
@@ -44,6 +42,5 @@ export const useProductTemplate = () => {
     templateSearch,
     setTemplateSearch,
     loadMoreTemplates,
-    fetchingTemplates,
   };
 };
