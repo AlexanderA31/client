@@ -23,7 +23,7 @@ export const useProductTemplate = () => {
       );
       setTemplatesData((prev) => [...prev, ...newTemplates]);
     }
-  }, [templates, templatesData]);
+  }, [templates]);
 
   const loadMoreTemplates = () => {
     if (

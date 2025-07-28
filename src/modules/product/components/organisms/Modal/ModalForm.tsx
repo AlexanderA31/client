@@ -211,17 +211,17 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
         <SheetHeader className='bg-background supports-[backdrop-filter]:bg-background/80 sticky top-0 z-10 border-b supports-[backdrop-filter]:backdrop-blur-sm'>
           <div className='flex items-center justify-between'>
             <SheetTitle>{currentRecord ? 'Editar producto' : 'Crear producto'}</SheetTitle>
-            <SheetClose>
-              <ActionButton
-                type='button'
-                variant='ghost'
-                onClick={handleClose}
-                size='icon'
-                disabled={isSubmitting}
-                icon={<Icons.x className='h-4 w-4' />}
-              />
-            </SheetClose>
           </div>
+          <SheetClose>
+            <ActionButton
+              type='button'
+              variant='ghost'
+              onClick={handleClose}
+              size='icon'
+              disabled={isSubmitting}
+              icon={<Icons.x className='h-4 w-4' />}
+            />
+          </SheetClose>
           <SheetDescription>
             {currentRecord ? 'Modifica los campos del producto existente' : 'Completa los campos para crear un nuevo producto'}
           </SheetDescription>

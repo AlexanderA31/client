@@ -77,6 +77,10 @@ export const useProductModal = () => {
     fetchSuppliers({ search: debouncedSupplierSearch, page: 1, limit: 10 })
   }, [debouncedSupplierSearch, fetchSuppliers])
 
+  useEffect(() => {
+    loadMoreTemplates()
+  }, [debouncedTemplateSearch])
+
 
   const loadMoreCategories = () => {
     if (categoriesData?.data?.hasNextPage) {
