@@ -105,12 +105,14 @@ function createStore(
 	function reducer(state: StoreState, action: StoreAction): StoreState {
 		switch (action.variant) {
 			case 'ADD_FILES': {
-				for (const file of action.files) {
-					files.set(file, {
-						file,
-						progress: 0,
-						status: 'idle',
-					})
+				if (action.files) {
+					for (const file of action.files) {
+						files.set(file, {
+							file,
+							progress: 0,
+							status: 'idle',
+						})
+					}
 				}
 
 				if (onValueChange) {
