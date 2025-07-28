@@ -36,7 +36,7 @@ const productSchema = z.object({
   categoryId: z.string().optional(),
   brandId: z.string().optional(),
   supplierId: z.string().optional(),
-  photo: z.string().optional(),
+  photo: z.any().optional(),
   removePhoto: z.boolean().optional(),
 });
 
@@ -148,7 +148,12 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
 
   const handleFormSubmit = async (data: ProductFormData) => {
     try {
-      await onSubmit(data)
+      const dataToSend = {
+        ...data,
+        photo: data.photo ? { id: data.photo } : undefined,
+        description: data.description || null,
+      };
+      await onSubmit(dataToSend)
       handleClose()
     } catch (error) {
       console.error('Error al enviar formulario:', error)
