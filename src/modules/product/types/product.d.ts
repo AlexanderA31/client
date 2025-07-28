@@ -25,21 +25,6 @@ export interface I_Product {
 	deletedAt: Date | null
 }
 
-export interface I_CreateProduct {
-	isVariant?: boolean
-	name: string
-	description?: string | null
-	status?: ProductStatus
-	photo?: object
-	price: number
-	sku?: string | null
-	barCode?: string | null
-	stock?: number
-	categoryId?: string | null
-	brandId?: string | null
-	supplierId?: string | null
-}
-
 export interface I_UpdateProduct {
 	isVariant?: boolean
 	name?: string
