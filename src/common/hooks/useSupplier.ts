@@ -45,12 +45,12 @@ export const useSupplier = (paginationParams: Props = {}) => {
 
 	return {
 		// Datos del query - manteniendo los mismos nombres
-		recordsData: query.data,
-		isLoading: query.isLoading,
+		supplierData: query.data,
+		loading: query.isLoading,
 		error: query.error?.message,
 
 		// Funciones - manteniendo los mismos nombres
-		fetchData: query.refetch,
+		refetchRecords: query.refetch,
 
 		// Funciones CRUD - manteniendo los mismos nombres
 		createRecord: api.create,
