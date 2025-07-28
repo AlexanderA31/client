@@ -33,9 +33,9 @@ const productSchema = z.object({
     z.number({ invalid_type_error: 'Debe ser un número' }).int('Debe ser un entero').min(0, 'Debe ser un número positivo').optional()
   ),
   status: z.enum(['draft', 'active', 'inactive', 'discontinued', 'out_of_stock']),
-  categoryId: z.string().optional(),
-  brandId: z.string().optional(),
-  supplierId: z.string().optional(),
+  categoryId: z.string().optional().nullable(),
+  brandId: z.string().optional().nullable(),
+  supplierId: z.string().optional().nullable(),
   photo: z.any().optional(),
   removePhoto: z.boolean().optional(),
   templateId: z.string().optional(),
@@ -156,6 +156,9 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
         ...data,
         photo: data.photo ? { id: data.photo } : undefined,
         description: data.description || null,
+        categoryId: data.categoryId || null,
+        brandId: data.brandId || null,
+        supplierId: data.supplierId || null,
       };
       delete dataToSend.removePhoto;
       if (!dataToSend.templateId) {
