@@ -18,6 +18,7 @@ import { CategorySelector } from './CategorySelector'
 import { BrandSelector } from './BrandSelector'
 import { SupplierSelector } from './SupplierSelector'
 import { FileUploadSection } from './FileUpload'
+import { TemplateSelector } from './TemplateSelector'
 
 const productSchema = z.object({
   name: z.string().nonempty('El nombre es requerido'),
@@ -38,7 +39,7 @@ const productSchema = z.object({
   supplierId: z.string().optional().nullable(),
   photo: z.any().optional(),
   removePhoto: z.boolean().optional(),
-  templateId: z.string().optional(),
+  templateId: z.string().nonempty('La plantilla es requerida'),
 });
 
 export type ProductFormData = z.infer<typeof productSchema>
@@ -80,6 +81,13 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
     triggerFileInput,
     clearPreview,
     setPreviewImage,
+    templatesData,
+    loadingTemplates,
+    templateSearch,
+    setTemplateSearch,
+    templateOpen,
+    setTemplateOpen,
+    loadMoreTemplates,
   } = useProductModal()
 
   const methods = useForm<ProductFormData>({
@@ -294,6 +302,17 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   onClearPreview={handleClearPreviewWithForm}
                   currentImage={currentRecord?.photo}
                   shouldHideCurrentImage={removePhoto}
+                />
+                <TemplateSelector
+                  control={control}
+                  setValue={methods.setValue}
+                  templates={templatesData}
+                  loadingTemplates={loadingTemplates}
+                  templateSearch={templateSearch}
+                  setTemplateSearch={setTemplateSearch}
+                  templateOpen={templateOpen}
+                  setTemplateOpen={setTemplateOpen}
+                  loadMoreTemplates={loadMoreTemplates}
                 />
               </CardContent>
             </Card>

@@ -5,24 +5,29 @@ import { useDebounce } from '@/common/hooks/useDebounce'
 import { useProductCategory } from './useProductCategory'
 import { useProductBrand } from './useProductBrand'
 import { useProductSupplier } from './useProductSupplier'
+import { useProductTemplate } from './useProductTemplate'
 import { useFileUpload } from '@/common/hooks/useFileUpload'
 
 export const useProductModal = () => {
   const [categoryPage, setCategoryPage] = useState(1)
   const [brandPage, setBrandPage] = useState(1)
   const [supplierPage, setSupplierPage] = useState(1)
+  const [templatePage, setTemplatePage] = useState(1)
 
   const [categorySearch, setCategorySearch] = useState('')
   const [brandSearch, setBrandSearch] = useState('')
   const [supplierSearch, setSupplierSearch] = useState('')
+  const [templateSearch, setTemplateSearch] = useState('')
 
   const debouncedCategorySearch = useDebounce(categorySearch, 500)
   const debouncedBrandSearch = useDebounce(brandSearch, 500)
   const debouncedSupplierSearch = useDebounce(supplierSearch, 500)
+  const debouncedTemplateSearch = useDebounce(templateSearch, 500)
 
   const [categoryOpen, setCategoryOpen] = useState(false)
   const [brandOpen, setBrandOpen] = useState(false)
   const [supplierOpen, setSupplierOpen] = useState(false)
+  const [templateOpen, setTemplateOpen] = useState(false)
 
   const {
     recordsData: categoriesData,
@@ -41,6 +46,12 @@ export const useProductModal = () => {
     isLoading: loadingSuppliers,
     fetchData: fetchSuppliers,
   } = useProductSupplier()
+
+  const {
+    recordsData: templatesData,
+    isLoading: loadingTemplates,
+    fetchData: fetchTemplates,
+  } = useProductTemplate()
 
   const {
     fileInputRef,
@@ -64,6 +75,10 @@ export const useProductModal = () => {
     fetchSuppliers({ search: debouncedSupplierSearch, page: 1, limit: 10 })
   }, [debouncedSupplierSearch, fetchSuppliers])
 
+  useEffect(() => {
+    fetchTemplates({ search: debouncedTemplateSearch, page: 1, limit: 10 })
+  }, [debouncedTemplateSearch, fetchTemplates])
+
   const loadMoreCategories = () => {
     if (categoriesData?.data?.hasNextPage) {
       fetchCategories({ page: categoryPage + 1, search: debouncedCategorySearch })
@@ -82,6 +97,13 @@ export const useProductModal = () => {
     if (suppliersData?.data?.hasNextPage) {
       fetchSuppliers({ page: supplierPage + 1, search: debouncedSupplierSearch })
       setSupplierPage(prev => prev + 1)
+    }
+  }
+
+  const loadMoreTemplates = () => {
+    if (templatesData?.data?.hasNextPage) {
+      fetchTemplates({ page: templatePage + 1, search: debouncedTemplateSearch })
+      setTemplatePage(prev => prev + 1)
     }
   }
 
@@ -114,5 +136,12 @@ export const useProductModal = () => {
     triggerFileInput,
     clearPreview,
     setPreviewImage,
+    templatesData,
+    loadingTemplates,
+    templateSearch,
+    setTemplateSearch,
+    templateOpen,
+    setTemplateOpen,
+    loadMoreTemplates,
   }
 }
