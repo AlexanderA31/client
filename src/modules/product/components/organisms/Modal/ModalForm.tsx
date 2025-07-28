@@ -39,7 +39,7 @@ const productSchema = z.object({
   supplierId: z.string().optional(),
   photo: z.any().optional(),
   removePhoto: z.boolean().optional(),
-  templateId: z.string().optional(),
+  templateId: z.string().nonempty('El ID del template es obligatorio'),
 });
 
 export type ProductFormData = z.infer<typeof productSchema>
