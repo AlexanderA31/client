@@ -1,7 +1,7 @@
 'use client'
 
 import { z } from 'zod'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Icons } from '@/components/icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -14,14 +14,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet'
 import { SelectFieldZod } from '@/components/layout/atoms/SelectFieldZod'
 import { TextareaFieldZod } from '@/components/layout/atoms/TextareaFieldZod'
-import { FileUpload } from '@/components/layout/atoms/FileUpload'
 import { CategorySelector } from './CategorySelector'
 import { BrandSelector } from './BrandSelector'
 import { SupplierSelector } from './SupplierSelector'
+import { FileUploadSection } from './FileUpload'
 
 const productSchema = z.object({
   name: z.string().nonempty('El nombre es requerido'),
-  description: z.string().optional(),
+  description: z.string().optional().or(z.literal('')),
   price: z.preprocess(
     (val) => (val === "" ? undefined : Number(val)),
     z.number({ invalid_type_error: 'Debe ser un número' }).positive('Debe ser un número positivo').max(999999, 'Máximo 6 dígitos').optional()
@@ -36,6 +36,8 @@ const productSchema = z.object({
   categoryId: z.string().optional(),
   brandId: z.string().optional(),
   supplierId: z.string().optional(),
+  photo: z.string().optional(),
+  removePhoto: z.boolean().optional(),
 });
 
 export type ProductFormData = z.infer<typeof productSchema>
@@ -70,7 +72,15 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
     supplierOpen,
     setSupplierOpen,
     loadMoreSuppliers,
+    fileInputRef,
+    previewImage,
+    isUploading,
+    handleFileChange,
+    triggerFileInput,
+    clearPreview,
+    setPreviewImage,
   } = useProductModal()
+
   const methods = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
     mode: 'onChange',
@@ -85,10 +95,12 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
       categoryId: '',
       brandId: '',
       supplierId: '',
+      photo: '',
+      removePhoto: false,
     },
   })
 
-  const { handleSubmit, reset, control, formState } = methods
+  const { handleSubmit, reset, control, formState, setValue, watch } = methods
   const { errors, isSubmitting, isValid, isDirty } = formState
 
   useEffect(() => {
@@ -105,7 +117,15 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
           categoryId: currentRecord.category?.id || '',
           brandId: currentRecord.brand?.id || '',
           supplierId: currentRecord.suppplier?.id || '',
+          photo: currentRecord.photo?.id || '',
+          removePhoto: false,
         });
+
+        if (currentRecord.photo) {
+          setPreviewImage(currentRecord.photo.path)
+        } else {
+          setPreviewImage(null)
+        }
       } else {
         reset({
           name: '',
@@ -118,10 +138,13 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
           categoryId: '',
           brandId: '',
           supplierId: '',
+          photo: '',
+          removePhoto: false,
         });
+        clearPreview()
       }
     }
-  }, [isOpen, currentRecord, reset]);
+  }, [isOpen, currentRecord, reset, setPreviewImage, clearPreview]);
 
   const handleFormSubmit = async (data: ProductFormData) => {
     try {
@@ -135,6 +158,31 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
   const handleClose = () => {
     reset()
     onClose()
+    clearPreview()
+  }
+
+  const removePhoto = watch('removePhoto')
+
+  const handleClearPreviewWithForm = () => {
+    const currentPhoto = currentRecord?.photo?.id
+
+    if (currentPhoto) {
+      setValue('removePhoto', true, { shouldDirty: true })
+      setValue('photo', '', { shouldDirty: true })
+    } else {
+      setValue('photo', '', { shouldDirty: true })
+      setValue('removePhoto', false, { shouldDirty: true })
+    }
+
+    clearPreview()
+  }
+
+  const handleFileChangeWithForm = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileId = await handleFileChange(e)
+    if (fileId) {
+      setValue('photo', fileId, { shouldDirty: true })
+      setValue('removePhoto', false, { shouldDirty: true })
+    }
   }
 
   return (
@@ -221,10 +269,15 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   setSupplierOpen={setSupplierOpen}
                   loadMoreSuppliers={loadMoreSuppliers}
                 />
-                <FileUpload
-                  label='Foto del producto'
-                  onFileSelect={(file) => console.log(file)}
-                  accept='image/*'
+                <FileUploadSection
+                  fileInputRef={fileInputRef}
+                  previewImage={previewImage}
+                  isUploading={isUploading}
+                  onFileChange={handleFileChangeWithForm}
+                  onTriggerFileInput={triggerFileInput}
+                  onClearPreview={handleClearPreviewWithForm}
+                  currentImage={currentRecord?.photo}
+                  shouldHideCurrentImage={removePhoto}
                 />
               </CardContent>
             </Card>

@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useDebounce } from '@/common/hooks/useDebounce'
 import { useProductCategory } from './useProductCategory'
 import { useProductBrand } from './useProductBrand'
 import { useProductSupplier } from './useProductSupplier'
+import { useFileUpload } from '@/common/hooks/useFileUpload'
 
 export const useProductModal = () => {
   const [categoryPage, setCategoryPage] = useState(1)
@@ -40,6 +41,16 @@ export const useProductModal = () => {
     isLoading: loadingSuppliers,
     fetchData: fetchSuppliers,
   } = useProductSupplier()
+
+  const {
+    fileInputRef,
+    previewImage,
+    isUploading,
+    handleFileChange,
+    triggerFileInput,
+    clearPreview,
+    setPreviewImage,
+  } = useFileUpload()
 
   useEffect(() => {
     fetchCategories({ search: debouncedCategorySearch, page: 1, limit: 10 })
@@ -96,5 +107,12 @@ export const useProductModal = () => {
     supplierOpen,
     setSupplierOpen,
     loadMoreSuppliers,
+    fileInputRef,
+    previewImage,
+    isUploading,
+    handleFileChange,
+    triggerFileInput,
+    clearPreview,
+    setPreviewImage,
   }
 }
