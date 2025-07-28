@@ -38,6 +38,7 @@ const productSchema = z.object({
   supplierId: z.string().optional(),
   photo: z.any().optional(),
   removePhoto: z.boolean().optional(),
+  templateId: z.string().optional(),
 });
 
 export type ProductFormData = z.infer<typeof productSchema>
@@ -153,6 +154,10 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
         photo: data.photo ? { id: data.photo } : undefined,
         description: data.description || null,
       };
+      delete dataToSend.removePhoto;
+      if (!dataToSend.templateId) {
+        delete dataToSend.templateId;
+      }
       await onSubmit(dataToSend)
       handleClose()
     } catch (error) {
