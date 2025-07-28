@@ -20,7 +20,14 @@ interface Props {
 
 export function TemplateSelector({
   control,
+  setValue,
   templates,
+  loadingTemplates,
+  templateSearch,
+  setTemplateSearch,
+  templateOpen,
+  setTemplateOpen,
+  loadMoreTemplates,
 }: Props) {
   return (
     <div>
@@ -33,6 +40,10 @@ export function TemplateSelector({
           label: template.name,
         }))}
         required
+        onChange={(value) => {
+          console.log('Selected templateId:', value)
+          setValue('templateId', value, { shouldDirty: true })
+        }}
       />
     </div>
   )
