@@ -18,6 +18,7 @@ import { CategorySelector } from './CategorySelector'
 import { BrandSelector } from './BrandSelector'
 import { SupplierSelector } from './SupplierSelector'
 import { FileUploadSection } from './FileUpload'
+import { TemplateSelector } from './TemplateSelector'
 
 const productSchema = z.object({
   name: z.string().nonempty('El nombre es requerido'),
@@ -33,12 +34,12 @@ const productSchema = z.object({
     z.number({ invalid_type_error: 'Debe ser un número' }).int('Debe ser un entero').min(0, 'Debe ser un número positivo').optional()
   ),
   status: z.enum(['draft', 'active', 'inactive', 'discontinued', 'out_of_stock']),
-  categoryId: z.string().optional(),
-  brandId: z.string().optional(),
-  supplierId: z.string().optional(),
+  categoryId: z.string().optional().nullable(),
+  brandId: z.string().optional().nullable(),
+  supplierId: z.string().optional().nullable(),
   photo: z.any().optional(),
   removePhoto: z.boolean().optional(),
-  templateId: z.string().optional(),
+  templateId: z.string().nonempty('La plantilla es requerida'),
 });
 
 export type ProductFormData = z.infer<typeof productSchema>
@@ -80,6 +81,13 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
     triggerFileInput,
     clearPreview,
     setPreviewImage,
+    templatesData,
+    loadingTemplates,
+    templateSearch,
+    setTemplateSearch,
+    templateOpen,
+    setTemplateOpen,
+    loadMoreTemplates,
   } = useProductModal()
 
   const methods = useForm<ProductFormData>({
@@ -98,6 +106,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
       supplierId: '',
       photo: '',
       removePhoto: false,
+      templateId: '',
     },
   })
 
@@ -120,6 +129,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
           supplierId: currentRecord.suppplier?.id || '',
           photo: currentRecord.photo?.id || '',
           removePhoto: false,
+          templateId: currentRecord.template?.id || '',
         });
 
         if (currentRecord.photo) {
@@ -141,6 +151,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
           supplierId: '',
           photo: '',
           removePhoto: false,
+          templateId: '',
         });
         clearPreview()
       }
@@ -153,6 +164,9 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
         ...data,
         photo: data.photo ? { id: data.photo } : undefined,
         description: data.description || null,
+        categoryId: data.categoryId || null,
+        brandId: data.brandId || null,
+        supplierId: data.supplierId || null,
       };
       delete dataToSend.removePhoto;
       if (!dataToSend.templateId) {
@@ -228,7 +242,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
               </CardHeader>
               <CardContent className='space-y-4 p-0'>
                 <UniversalFormField control={control} name='name' label='Nombre' placeholder='Ej. Camiseta de algodón' type='text' required />
-                <TextareaFieldZod control={control} name='description' label='Descripción' placeholder='Ej. Camiseta de algodón peinado, suave al tacto...' required={false}/>
+                <TextareaFieldZod control={control} name='description' label='Descripción' placeholder='Ej. Camiseta de algodón peinado, suave al tacto...' />
                 <UniversalFormField control={control} name='price' label='Precio' placeholder='Ej. 25.99' type='number' required />
                 <UniversalFormField control={control} name='sku' label='SKU' placeholder='Ej. CAM-ALG-001' type='text' />
                 <UniversalFormField control={control} name='barCode' label='Código de barras' placeholder='Ej. 7861234567890' type='text' />
@@ -288,6 +302,17 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   onClearPreview={handleClearPreviewWithForm}
                   currentImage={currentRecord?.photo}
                   shouldHideCurrentImage={removePhoto}
+                />
+                <TemplateSelector
+                  control={control}
+                  setValue={methods.setValue}
+                  templates={templatesData}
+                  loadingTemplates={loadingTemplates}
+                  templateSearch={templateSearch}
+                  setTemplateSearch={setTemplateSearch}
+                  templateOpen={templateOpen}
+                  setTemplateOpen={setTemplateOpen}
+                  loadMoreTemplates={loadMoreTemplates}
                 />
               </CardContent>
             </Card>
