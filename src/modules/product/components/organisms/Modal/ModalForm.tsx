@@ -21,7 +21,7 @@ import { SupplierSelector } from './SupplierSelector'
 
 const productSchema = z.object({
   name: z.string().nonempty('El nombre es requerido'),
-  description: z.string().optional(),
+  description: z.string().nonempty('La descripción es requerida'),
   price: z.preprocess(
     (val) => (val === "" ? undefined : Number(val)),
     z.number({ invalid_type_error: 'Debe ser un número' }).positive('Debe ser un número positivo').max(999999, 'Máximo 6 dígitos').optional()
