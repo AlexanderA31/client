@@ -158,6 +158,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
   }, [isOpen, currentRecord, reset, setPreviewImage, clearPreview]);
 
   const handleFormSubmit = async (data: ProductFormData) => {
+    console.log('Form data:', data)
     try {
       const dataToSend = {
         ...data,
@@ -168,6 +169,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
       if (!dataToSend.templateId) {
         delete dataToSend.templateId;
       }
+      console.log('Data to send:', dataToSend)
       await onSubmit(dataToSend)
       handleClose()
     } catch (error) {
