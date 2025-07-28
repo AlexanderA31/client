@@ -12,8 +12,8 @@ import { FormFooter } from '@/modules/product/components/organisms/Modal/FormFoo
 import { useProductForm } from '@/modules/product/hooks/useProductForm'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet'
-import { SelectField } from '@/components/layout/atoms/SelectFieldZod'
-import { TextareaFormField } from '@/components/layout/atoms/TextareaFieldZod'
+import { SelectFieldZod } from '@/components/layout/atoms/SelectFieldZod'
+import { TextareaFieldZod } from '@/components/layout/atoms/TextareaFieldZod'
 import { FileUpload } from '@/components/layout/atoms/FileUpload'
 
 const productSchema = z.object({
@@ -145,12 +145,12 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
               </CardHeader>
               <CardContent className='space-y-4 p-0'>
                 <UniversalFormField control={control} name='name' label='Nombre' placeholder='Ej. Camiseta de algodón' type='text' required />
-                <TextareaFormField control={control} name='description' label='Descripción' placeholder='Ej. Camiseta de algodón peinado, suave al tacto...' />
+                <TextareaFieldZod control={control} name='description' label='Descripción' placeholder='Ej. Camiseta de algodón peinado, suave al tacto...' />
                 <UniversalFormField control={control} name='price' label='Precio' placeholder='Ej. 25.99' type='number' required />
                 <UniversalFormField control={control} name='sku' label='SKU' placeholder='Ej. CAM-ALG-001' type='text' />
                 <UniversalFormField control={control} name='barCode' label='Código de barras' placeholder='Ej. 7861234567890' type='text' />
                 <UniversalFormField control={control} name='stock' label='Stock' placeholder='Ej. 100' type='number' required />
-                <SelectField
+                <SelectFieldZod
                   control={control}
                   name='status'
                   label='Estado'
@@ -163,9 +163,9 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   ]}
                   required
                 />
-                <SelectField control={control} name='categoryId' label='Categoría' options={categoryOptions || []} placeholder='Seleccionar categoría' />
-                <SelectField control={control} name='brandId' label='Marca' options={brandOptions || []} placeholder='Seleccionar marca' />
-                <SelectField control={control} name='supplierId' label='Proveedor' options={supplierOptions || []} placeholder='Seleccionar proveedor' />
+                <SelectFieldZod control={control} name='categoryId' label='Categoría' options={categoryOptions || []} placeholder='Seleccionar categoría' />
+                <SelectFieldZod control={control} name='brandId' label='Marca' options={brandOptions || []} placeholder='Seleccionar marca' />
+                <SelectFieldZod control={control} name='supplierId' label='Proveedor' options={supplierOptions || []} placeholder='Seleccionar proveedor' />
                 <FileUpload
                   label='Foto del producto'
                   onFileSelect={(file) => console.log(file)}
