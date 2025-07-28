@@ -6,16 +6,15 @@ import { TEMPLATE_ENDPOINTS_CONFIG } from '@/common/configs/api/template-endpoin
 
 export const useProductTemplate = () => {
   const {
-    recordsData,
     isLoading,
     isError,
     buildQuery,
   } = useGenericApi<I_TemplateResponse, I_Template>(TEMPLATE_ENDPOINTS_CONFIG)
 
-  const { data: recordsData, refetch } = buildQuery({ limit: 100 })
+  const { data: templatesData, refetch } = buildQuery({ limit: 100 })
 
   return {
-    recordsData: recordsData?.data.items,
+    recordsData: templatesData?.data.items,
     isLoading,
     isError,
     fetchTemplates: refetch,
