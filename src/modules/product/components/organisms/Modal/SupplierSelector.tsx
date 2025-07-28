@@ -32,6 +32,7 @@ export function SupplierSelector({
 	supplierOpen,
 	setSupplierOpen,
 	loadMoreSuppliers,
+	value,
 }: SupplierSelectorProps) {
 	const supplierOptions =
 		suppliers?.data?.items?.map(supplier => ({
@@ -52,9 +53,9 @@ export function SupplierSelector({
 								<Button
 									variant='outline'
 									role='combobox'
-									className={`w-full justify-between ${!field.value && 'text-muted-foreground'}`}>
-									{field.value
-										? supplierOptions.find(supplier => supplier.value === field.value)?.label
+									className={`w-full justify-between ${!value && 'text-muted-foreground'}`}>
+									{value
+										? supplierOptions.find(supplier => supplier.value === value)?.label
 										: 'Buscar proveedor...'}
 									<Icons.chevronDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
 								</Button>
@@ -81,7 +82,7 @@ export function SupplierSelector({
 													setSupplierOpen(false)
 												}}>
 												<Icons.check
-													className={`mr-2 h-4 w-4 ${supplier.value === field.value ? 'opacity-100' : 'opacity-0'}`}
+													className={`mr-2 h-4 w-4 ${supplier.value === value ? 'opacity-100' : 'opacity-0'}`}
 												/>
 												{supplier.label}
 											</CommandItem>

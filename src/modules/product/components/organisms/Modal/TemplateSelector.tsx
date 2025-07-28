@@ -29,6 +29,7 @@ export function TemplateSelector({
   templateOpen,
   setTemplateOpen,
   loadMoreTemplates,
+  value,
 }: Props) {
   return (
     <div>
@@ -41,6 +42,7 @@ export function TemplateSelector({
           label: template.name,
         }))}
         required
+        value={value}
         onChange={(value) => {
           console.log('Selected templateId:', value)
           setValue('templateId', value, { shouldDirty: true })
