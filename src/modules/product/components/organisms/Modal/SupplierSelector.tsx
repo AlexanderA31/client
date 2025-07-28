@@ -19,6 +19,7 @@ interface SupplierSelectorProps {
 	supplierOpen: boolean
 	setSupplierOpen: (open: boolean) => void
 	loadMoreSuppliers: () => void
+	value: string
 }
 
 export function SupplierSelector({

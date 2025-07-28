@@ -16,6 +16,7 @@ interface Props {
   templateOpen: boolean
   setTemplateOpen: (value: boolean) => void
   loadMoreTemplates: () => void
+  value: string
 }
 
 export function TemplateSelector({

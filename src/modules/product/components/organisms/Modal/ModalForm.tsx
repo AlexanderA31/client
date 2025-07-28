@@ -257,6 +257,9 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                     { value: 'out_of_stock', label: 'Agotado' },
                   ]}
                   required
+                  onChange={(value) => {
+                    setValue('status', value, { shouldDirty: true })
+                  }}
                 />
                 <CategorySelector
                   control={control}
@@ -290,6 +293,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   supplierOpen={supplierOpen}
                   setSupplierOpen={setSupplierOpen}
                   loadMoreSuppliers={loadMoreSuppliers}
+                  value={watch('supplierId')}
                 />
                 <TemplateSelector
                   control={control}
@@ -301,6 +305,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   templateOpen={templateOpen}
                   setTemplateOpen={setTemplateOpen}
                   loadMoreTemplates={loadMoreTemplates}
+                  value={watch('templateId')}
                 />
                 <FileUploadSection
                   fileInputRef={fileInputRef}
