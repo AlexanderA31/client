@@ -27,7 +27,6 @@ export const useProductModal = () => {
   const [categoryOpen, setCategoryOpen] = useState(false)
   const [brandOpen, setBrandOpen] = useState(false)
   const [supplierOpen, setSupplierOpen] = useState(false)
-  const [templateOpen, setTemplateOpen] = useState(false)
 
   const {
     recordsData: categoriesData,
