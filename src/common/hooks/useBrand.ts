@@ -45,15 +45,15 @@ export const useBrand = (paginationParams: UseBrandParams = {}) => {
 
 	return {
 		// Datos del query - manteniendo los mismos nombres
-		brands: query.data,
-		loading: query.isLoading,
+		recordsData: query.data,
+		isLoading: query.isLoading,
 		error: query.error?.message,
 
 		// Funciones - manteniendo los mismos nombres
-		refetchBrands: query.refetch,
+		fetchData: query.refetch,
 
 		// Funciones CRUD - manteniendo los mismos nombres
-		createBrand: api.create,
+		createRecord: api.create,
 		updateBrand: api.update,
 		hardDeleteBrand: api.hardDelete,
 
