@@ -18,15 +18,6 @@ export const useProductModal = () => {
   const [brandSearch, setBrandSearch] = useState('')
   const [supplierSearch, setSupplierSearch] = useState('')
 
-  const {
-    templatesData,
-    loadingTemplates,
-    templateSearch,
-    setTemplateSearch,
-    templateOpen,
-    setTemplateOpen,
-    loadMoreTemplates,
-  } = useProductTemplate()
 
   const debouncedCategorySearch = useDebounce(categorySearch, 500)
   const debouncedBrandSearch = useDebounce(brandSearch, 500)
