@@ -41,7 +41,7 @@ export const useProductHandlers = ({
 
   const handleEdit = useCallback(
     (record: I_Product) => {
-      modalState.openDialog(record)
+      modalState.openEditDialog(record)
     },
     [modalState]
   )
