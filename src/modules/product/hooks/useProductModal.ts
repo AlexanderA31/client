@@ -50,7 +50,7 @@ export const useProductModal = () => {
   const {
     recordsData: templatesData,
     isLoading: loadingTemplates,
-    fetchData: fetchTemplates,
+    fetchTemplates,
   } = useProductTemplate()
 
   const {
