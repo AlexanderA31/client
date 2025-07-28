@@ -133,48 +133,60 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
             {currentRecord ? 'Modifica los campos del producto existente' : 'Completa los campos para crear un nuevo producto'}
           </SheetDescription>
         </SheetHeader>
-        <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(handleFormSubmit)} className='flex-1 space-y-6 overflow-auto p-4'>
-            <Card className='border-none bg-transparent p-0 shadow-none'>
-              <CardHeader className='p-0'>
-                <CardTitle className='flex items-center gap-2 text-lg'>
-                  <Icons.infoCircle className='h-4 w-4' />
-                  Información básica
-                </CardTitle>
-                <CardDescription>Datos básicos del producto</CardDescription>
-              </CardHeader>
-              <CardContent className='space-y-4 p-0'>
-                <UniversalFormField control={control} name='name' label='Nombre' placeholder='Ej. Camiseta de algodón' type='text' required />
-                <TextareaFieldZod control={control} name='description' label='Descripción' placeholder='Ej. Camiseta de algodón peinado, suave al tacto...' />
-                <UniversalFormField control={control} name='price' label='Precio' placeholder='Ej. 25.99' type='number' required />
-                <UniversalFormField control={control} name='sku' label='SKU' placeholder='Ej. CAM-ALG-001' type='text' />
-                <UniversalFormField control={control} name='barCode' label='Código de barras' placeholder='Ej. 7861234567890' type='text' />
-                <UniversalFormField control={control} name='stock' label='Stock' placeholder='Ej. 100' type='number' required />
-                <SelectFieldZod
-                  control={control}
-                  name='status'
-                  label='Estado'
-                  options={[
-                    { value: 'draft', label: 'Borrador' },
-                    { value: 'active', label: 'Activo' },
-                    { value: 'inactive', label: 'Inactivo' },
-                    { value: 'discontinued', label: 'Descontinuado' },
-                    { value: 'out_of_stock', label: 'Agotado' },
-                  ]}
-                  required
-                />
-                <SelectFieldZod control={control} name='categoryId' label='Categoría' options={categoryOptions || []} placeholder='Seleccionar categoría' />
-                <SelectFieldZod control={control} name='brandId' label='Marca' options={brandOptions || []} placeholder='Seleccionar marca' />
-                <SelectFieldZod control={control} name='supplierId' label='Proveedor' options={supplierOptions || []} placeholder='Seleccionar proveedor' />
-                <FileUpload
-                  label='Foto del producto'
-                  onFileSelect={(file) => console.log(file)}
-                  accept='image/*'
-                />
-              </CardContent>
-            </Card>
-          </form>
-        </FormProvider>
+				<FormProvider {...methods}>
+					<form onSubmit={handleSubmit(handleFormSubmit)} className='flex-1 space-y-6 overflow-auto p-4'>
+						<AlertMessage
+							message={
+								currentRecord
+									? 'Modifica los campos necesarios y guarda los cambios para actualizar este proveedor. Los cambios afectarán a todas las plantillas y productos que utilicen este proveedor.'
+									: 'Los proveedores definen características específicas de productos (como color, tamaño, material, etc.) y se utilizan para construir plantillas de productos.'
+							}
+							variant='info'
+						/>
+
+						<Card className='border-none bg-transparent p-0 shadow-none'>
+							<CardHeader className='p-0'>
+								<CardTitle className='flex items-center gap-2 text-lg'>
+									<Icons.infoCircle className='h-4 w-4' />
+									Información básica
+								</CardTitle>
+								<CardDescription>Datos básicos del proveedor</CardDescription>
+							</CardHeader>
+
+							<CardContent className='space-y-4 p-0'>
+								<UniversalFormField
+									control={control}
+									name='ruc'
+									label='RUC'
+									placeholder='Ej. 1790012345001'
+									type='text'
+									required={true}
+									showValidationIcons={true}
+								/>
+
+								<UniversalFormField
+									control={control}
+									name='legalName'
+									label='Razón social (nombre legal)'
+									placeholder='Ej. COMERCIALIZADORA ANDINA S.A.'
+									type='text'
+									required={true}
+									showValidationIcons={true}
+								/>
+
+								<UniversalFormField
+									control={control}
+									name='commercialName'
+									label='Nombre comercial'
+									placeholder='Ej. DISTRIANDINA'
+									type='text'
+									required={false}
+									showValidationIcons={true}
+								/>
+							</CardContent>
+						</Card>
+					</form>
+				</FormProvider>
         <FormFooter
           formState={formState}
           errors={errors}
