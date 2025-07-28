@@ -18,10 +18,19 @@ export const useProductModal = () => {
   const [brandSearch, setBrandSearch] = useState('')
   const [supplierSearch, setSupplierSearch] = useState('')
 
+  const {
+    templatesData,
+    loadingTemplates,
+    templateSearch,
+    setTemplateSearch,
+    templateOpen,
+    setTemplateOpen,
+    loadMoreTemplates,
+  } = useProductTemplate()
+
   const debouncedCategorySearch = useDebounce(categorySearch, 500)
   const debouncedBrandSearch = useDebounce(brandSearch, 500)
   const debouncedSupplierSearch = useDebounce(supplierSearch, 500)
-
   const debouncedTemplateSearch = useDebounce(templateSearch, 500)
 
   const [categoryOpen, setCategoryOpen] = useState(false)
@@ -45,16 +54,6 @@ export const useProductModal = () => {
     isLoading: loadingSuppliers,
     fetchData: fetchSuppliers,
   } = useProductSupplier()
-
-  const {
-    templatesData,
-    loadingTemplates,
-    templateSearch,
-    setTemplateSearch,
-    templateOpen,
-    setTemplateOpen,
-    loadMoreTemplates,
-  } = useProductTemplate()
 
   const {
     fileInputRef,
