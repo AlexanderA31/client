@@ -3,7 +3,7 @@
 import { useCategory } from '@/common/hooks/useCategory'
 import { useBrand } from '@/common/hooks/useBrand'
 import { useSupplier } from '@/common/hooks/useSupplier'
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDebounce } from '@/common/hooks/useDebounce'
 
 export const useProductModal = () => {
@@ -27,31 +27,31 @@ export const useProductModal = () => {
     recordsData: categoriesData,
     isLoading: loadingCategories,
     fetchData: fetchCategories,
-  } = useCategory({
-    search: debouncedCategorySearch,
-    page: categoryPage,
-    limit: 10,
-  })
+  } = useCategory()
 
   const {
     recordsData: brandsData,
     isLoading: loadingBrands,
     fetchData: fetchBrands,
-  } = useBrand({
-    search: debouncedBrandSearch,
-    page: brandPage,
-    limit: 10,
-  })
+  } = useBrand()
 
   const {
     recordsData: suppliersData,
     isLoading: loadingSuppliers,
     fetchData: fetchSuppliers,
-  } = useSupplier({
-    search: debouncedSupplierSearch,
-    page: supplierPage,
-    limit: 10,
-  })
+  } = useSupplier()
+
+  useEffect(() => {
+    fetchCategories({ search: debouncedCategorySearch, page: 1, limit: 10 })
+  }, [debouncedCategorySearch, fetchCategories])
+
+  useEffect(() => {
+    fetchBrands({ search: debouncedBrandSearch, page: 1, limit: 10 })
+  }, [debouncedBrandSearch, fetchBrands])
+
+  useEffect(() => {
+    fetchSuppliers({ search: debouncedSupplierSearch, page: 1, limit: 10 })
+  }, [debouncedSupplierSearch, fetchSuppliers])
 
   const loadMoreCategories = () => {
     if (categoriesData?.data?.hasNextPage) {
