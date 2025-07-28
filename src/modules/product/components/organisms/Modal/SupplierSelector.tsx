@@ -35,7 +35,7 @@ export function SupplierSelector({
 	value,
 }: SupplierSelectorProps) {
 	const supplierOptions =
-		suppliers?.data?.items?.map(supplier => ({
+		suppliers?.map(supplier => ({
 			value: supplier.id,
 			label: supplier.legalName,
 		})) || []

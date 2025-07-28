@@ -31,16 +31,18 @@ export function TemplateSelector({
   loadMoreTemplates,
   value,
 }: Props) {
+  const templateOptions =
+    templates?.map((template) => ({
+      value: template.id,
+      label: template.name,
+    })) || []
   return (
     <div>
       <SelectFieldZod
         control={control}
         name='templateId'
         label='Plantilla'
-        options={templates?.map((template) => ({
-          value: template.id,
-          label: template.name,
-        }))}
+        options={templateOptions}
         required
         value={value}
         onChange={(value) => {

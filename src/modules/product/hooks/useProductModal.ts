@@ -56,6 +56,16 @@ export const useProductModal = () => {
   } = useProductSupplier()
 
   const {
+    templatesData,
+    loadingTemplates,
+    templateSearch,
+    setTemplateSearch,
+    templateOpen,
+    setTemplateOpen,
+    loadMoreTemplates,
+  } = useProductTemplate()
+
+  const {
     fileInputRef,
     previewImage,
     isUploading,
@@ -119,7 +129,7 @@ export const useProductModal = () => {
     brandOpen,
     setBrandOpen,
     loadMoreBrands,
-    suppliersData,
+    suppliersData: suppliersData?.data?.items,
     loadingSuppliers,
     supplierSearch,
     setSupplierSearch,
