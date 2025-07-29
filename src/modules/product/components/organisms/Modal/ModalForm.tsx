@@ -88,7 +88,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
     triggerFileInput,
     clearPreview,
     setPreviewImage,
-  } = useProductModal()
+  } = useProductModal(currentRecord)
 
   const methods = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
@@ -125,7 +125,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
           status: currentRecord.status,
           categoryId: currentRecord.category?.id || '',
           brandId: currentRecord.brand?.id || '',
-          supplierId: currentRecord.suppplier?.id || '',
+          supplierId: currentRecord.supplier?.id || '',
           templateId: currentRecord.template?.id || '',
           photo: currentRecord.photo?.id || '',
           removePhoto: false,
@@ -306,6 +306,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   templateOpen={templateOpen}
                   setTemplateOpen={setTemplateOpen}
                   loadMoreTemplates={loadMoreTemplates}
+                  value={watch('templateId')}
                 />
                 <FileUploadSection
                   fileInputRef={fileInputRef}
