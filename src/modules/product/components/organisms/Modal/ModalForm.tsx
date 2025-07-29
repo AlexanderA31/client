@@ -299,7 +299,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                 <TemplateSelector
                   control={control}
                   setValue={methods.setValue}
-                  templates={templatesData}
+                  templates={templatesData?.data?.items}
                   loadingTemplates={loadingTemplates}
                   templateSearch={templateSearch}
                   setTemplateSearch={setTemplateSearch}

@@ -168,7 +168,7 @@ export const useProductModal = (currentRecord: I_Product | null) => {
     triggerFileInput,
     clearPreview,
     setPreviewImage,
-    templatesData: augmentedTemplatesData()?.data?.items,
+    templatesData: augmentedTemplatesData(),
     loadingTemplates,
     templateSearch,
     setTemplateSearch,
