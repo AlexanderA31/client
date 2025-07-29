@@ -8,10 +8,9 @@ import { useProductSupplier } from './useProductSupplier'
 import { useProductTemplate } from './useProductTemplate'
 import { useFileUpload } from '@/common/hooks/useFileUpload'
 
-import { UseFormWatch } from 'react-hook-form'
-import { ProductFormData } from '../components/organisms/Modal/ModalForm'
+import { I_Product } from '@/modules/product/types/product'
 
-export const useProductModal = (watch: UseFormWatch<ProductFormData>) => {
+export const useProductModal = (currentRecord: I_Product | null) => {
   const [categoryPage, setCategoryPage] = useState(1)
   const [brandPage, setBrandPage] = useState(1)
   const [supplierPage, setSupplierPage] = useState(1)
@@ -31,7 +30,6 @@ export const useProductModal = (watch: UseFormWatch<ProductFormData>) => {
   const [brandOpen, setBrandOpen] = useState(false)
   const [supplierOpen, setSupplierOpen] = useState(false)
   const [templateOpen, setTemplateOpen] = useState(false)
-  const [selectedTemplate, setSelectedTemplate] = useState(null)
 
   const {
     recordsData: categoriesData,
@@ -52,6 +50,34 @@ export const useProductModal = (watch: UseFormWatch<ProductFormData>) => {
   } = useProductSupplier()
 
   const {
+    templatesData,
+    loadingTemplates,
+    fetchTemplates,
+  } = useProductTemplate()
+
+  const augmentedSuppliersData = () => {
+    const items = suppliersData?.data?.items || []
+    if (currentRecord?.supplier && !items.find((s) => s.id === currentRecord.supplier.id)) {
+      return [currentRecord.supplier, ...items]
+    }
+    return items
+  }
+
+  const augmentedTemplatesData = () => {
+    const items = templatesData?.data?.items || []
+    if (currentRecord?.template && !items.find((t) => t.id === currentRecord.template.id)) {
+      return {
+        ...templatesData,
+        data: {
+          ...templatesData.data,
+          items: [currentRecord.template, ...items],
+        },
+      }
+    }
+    return templatesData
+  }
+
+  const {
     fileInputRef,
     previewImage,
     isUploading,
@@ -62,41 +88,28 @@ export const useProductModal = (watch: UseFormWatch<ProductFormData>) => {
   } = useFileUpload()
 
   useEffect(() => {
-    fetchCategories({ search: debouncedCategorySearch, page: 1, limit: 10 })
-  }, [debouncedCategorySearch, fetchCategories])
-
-  useEffect(() => {
-    fetchBrands({ search: debouncedBrandSearch, page: 1, limit: 10 })
-  }, [debouncedBrandSearch, fetchBrands])
-
-  useEffect(() => {
-    fetchSuppliers({ search: debouncedSupplierSearch, page: 1, limit: 10 })
-  }, [debouncedSupplierSearch, fetchSuppliers])
-
-  const {
-    templatesData,
-    loadingTemplates,
-    fetchTemplates,
-    getTemplateById,
-  } = useProductTemplate()
-
-  useEffect(() => {
-    fetchTemplates({ search: debouncedTemplateSearch, page: 1, limit: 10 })
-  }, [debouncedTemplateSearch, fetchTemplates])
-
-  useEffect(() => {
-    const fetchTemplate = async () => {
-      const templateId = watch('templateId')
-      if (templateId) {
-        const template = await getTemplateById(templateId)
-        setSelectedTemplate(template)
-      } else {
-        setSelectedTemplate(null)
-      }
+    if (categoryOpen) {
+      fetchCategories({ search: debouncedCategorySearch, page: 1, limit: 10 })
     }
+  }, [debouncedCategorySearch, fetchCategories, categoryOpen])
 
-    fetchTemplate()
-  }, [watch, getTemplateById])
+  useEffect(() => {
+    if (brandOpen) {
+      fetchBrands({ search: debouncedBrandSearch, page: 1, limit: 10 })
+    }
+  }, [debouncedBrandSearch, fetchBrands, brandOpen])
+
+  useEffect(() => {
+    if (supplierOpen) {
+      fetchSuppliers({ search: debouncedSupplierSearch, page: 1, limit: 10 })
+    }
+  }, [debouncedSupplierSearch, fetchSuppliers, supplierOpen])
+
+  useEffect(() => {
+    if (templateOpen) {
+      fetchTemplates({ search: debouncedTemplateSearch, page: 1, limit: 10 })
+    }
+  }, [debouncedTemplateSearch, fetchTemplates, templateOpen])
 
   const loadMoreCategories = () => {
     if (categoriesData?.data?.hasNextPage) {
@@ -141,7 +154,7 @@ export const useProductModal = (watch: UseFormWatch<ProductFormData>) => {
     brandOpen,
     setBrandOpen,
     loadMoreBrands,
-    suppliersData: suppliersData?.data?.items,
+    suppliersData: augmentedSuppliersData(),
     loadingSuppliers,
     supplierSearch,
     setSupplierSearch,
@@ -155,13 +168,12 @@ export const useProductModal = (watch: UseFormWatch<ProductFormData>) => {
     triggerFileInput,
     clearPreview,
     setPreviewImage,
-    templatesData,
+    templatesData: augmentedTemplatesData(),
     loadingTemplates,
     templateSearch,
     setTemplateSearch,
     templateOpen,
     setTemplateOpen,
     loadMoreTemplates,
-    selectedTemplate,
   }
 }

@@ -19,7 +19,6 @@ import { BrandSelector } from './BrandSelector'
 import { SupplierSelector } from './SupplierSelector'
 import { TemplateSelector } from './TemplateSelector'
 import { FileUploadSection } from './FileUpload'
-import { DynamicAttributes } from './DynamicAttributes'
 
 const productSchema = z.object({
   name: z.string().nonempty('El nombre es requerido'),
@@ -53,28 +52,6 @@ interface Props {
 }
 
 export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Props) {
-  const methods = useForm<ProductFormData>({
-    resolver: zodResolver(productSchema),
-    mode: 'onChange',
-    defaultValues: {
-      name: '',
-      description: '',
-      price: 0,
-      sku: '',
-      barCode: '',
-      stock: 0,
-      status: 'draft',
-      categoryId: '',
-      brandId: '',
-      supplierId: '',
-      photo: '',
-      removePhoto: false,
-    },
-  })
-
-  const { handleSubmit, reset, control, formState, setValue, watch } = methods
-  const { errors, isSubmitting, isValid, isDirty } = formState
-
   const {
     categoriesData,
     loadingCategories,
@@ -111,8 +88,29 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
     triggerFileInput,
     clearPreview,
     setPreviewImage,
-    selectedTemplate,
-  } = useProductModal(watch)
+  } = useProductModal(currentRecord)
+
+  const methods = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      description: '',
+      price: 0,
+      sku: '',
+      barCode: '',
+      stock: 0,
+      status: 'draft',
+      categoryId: '',
+      brandId: '',
+      supplierId: '',
+      photo: '',
+      removePhoto: false,
+    },
+  })
+
+  const { handleSubmit, reset, control, formState, setValue, watch } = methods
+  const { errors, isSubmitting, isValid, isDirty } = formState
 
   useEffect(() => {
     if (isOpen) {
@@ -301,7 +299,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                 <TemplateSelector
                   control={control}
                   setValue={methods.setValue}
-                  templates={templatesData}
+                  templates={templatesData?.data?.items}
                   loadingTemplates={loadingTemplates}
                   templateSearch={templateSearch}
                   setTemplateSearch={setTemplateSearch}
@@ -322,26 +320,6 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                 />
               </CardContent>
             </Card>
-
-            {selectedTemplate && (
-              <Card className='border-none bg-transparent p-0 shadow-none'>
-                <CardHeader className='p-0'>
-                  <CardTitle className='flex items-center gap-2 text-lg'>
-                    <Icons.stars className='h-4 w-4' />
-                    Atributos
-                  </CardTitle>
-                  <CardDescription>
-                    Atributos del template seleccionado
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className='space-y-4 p-0'>
-                  <DynamicAttributes
-                    attributes={selectedTemplate.attributes}
-                    control={control}
-                  />
-                </CardContent>
-              </Card>
-            )}
           </form>
         </FormProvider>
         <FormFooter
