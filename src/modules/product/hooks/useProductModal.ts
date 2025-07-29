@@ -66,9 +66,15 @@ export const useProductModal = (currentRecord: I_Product | null) => {
   const augmentedTemplatesData = () => {
     const items = templatesData?.data?.items || []
     if (currentRecord?.template && !items.find((t) => t.id === currentRecord.template.id)) {
-      return [currentRecord.template, ...items]
+      return {
+        ...templatesData,
+        data: {
+          ...templatesData.data,
+          items: [currentRecord.template, ...items],
+        },
+      }
     }
-    return items
+    return templatesData
   }
 
   const {
@@ -162,7 +168,7 @@ export const useProductModal = (currentRecord: I_Product | null) => {
     triggerFileInput,
     clearPreview,
     setPreviewImage,
-    templatesData: augmentedTemplatesData(),
+    templatesData: augmentedTemplatesData()?.data?.items,
     loadingTemplates,
     templateSearch,
     setTemplateSearch,
