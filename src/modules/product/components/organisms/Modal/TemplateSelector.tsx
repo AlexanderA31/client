@@ -46,7 +46,6 @@ export function TemplateSelector({
         required
         value={value}
         onChange={(value) => {
-          console.log('Selected templateId:', value)
           setValue('templateId', value, { shouldDirty: true })
         }}
       />
