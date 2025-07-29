@@ -20,7 +20,6 @@ import { SupplierSelector } from './SupplierSelector'
 import { TemplateSelector } from './TemplateSelector'
 import { FileUploadSection } from './FileUpload'
 import { DynamicAttributes } from './DynamicAttributes'
-import { Icons } from '@/components/icons'
 
 const productSchema = z.object({
   name: z.string().nonempty('El nombre es requerido'),
