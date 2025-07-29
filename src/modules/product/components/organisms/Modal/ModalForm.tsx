@@ -125,7 +125,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
           status: currentRecord.status,
           categoryId: currentRecord.category?.id || '',
           brandId: currentRecord.brand?.id || '',
-          supplierId: currentRecord.suppplier?.id || '',
+          supplierId: currentRecord.supplier?.id || '',
           templateId: currentRecord.template?.id || '',
           photo: currentRecord.photo?.id || '',
           removePhoto: false,

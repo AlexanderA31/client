@@ -64,20 +64,28 @@ export const useProductModal = () => {
   } = useFileUpload()
 
   useEffect(() => {
-    fetchCategories({ search: debouncedCategorySearch, page: 1, limit: 10 })
-  }, [debouncedCategorySearch, fetchCategories])
+    if (categoryOpen) {
+      fetchCategories({ search: debouncedCategorySearch, page: 1, limit: 10 })
+    }
+  }, [debouncedCategorySearch, fetchCategories, categoryOpen])
 
   useEffect(() => {
-    fetchBrands({ search: debouncedBrandSearch, page: 1, limit: 10 })
-  }, [debouncedBrandSearch, fetchBrands])
+    if (brandOpen) {
+      fetchBrands({ search: debouncedBrandSearch, page: 1, limit: 10 })
+    }
+  }, [debouncedBrandSearch, fetchBrands, brandOpen])
 
   useEffect(() => {
-    fetchSuppliers({ search: debouncedSupplierSearch, page: 1, limit: 10 })
-  }, [debouncedSupplierSearch, fetchSuppliers])
+    if (supplierOpen) {
+      fetchSuppliers({ search: debouncedSupplierSearch, page: 1, limit: 10 })
+    }
+  }, [debouncedSupplierSearch, fetchSuppliers, supplierOpen])
 
   useEffect(() => {
-    fetchTemplates({ search: debouncedTemplateSearch, page: 1, limit: 10 })
-  }, [debouncedTemplateSearch, fetchTemplates])
+    if (templateOpen) {
+      fetchTemplates({ search: debouncedTemplateSearch, page: 1, limit: 10 })
+    }
+  }, [debouncedTemplateSearch, fetchTemplates, templateOpen])
 
   const loadMoreCategories = () => {
     if (categoriesData?.data?.hasNextPage) {
