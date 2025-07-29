@@ -53,6 +53,28 @@ interface Props {
 }
 
 export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Props) {
+  const methods = useForm<ProductFormData>({
+    resolver: zodResolver(productSchema),
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      description: '',
+      price: 0,
+      sku: '',
+      barCode: '',
+      stock: 0,
+      status: 'draft',
+      categoryId: '',
+      brandId: '',
+      supplierId: '',
+      photo: '',
+      removePhoto: false,
+    },
+  })
+
+  const { handleSubmit, reset, control, formState, setValue, watch } = methods
+  const { errors, isSubmitting, isValid, isDirty } = formState
+
   const {
     categoriesData,
     loadingCategories,
@@ -91,28 +113,6 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
     setPreviewImage,
     selectedTemplate,
   } = useProductModal(watch)
-
-  const methods = useForm<ProductFormData>({
-    resolver: zodResolver(productSchema),
-    mode: 'onChange',
-    defaultValues: {
-      name: '',
-      description: '',
-      price: 0,
-      sku: '',
-      barCode: '',
-      stock: 0,
-      status: 'draft',
-      categoryId: '',
-      brandId: '',
-      supplierId: '',
-      photo: '',
-      removePhoto: false,
-    },
-  })
-
-  const { handleSubmit, reset, control, formState, setValue, watch } = methods
-  const { errors, isSubmitting, isValid, isDirty } = formState
 
   useEffect(() => {
     if (isOpen) {
