@@ -8,9 +8,10 @@ import { useProductSupplier } from './useProductSupplier'
 import { useProductTemplate } from './useProductTemplate'
 import { useFileUpload } from '@/common/hooks/useFileUpload'
 
-import { I_Product } from '@/modules/product/types/product'
+import { UseFormWatch } from 'react-hook-form'
+import { ProductFormData } from '../components/organisms/Modal/ModalForm'
 
-export const useProductModal = (currentRecord: I_Product | null) => {
+export const useProductModal = (watch: UseFormWatch<ProductFormData>) => {
   const [categoryPage, setCategoryPage] = useState(1)
   const [brandPage, setBrandPage] = useState(1)
   const [supplierPage, setSupplierPage] = useState(1)
@@ -30,6 +31,7 @@ export const useProductModal = (currentRecord: I_Product | null) => {
   const [brandOpen, setBrandOpen] = useState(false)
   const [supplierOpen, setSupplierOpen] = useState(false)
   const [templateOpen, setTemplateOpen] = useState(false)
+  const [selectedTemplate, setSelectedTemplate] = useState(null)
 
   const {
     recordsData: categoriesData,
@@ -50,34 +52,6 @@ export const useProductModal = (currentRecord: I_Product | null) => {
   } = useProductSupplier()
 
   const {
-    templatesData,
-    loadingTemplates,
-    fetchTemplates,
-  } = useProductTemplate()
-
-  const augmentedSuppliersData = () => {
-    const items = suppliersData?.data?.items || []
-    if (currentRecord?.supplier && !items.find((s) => s.id === currentRecord.supplier.id)) {
-      return [currentRecord.supplier, ...items]
-    }
-    return items
-  }
-
-  const augmentedTemplatesData = () => {
-    const items = templatesData?.data?.items || []
-    if (currentRecord?.template && !items.find((t) => t.id === currentRecord.template.id)) {
-      return {
-        ...templatesData,
-        data: {
-          ...templatesData.data,
-          items: [currentRecord.template, ...items],
-        },
-      }
-    }
-    return templatesData
-  }
-
-  const {
     fileInputRef,
     previewImage,
     isUploading,
@@ -88,28 +62,41 @@ export const useProductModal = (currentRecord: I_Product | null) => {
   } = useFileUpload()
 
   useEffect(() => {
-    if (categoryOpen) {
-      fetchCategories({ search: debouncedCategorySearch, page: 1, limit: 10 })
-    }
-  }, [debouncedCategorySearch, fetchCategories, categoryOpen])
+    fetchCategories({ search: debouncedCategorySearch, page: 1, limit: 10 })
+  }, [debouncedCategorySearch, fetchCategories])
 
   useEffect(() => {
-    if (brandOpen) {
-      fetchBrands({ search: debouncedBrandSearch, page: 1, limit: 10 })
-    }
-  }, [debouncedBrandSearch, fetchBrands, brandOpen])
+    fetchBrands({ search: debouncedBrandSearch, page: 1, limit: 10 })
+  }, [debouncedBrandSearch, fetchBrands])
 
   useEffect(() => {
-    if (supplierOpen) {
-      fetchSuppliers({ search: debouncedSupplierSearch, page: 1, limit: 10 })
-    }
-  }, [debouncedSupplierSearch, fetchSuppliers, supplierOpen])
+    fetchSuppliers({ search: debouncedSupplierSearch, page: 1, limit: 10 })
+  }, [debouncedSupplierSearch, fetchSuppliers])
+
+  const {
+    templatesData,
+    loadingTemplates,
+    fetchTemplates,
+    getTemplateById,
+  } = useProductTemplate()
 
   useEffect(() => {
-    if (templateOpen) {
-      fetchTemplates({ search: debouncedTemplateSearch, page: 1, limit: 10 })
+    fetchTemplates({ search: debouncedTemplateSearch, page: 1, limit: 10 })
+  }, [debouncedTemplateSearch, fetchTemplates])
+
+  useEffect(() => {
+    const fetchTemplate = async () => {
+      const templateId = watch('templateId')
+      if (templateId) {
+        const template = await getTemplateById(templateId)
+        setSelectedTemplate(template)
+      } else {
+        setSelectedTemplate(null)
+      }
     }
-  }, [debouncedTemplateSearch, fetchTemplates, templateOpen])
+
+    fetchTemplate()
+  }, [watch, getTemplateById])
 
   const loadMoreCategories = () => {
     if (categoriesData?.data?.hasNextPage) {
@@ -154,7 +141,7 @@ export const useProductModal = (currentRecord: I_Product | null) => {
     brandOpen,
     setBrandOpen,
     loadMoreBrands,
-    suppliersData: augmentedSuppliersData(),
+    suppliersData: suppliersData?.data?.items,
     loadingSuppliers,
     supplierSearch,
     setSupplierSearch,
@@ -168,12 +155,13 @@ export const useProductModal = (currentRecord: I_Product | null) => {
     triggerFileInput,
     clearPreview,
     setPreviewImage,
-    templatesData: augmentedTemplatesData(),
+    templatesData,
     loadingTemplates,
     templateSearch,
     setTemplateSearch,
     templateOpen,
     setTemplateOpen,
     loadMoreTemplates,
+    selectedTemplate,
   }
 }

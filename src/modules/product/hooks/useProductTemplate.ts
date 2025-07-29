@@ -10,6 +10,7 @@ export const useProductTemplate = () => {
     template: templates,
     loading: loadingTemplates,
     refetchTemplate: refetchTemplates,
+    getTemplateById,
   } = useTemplate({
     page: 1,
     limit: 5,
@@ -48,5 +49,6 @@ export const useProductTemplate = () => {
     setTemplateSearch,
     loadMoreTemplates,
     fetchTemplates,
+    getTemplateById,
   };
 };
