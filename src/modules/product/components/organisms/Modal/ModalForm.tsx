@@ -88,7 +88,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
     triggerFileInput,
     clearPreview,
     setPreviewImage,
-  } = useProductModal()
+  } = useProductModal(currentRecord)
 
   const methods = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),

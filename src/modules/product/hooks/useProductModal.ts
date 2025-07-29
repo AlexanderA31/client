@@ -8,7 +8,9 @@ import { useProductSupplier } from './useProductSupplier'
 import { useProductTemplate } from './useProductTemplate'
 import { useFileUpload } from '@/common/hooks/useFileUpload'
 
-export const useProductModal = () => {
+import { I_Product } from '@/modules/product/types/product'
+
+export const useProductModal = (currentRecord: I_Product | null) => {
   const [categoryPage, setCategoryPage] = useState(1)
   const [brandPage, setBrandPage] = useState(1)
   const [supplierPage, setSupplierPage] = useState(1)
@@ -52,6 +54,22 @@ export const useProductModal = () => {
     loadingTemplates,
     fetchTemplates,
   } = useProductTemplate()
+
+  const augmentedSuppliersData = () => {
+    const items = suppliersData?.data?.items || []
+    if (currentRecord?.supplier && !items.find((s) => s.id === currentRecord.supplier.id)) {
+      return [currentRecord.supplier, ...items]
+    }
+    return items
+  }
+
+  const augmentedTemplatesData = () => {
+    const items = templatesData?.data?.items || []
+    if (currentRecord?.template && !items.find((t) => t.id === currentRecord.template.id)) {
+      return [currentRecord.template, ...items]
+    }
+    return items
+  }
 
   const {
     fileInputRef,
@@ -130,7 +148,7 @@ export const useProductModal = () => {
     brandOpen,
     setBrandOpen,
     loadMoreBrands,
-    suppliersData: suppliersData?.data?.items,
+    suppliersData: augmentedSuppliersData(),
     loadingSuppliers,
     supplierSearch,
     setSupplierSearch,
@@ -144,7 +162,7 @@ export const useProductModal = () => {
     triggerFileInput,
     clearPreview,
     setPreviewImage,
-    templatesData,
+    templatesData: augmentedTemplatesData(),
     loadingTemplates,
     templateSearch,
     setTemplateSearch,
