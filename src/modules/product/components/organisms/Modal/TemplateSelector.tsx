@@ -19,10 +19,10 @@ interface Props {
   value: string
 }
 
-export function TemplateSelector({ control, setValue, value, templates }: Props) {
+export function TemplateSelector({ control, setValue, value, templates, loadingTemplates }: Props) {
 	const templateOptions =
 		templates?.map(template => ({
-			value: template,
+			value: template.id,
 			label: template.name,
 		})) || []
 	return (
@@ -33,10 +33,12 @@ export function TemplateSelector({ control, setValue, value, templates }: Props)
 				label='Plantilla'
 				options={templateOptions}
 				required
-				value={value}
+				value={value?.id}
 				onChange={value => {
-					setValue('templateId', value, { shouldDirty: true })
+					const template = templates.find(t => t.id === value)
+					setValue('templateId', template, { shouldDirty: true })
 				}}
+				isLoading={loadingTemplates}
 			/>
 		</div>
 	)

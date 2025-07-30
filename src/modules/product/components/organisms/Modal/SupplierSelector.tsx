@@ -59,22 +59,28 @@ export function SupplierSelector({ control, setValue, value, suppliers }: Suppli
 								<CommandList>
 									<CommandEmpty>No se encontraron proveedores</CommandEmpty>
 									<CommandGroup>
-										{supplierOptions.map(supplier => (
-											<CommandItem
-												key={supplier.value.id}
-												value={supplier.label}
-												onSelect={() => {
-													setValue('supplierId', supplier.value, { shouldValidate: true })
-													setOpen(false)
-												}}>
-												<Icons.check
-													className={`mr-2 h-4 w-4 ${
-														supplier.value.id === field.value?.id ? 'opacity-100' : 'opacity-0'
-													}`}
-												/>
-												{supplier.label}
-											</CommandItem>
-										))}
+										{loadingSuppliers ? (
+											<div className='flex items-center justify-center p-2'>
+												<SpinnerLoader />
+											</div>
+										) : (
+											supplierOptions.map(supplier => (
+												<CommandItem
+													key={supplier.value.id}
+													value={supplier.label}
+													onSelect={() => {
+														setValue('supplierId', supplier.value, { shouldValidate: true })
+														setOpen(false)
+													}}>
+													<Icons.check
+														className={`mr-2 h-4 w-4 ${
+															supplier.value.id === field.value?.id ? 'opacity-100' : 'opacity-0'
+														}`}
+													/>
+													{supplier.label}
+												</CommandItem>
+											))
+										)}
 									</CommandGroup>
 								</CommandList>
 							</Command>

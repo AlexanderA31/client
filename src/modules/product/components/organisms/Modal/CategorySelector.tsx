@@ -59,22 +59,28 @@ export function CategorySelector({ control, setValue, value, categories }: Categ
 								<CommandList>
 									<CommandEmpty>No se encontraron categorías</CommandEmpty>
 									<CommandGroup>
-										{categoryOptions.map(category => (
-											<CommandItem
-												key={category.value.id}
-												value={category.label}
-												onSelect={() => {
-													setValue('categoryId', category.value, { shouldValidate: true })
-													setOpen(false)
-												}}>
-												<Icons.check
-													className={`mr-2 h-4 w-4 ${
-														category.value.id === field.value?.id ? 'opacity-100' : 'opacity-0'
-													}`}
-												/>
-												{category.label}
-											</CommandItem>
-										))}
+										{loadingCategories ? (
+											<div className='flex items-center justify-center p-2'>
+												<SpinnerLoader />
+											</div>
+										) : (
+											categoryOptions.map(category => (
+												<CommandItem
+													key={category.value.id}
+													value={category.label}
+													onSelect={() => {
+														setValue('categoryId', category.value, { shouldValidate: true })
+														setOpen(false)
+													}}>
+													<Icons.check
+														className={`mr-2 h-4 w-4 ${
+															category.value.id === field.value?.id ? 'opacity-100' : 'opacity-0'
+														}`}
+													/>
+													{category.label}
+												</CommandItem>
+											))
+										)}
 									</CommandGroup>
 								</CommandList>
 							</Command>

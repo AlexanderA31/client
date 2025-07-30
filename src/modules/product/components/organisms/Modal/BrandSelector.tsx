@@ -58,22 +58,28 @@ export function BrandSelector({ control, setValue, value, brands }: BrandSelecto
 								<CommandList>
 									<CommandEmpty>No se encontraron marcas</CommandEmpty>
 									<CommandGroup>
-										{brandOptions.map(brand => (
-											<CommandItem
-												key={brand.value.id}
-												value={brand.label}
-												onSelect={() => {
-													setValue('brandId', brand.value, { shouldValidate: true })
-													setOpen(false)
-												}}>
-												<Icons.check
-													className={`mr-2 h-4 w-4 ${
-														brand.value.id === field.value?.id ? 'opacity-100' : 'opacity-0'
-													}`}
-												/>
-												{brand.label}
-											</CommandItem>
-										))}
+										{loadingBrands ? (
+											<div className='flex items-center justify-center p-2'>
+												<SpinnerLoader />
+											</div>
+										) : (
+											brandOptions.map(brand => (
+												<CommandItem
+													key={brand.value.id}
+													value={brand.label}
+													onSelect={() => {
+														setValue('brandId', brand.value, { shouldValidate: true })
+														setOpen(false)
+													}}>
+													<Icons.check
+														className={`mr-2 h-4 w-4 ${
+															brand.value.id === field.value?.id ? 'opacity-100' : 'opacity-0'
+														}`}
+													/>
+													{brand.label}
+												</CommandItem>
+											))
+										)}
 									</CommandGroup>
 								</CommandList>
 							</Command>
