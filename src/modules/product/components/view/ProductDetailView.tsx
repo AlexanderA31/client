@@ -24,29 +24,8 @@ type Props = {
 }
 
 export function ProductDetailView({ productId }: Props) {
-	const { getAttributeById, isHardDeleting } = useProduct({ enabled: false })
-	const [product, setProduct] = useState<I_Product | null>(null)
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState<string | null>(null)
+	const { data: product, isLoading, error } = useProduct({ enabled: !!productId, page: 1, limit: 1, filters: { id: productId } })
 	const router = useRouter()
-
-	useEffect(() => {
-		const fetchProduct = async () => {
-			try {
-				setLoading(true)
-				setError(null)
-				const productData = await getAttributeById(productId)
-				setProduct(productData)
-			} catch (err) {
-				setError(err.response.data.error.message)
-				console.error('Error fetching product:', err)
-			} finally {
-				setLoading(false)
-			}
-		}
-
-		if (productId) fetchProduct()
-	}, [productId, getAttributeById])
 
 	const InfoRow = ({
 		label,
@@ -71,7 +50,7 @@ export function ProductDetailView({ productId }: Props) {
 	const Label = ({ children }: { children: string }) => (
 		<label className='text-muted-foreground text-sm font-medium'>{children}</label>
 	)
-	if (loading) {
+	if (isLoading) {
 		return (
 			<div className='flex h-screen flex-1 flex-col items-center justify-center'>
 				<SpinnerLoader text='Cargando... Por favor espera' />

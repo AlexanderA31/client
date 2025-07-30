@@ -9,7 +9,7 @@ import { I_Product } from '@/modules/product/types/product'
 import { ActionButton } from '@/components/layout/atoms/ActionButton'
 import { UniversalFormField } from '@/components/layout/atoms/FormFieldZod'
 import { FormFooter } from '@/modules/product/components/organisms/Modal/FormFooter'
-import { useProductModal } from '@/modules/product/hooks/useProductModal'
+import { useProduct } from '@/common/hooks/useProduct'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet'
 import { SelectFieldZod } from '@/components/layout/atoms/SelectFieldZod'
@@ -52,43 +52,10 @@ interface Props {
 }
 
 export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Props) {
-  const {
-    categoriesData,
-    loadingCategories,
-    categorySearch,
-    setCategorySearch,
-    categoryOpen,
-    setCategoryOpen,
-    loadMoreCategories,
-    brandsData,
-    loadingBrands,
-    brandSearch,
-    setBrandSearch,
-    brandOpen,
-    setBrandOpen,
-    loadMoreBrands,
-    suppliersData,
-    loadingSuppliers,
-    supplierSearch,
-    setSupplierSearch,
-    supplierOpen,
-    setSupplierOpen,
-    loadMoreSuppliers,
-    templatesData,
-    loadingTemplates,
-    templateSearch,
-    setTemplateSearch,
-    templateOpen,
-    setTemplateOpen,
-    loadMoreTemplates,
-    fileInputRef,
-    previewImage,
-    isUploading,
-    handleFileChange,
-    triggerFileInput,
-    clearPreview,
-    setPreviewImage,
-  } = useProductModal(currentRecord)
+  const { getProductById, ...productQuery } = useProduct({ enabled: false });
+  const [previewImage, setPreviewImage] = React.useState<string | null>(null);
+  const [isUploading, setIsUploading] = React.useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const methods = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
@@ -113,28 +80,28 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
   const { errors, isSubmitting, isValid, isDirty } = formState
 
   useEffect(() => {
-    if (isOpen) {
-      if (currentRecord) {
-        reset({
-          name: currentRecord.name,
-          description: currentRecord.description || '',
-          price: currentRecord.price,
-          sku: currentRecord.sku || '',
-          barCode: currentRecord.barCode || '',
-          stock: currentRecord.stock,
-          status: currentRecord.status,
-          categoryId: currentRecord.category?.id || '',
-          brandId: currentRecord.brand?.id || '',
-          supplierId: currentRecord.supplier?.id || '',
-          templateId: currentRecord.template?.id || '',
-          photo: currentRecord.photo?.id || '',
-          removePhoto: false,
-        });
-
-        if (currentRecord.photo) {
-          setPreviewImage(currentRecord.photo.path)
-        } else {
-          setPreviewImage(null)
+    const fetchProduct = async () => {
+      if (currentRecord?.id) {
+        const productData = await getProductById(currentRecord.id);
+        if (productData) {
+          reset({
+            name: productData.name,
+            description: productData.description || '',
+            price: productData.price,
+            sku: productData.sku || '',
+            barCode: productData.barCode || '',
+            stock: productData.stock,
+            status: productData.status,
+            categoryId: productData.category?.id || '',
+            brandId: productData.brand?.id || '',
+            supplierId: productData.supplier?.id || '',
+            templateId: productData.template?.id || '',
+            photo: productData.photo?.id || '',
+            removePhoto: false,
+          });
+          if (productData.photo) {
+            setPreviewImage(productData.photo.path);
+          }
         }
       } else {
         reset({
@@ -152,10 +119,14 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
           photo: '',
           removePhoto: false,
         });
-        clearPreview()
+        setPreviewImage(null);
       }
+    };
+
+    if (isOpen) {
+      fetchProduct();
     }
-  }, [isOpen, currentRecord, reset, setPreviewImage, clearPreview]);
+  }, [isOpen, currentRecord, reset, getProductById]);
 
   const handleFormSubmit = async (data: ProductFormData) => {
     
@@ -180,32 +151,22 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
   const handleClose = () => {
     reset()
     onClose()
-    clearPreview()
-  }
-
-  const removePhoto = watch('removePhoto')
-
-  const handleClearPreviewWithForm = () => {
-    const currentPhoto = currentRecord?.photo?.id
-
-    if (currentPhoto) {
-      setValue('removePhoto', true, { shouldDirty: true })
-      setValue('photo', '', { shouldDirty: true })
-    } else {
-      setValue('photo', '', { shouldDirty: true })
-      setValue('removePhoto', false, { shouldDirty: true })
-    }
-
-    clearPreview()
+    setPreviewImage(null)
   }
 
   const handleFileChangeWithForm = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileId = await handleFileChange(e)
-    if (fileId) {
-      setValue('photo', fileId, { shouldDirty: true })
-      setValue('removePhoto', false, { shouldDirty: true })
-    }
-  }
+    // const fileId = await handleFileChange(e);
+    // if (fileId) {
+    //   setValue('photo', fileId, { shouldDirty: true });
+    //   setValue('removePhoto', false, { shouldDirty: true });
+    // }
+  };
+
+  const handleClearPreviewWithForm = () => {
+    setValue('photo', '', { shouldDirty: true });
+    setValue('removePhoto', true, { shouldDirty: true });
+    setPreviewImage(null);
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={handleClose}>
@@ -265,47 +226,21 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                 <CategorySelector
                   control={control}
                   setValue={methods.setValue}
-                  categories={categoriesData}
-                  loadingCategories={loadingCategories}
-                  categorySearch={categorySearch}
-                  setCategorySearch={setCategorySearch}
-                  categoryOpen={categoryOpen}
-                  setCategoryOpen={setCategoryOpen}
-                  loadMoreCategories={loadMoreCategories}
+                  value={watch('categoryId')}
                 />
                 <BrandSelector
                   control={control}
                   setValue={methods.setValue}
-                  brands={brandsData}
-                  loadingBrands={loadingBrands}
-                  brandSearch={brandSearch}
-                  setBrandSearch={setBrandSearch}
-                  brandOpen={brandOpen}
-                  setBrandOpen={setBrandOpen}
-                  loadMoreBrands={loadMoreBrands}
+                  value={watch('brandId')}
                 />
                 <SupplierSelector
                   control={control}
                   setValue={methods.setValue}
-                  suppliers={suppliersData}
-                  loadingSuppliers={loadingSuppliers}
-                  supplierSearch={supplierSearch}
-                  setSupplierSearch={setSupplierSearch}
-                  supplierOpen={supplierOpen}
-                  setSupplierOpen={setSupplierOpen}
-                  loadMoreSuppliers={loadMoreSuppliers}
                   value={watch('supplierId')}
                 />
                 <TemplateSelector
                   control={control}
                   setValue={methods.setValue}
-                  templates={templatesData}
-                  loadingTemplates={loadingTemplates}
-                  templateSearch={templateSearch}
-                  setTemplateSearch={setTemplateSearch}
-                  templateOpen={templateOpen}
-                  setTemplateOpen={setTemplateOpen}
-                  loadMoreTemplates={loadMoreTemplates}
                   value={watch('templateId')}
                 />
                 <FileUploadSection
@@ -313,10 +248,10 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   previewImage={previewImage}
                   isUploading={isUploading}
                   onFileChange={handleFileChangeWithForm}
-                  onTriggerFileInput={triggerFileInput}
+                  onTriggerFileInput={() => fileInputRef.current?.click()}
                   onClearPreview={handleClearPreviewWithForm}
                   currentImage={currentRecord?.photo}
-                  shouldHideCurrentImage={removePhoto}
+                  shouldHideCurrentImage={watch('removePhoto')}
                 />
               </CardContent>
             </Card>

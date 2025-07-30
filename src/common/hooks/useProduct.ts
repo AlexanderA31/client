@@ -50,8 +50,9 @@ export const useProduct = (paginationParams: Props = {}) => {
 	// ✅ Solo ejecutar el query si está habilitado
 	const query = genericApi.buildQuery(queryParams, { enabled })
 
-	// ✅ Memoizar la función getAttributeById para evitar re-creaciones
-	const getAttributeById = useCallback(async (id: string) => {
+	// ✅ Memoizar la función getProductById para evitar re-creaciones
+	const getProductById = useCallback(async (id: string) => {
+		if (!id) return
 		try {
 			const response = await api.get(`${ENDPOINT_API.PRODUCT}/${id}`)
 			return response.data.data
@@ -62,34 +63,8 @@ export const useProduct = (paginationParams: Props = {}) => {
 	}, []) // Sin dependencias porque api y ENDPOINT_API son estables
 
 	return {
-		// Datos del query - manteniendo los mismos nombres
-		recordsData: query.data,
-		loading: query.isLoading,
-		error: query.error?.message,
-
-		// Funciones - manteniendo los mismos nombres
-		refetchRecords: query.refetch,
-
-		// Funciones CRUD - manteniendo los mismos nombres
-		getAttributeById: getAttributeById,
-		createRecord: genericApi.create,
-		updateRecord: genericApi.update,
-		restoreRecord: genericApi.restore,
-		softDeleteRecord: genericApi.delete,
-		hardDeleteRecord: genericApi.hardDelete,
-
-		// Estados granulares de loading - manteniendo los mismos nombres
-		isCreating: genericApi.isCreating,
-		isUpdating: genericApi.isUpdating,
-		isRestoring: genericApi.isRestoring,
-		isSoftDeleting: genericApi.isDeleting,
-		isHardDeleting: genericApi.isHardDeleting,
-
-		// Mutations para control avanzado - ahora completamente dinámicas
-		mutations: genericApi.mutations, // Contiene todas las mutations configuradas
-
-		// Funciones adicionales del API genérico - manteniendo los mismos nombres
-		executeCustomEndpoint: genericApi.executeCustomEndpoint,
-		apiService: genericApi.apiService,
+		...genericApi,
+		...query,
+		getProductById,
 	}
 }
