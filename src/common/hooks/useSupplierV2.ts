@@ -11,10 +11,7 @@ interface Props {
 }
 
 export const useSupplierV2 = (paginationParams: Props = {}) => {
-	const api = useGenericApi<I_SupplierResponse, I_CreateSupplier, I_UpdateSupplier>({
-		...SUPPLIER_ENDPOINTS_CONFIG,
-		baseEndpoint: '/supplier',
-	})
+	const api = useGenericApi<I_SupplierResponse, I_CreateSupplier, I_UpdateSupplier>(SUPPLIER_ENDPOINTS_CONFIG)
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const queryParams: Record<string, any> = {}
@@ -39,9 +36,6 @@ export const useSupplierV2 = (paginationParams: Props = {}) => {
 	if (paginationParams.search && paginationParams.search.trim()) queryParams.search = paginationParams.search.trim()
 
 	const query = api.buildQuery(queryParams)
-
-	console.log('Supplier query params:', queryParams)
-	console.log('Supplier query data:', query.data)
 
 	return {
 		suppliers: query.data,
