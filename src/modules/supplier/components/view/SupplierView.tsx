@@ -1,10 +1,10 @@
 'use client'
 
 import { useCallback, useMemo, useState } from 'react'
-import { useSupplier } from '@/common/hooks/useSupplier'
 
 import { useModalState } from '@/modules/supplier/hooks/useModalState'
 import { usePagination } from '@/modules/supplier/hooks/usePagination'
+import { useSupplierV2 } from '@/common/hooks/useSupplierV2'
 import { useSupplierHandlers } from '@/modules/supplier/hooks/useHandlers'
 import { useGenericRefresh } from '@/common/hooks/shared/useGenericRefresh'
 
@@ -60,7 +60,7 @@ export function SupplierView() {
 		updateRecord,
 		hardDeleteRecord,
 		refetchRecords,
-	} = useSupplier(paginationParams)
+	} = useSupplierV2(paginationParams)
 
 	// Hook de refresh data
 	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchRecords)
