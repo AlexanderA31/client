@@ -149,7 +149,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
         supplierId: data.supplierId?.id,
         templateId: data.templateId?.id,
         photo: data.photo ? { id: data.photo } : undefined,
-        description: data.description || null,
+        description: data.description,
       };
       delete dataToSend.removePhoto;
    
