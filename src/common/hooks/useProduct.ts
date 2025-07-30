@@ -54,14 +54,14 @@ export const useProduct = (paginationParams: Props = {}) => {
 		async (id: string) => {
 			if (!id) return
 			try {
-				const response = await api.getById(id)
-				return response.data
+				const response = await api.apiService.getById(id)
+				return response
 			} catch (error) {
 				console.error(`Error fetching attribute with ID ${id}:`, error)
 				throw error
 			}
 		},
-		[api],
+		[api.apiService],
 	)
 	return {
 		// Datos del query - manteniendo los mismos nombres
