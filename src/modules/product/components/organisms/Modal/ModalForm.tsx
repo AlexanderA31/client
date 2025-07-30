@@ -82,8 +82,9 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
   useEffect(() => {
     const fetchProduct = async () => {
       if (currentRecord?.id) {
-        const productData = await getProductById(currentRecord.id);
-        if (productData) {
+        const response = await getProductById(currentRecord.id);
+        if (response) {
+          const productData = response.data
           reset({
             name: productData.name,
             description: productData.description || '',
