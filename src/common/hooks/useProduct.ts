@@ -65,7 +65,7 @@ export const useProduct = (paginationParams: Props = {}) => {
 	)
 	return {
 		// Datos del query - manteniendo los mismos nombres
-		products: query.data,
+		products: query.data?.data,
 		loading: query.isLoading,
 		error: query.error?.message,
 
