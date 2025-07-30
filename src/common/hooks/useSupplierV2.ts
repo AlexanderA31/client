@@ -37,6 +37,9 @@ export const useSupplierV2 = (paginationParams: Props = {}) => {
 
 	const query = api.buildQuery(queryParams)
 
+	console.log('Supplier query params:', queryParams)
+	console.log('Supplier query data:', query.data)
+
 	return {
 		suppliers: query.data,
 		loading: query.isLoading,

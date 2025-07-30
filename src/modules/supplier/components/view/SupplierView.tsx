@@ -91,6 +91,9 @@ export function SupplierView() {
 		[suppliers]
 	)
 
+	console.log('Suppliers from hook:', suppliers)
+	console.log('Paginated data for table:', dataPaginated)
+
 	// Función para reintentar la carga
 	const handleRetry = useCallback(() => {
 		setRetryCount(prev => prev + 1)
