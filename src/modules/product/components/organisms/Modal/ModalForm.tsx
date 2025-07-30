@@ -52,10 +52,10 @@ interface Props {
 }
 
 export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Props) {
-  const { getProductById, ...productQuery } = useProduct({ enabled: false });
-  const [previewImage, setPreviewImage] = React.useState<string | null>(null);
-  const [isUploading, setIsUploading] = React.useState(false);
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const { getProductById } = useProduct({ enabled: false })
+  const [previewImage, setPreviewImage] = React.useState<string | null>(null)
+  const [isUploading, setIsUploading] = React.useState(false)
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
 
   const methods = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),

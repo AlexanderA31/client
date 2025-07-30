@@ -17,8 +17,8 @@ interface Props {
 }
 
 export const useProduct = (paginationParams: Props = {}) => {
-	const { enabled = false, ...restParams } = paginationParams
-	const genericApi = useGenericApi<I_ProductResponse, I_CreateProduct, I_UpdateProduct>(PRODUCT_ENDPOINTS_CONFIG)
+	const { enabled = true, ...restParams } = paginationParams
+	const api = useGenericApi<I_ProductResponse, I_CreateProduct, I_UpdateProduct>(PRODUCT_ENDPOINTS_CONFIG)
 
 	// ✅ Construir queryParams correctamente
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,24 +47,51 @@ export const useProduct = (paginationParams: Props = {}) => {
 	// ✅ Parámetro de búsqueda
 	if (restParams.search && restParams.search.trim()) queryParams.search = restParams.search.trim()
 
-	// ✅ Solo ejecutar el query si está habilitado
-	const query = genericApi.buildQuery(queryParams, { enabled })
-
+	// ✅ Usa el query dinámico con los parámetros de paginación
+	const query = api.buildQuery(queryParams, { enabled })
 	// ✅ Memoizar la función getProductById para evitar re-creaciones
-	const getProductById = useCallback(async (id: string) => {
-		if (!id) return
-		try {
-			const response = await api.get(`${ENDPOINT_API.PRODUCT}/${id}`)
-			return response.data.data
-		} catch (error) {
-			console.error(`Error fetching attribute with ID ${id}:`, error)
-			throw error
-		}
-	}, []) // Sin dependencias porque api y ENDPOINT_API son estables
-
+	const getProductById = useCallback(
+		async (id: string) => {
+			if (!id) return
+			try {
+				const response = await api.apiService.getById(id)
+				return response.data
+			} catch (error) {
+				console.error(`Error fetching attribute with ID ${id}:`, error)
+				throw error
+			}
+		},
+		[api.apiService],
+	)
 	return {
-		...genericApi,
-		...query,
+		// Datos del query - manteniendo los mismos nombres
+		products: query.data,
+		loading: query.isLoading,
+		error: query.error?.message,
+
+		// Funciones - manteniendo los mismos nombres
+		refetchProducts: query.refetch,
+
+		// Funciones CRUD - manteniendo los mismos nombres
 		getProductById,
+		createProduct: api.create,
+		updateProduct: api.update,
+		restoreProduct: api.restore,
+		softDeleteProduct: api.delete,
+		hardDeleteProduct: api.hardDelete,
+
+		// Estados granulares de loading - manteniendo los mismos nombres
+		isCreating: api.isCreating,
+		isUpdating: api.isUpdating,
+		isRestoring: api.isRestoring,
+		isSoftDeleting: api.isDeleting,
+		isHardDeleting: api.isHardDeleting,
+
+		// Mutations para control avanzado - ahora completamente dinámicas
+		mutations: api.mutations, // Contiene todas las mutations configuradas
+
+		// Funciones adicionales del API genérico - manteniendo los mismos nombres
+		executeCustomEndpoint: api.executeCustomEndpoint,
+		apiService: api.apiService,
 	}
 }

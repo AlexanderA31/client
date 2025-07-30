@@ -24,7 +24,8 @@ type Props = {
 }
 
 export function ProductDetailView({ productId }: Props) {
-	const { data: product, isLoading, error } = useProduct({ enabled: !!productId, page: 1, limit: 1, filters: { id: productId } })
+	const { products, loading, error } = useProduct({ enabled: !!productId, filters: { id: productId } })
+	const product = products?.data[0]
 	const router = useRouter()
 
 	const InfoRow = ({
@@ -50,7 +51,7 @@ export function ProductDetailView({ productId }: Props) {
 	const Label = ({ children }: { children: string }) => (
 		<label className='text-muted-foreground text-sm font-medium'>{children}</label>
 	)
-	if (isLoading) {
+	if (loading) {
 		return (
 			<div className='flex h-screen flex-1 flex-col items-center justify-center'>
 				<SpinnerLoader text='Cargando... Por favor espera' />
