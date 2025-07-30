@@ -34,12 +34,14 @@ const productSchema = z.object({
     z.number({ invalid_type_error: 'Debe ser un número' }).int('Debe ser un entero').min(0, 'Debe ser un número positivo').optional()
   ),
   status: z.enum(['draft', 'active', 'inactive', 'discontinued', 'out_of_stock']),
-  categoryId: z.string().optional(),
-  brandId: z.string().optional(),
-  supplierId: z.string().optional(),
+  categoryId: z.any().optional(),
+  brandId: z.any().optional(),
+  supplierId: z.any().optional(),
   photo: z.any().optional(),
   removePhoto: z.boolean().optional(),
-  templateId: z.string().nonempty('El ID del template es obligatorio'),
+  templateId: z.any().refine(value => value && value.id, {
+    message: 'El ID del template es obligatorio',
+  }),
 });
 
 export type ProductFormData = z.infer<typeof productSchema>
@@ -93,10 +95,10 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
             barCode: productData.barCode || '',
             stock: productData.stock,
             status: productData.status,
-            categoryId: productData.category?.id || '',
-            brandId: productData.brand?.id || '',
-            supplierId: productData.supplier?.id || '',
-            templateId: productData.template?.id || '',
+            categoryId: productData.category,
+            brandId: productData.brand,
+            supplierId: productData.supplier,
+            templateId: productData.template,
             photo: productData.photo?.id || '',
             removePhoto: false,
           });
@@ -134,13 +136,14 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
     try {
       const dataToSend = {
         ...data,
+        categoryId: data.categoryId?.id,
+        brandId: data.brandId?.id,
+        supplierId: data.supplierId?.id,
+        templateId: data.templateId?.id,
         photo: data.photo ? { id: data.photo } : undefined,
         description: data.description || null,
       };
       delete dataToSend.removePhoto;
-      if (!dataToSend.templateId) {
-        delete dataToSend.templateId;
-      }
    
       await onSubmit(dataToSend)
       handleClose()
