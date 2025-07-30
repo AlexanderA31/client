@@ -249,13 +249,6 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   brands={brands?.data.items}
                   loadingBrands={brands?.loading}
                 />
-                <SupplierSelector
-                  control={control}
-                  setValue={methods.setValue}
-                  value={watch('supplierId')}
-                  suppliers={suppliers?.data.items}
-                  loadingSuppliers={suppliers?.loading}
-                />
                 <TemplateSelector
                   control={control}
                   setValue={methods.setValue}
@@ -271,6 +264,13 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   onClearPreview={handleClearPreviewWithForm}
                   currentImage={currentRecord?.photo}
                   shouldHideCurrentImage={watch('removePhoto')}
+                />
+                <SupplierSelector
+                  control={control}
+                  setValue={methods.setValue}
+                  value={watch('supplierId')}
+                  suppliers={suppliers?.data.items}
+                  loadingSuppliers={suppliers?.loading}
                 />
               </CardContent>
             </Card>
