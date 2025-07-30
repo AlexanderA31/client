@@ -10,6 +10,10 @@ import { ActionButton } from '@/components/layout/atoms/ActionButton'
 import { UniversalFormField } from '@/components/layout/atoms/FormFieldZod'
 import { FormFooter } from '@/modules/product/components/organisms/Modal/FormFooter'
 import { useProduct } from '@/common/hooks/useProduct'
+import { useCategory } from '@/common/hooks/useCategory'
+import { useBrand } from '@/common/hooks/useBrand'
+import { useSupplier } from '@/common/hooks/useSupplier'
+import { useTemplate } from '@/common/hooks/useTemplate'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet'
 import { SelectFieldZod } from '@/components/layout/atoms/SelectFieldZod'
@@ -55,6 +59,10 @@ interface Props {
 
 export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Props) {
   const { getProductById } = useProduct({ enabled: false })
+  const { categories } = useCategory()
+  const { brands } = useBrand()
+  const { suppliers } = useSupplier()
+  const { templates } = useTemplate()
   const [previewImage, setPreviewImage] = React.useState<string | null>(null)
   const [isUploading, setIsUploading] = React.useState(false)
   const fileInputRef = React.useRef<HTMLInputElement>(null)
@@ -129,7 +137,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
     if (isOpen) {
       fetchProduct();
     }
-  }, [isOpen, currentRecord, reset, getProductById]);
+  }, [isOpen, currentRecord, reset, getProductById, categories, brands, suppliers, templates]);
 
   const handleFormSubmit = async (data: ProductFormData) => {
     
@@ -231,21 +239,25 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   control={control}
                   setValue={methods.setValue}
                   value={watch('categoryId')}
+                  categories={categories?.data.items}
                 />
                 <BrandSelector
                   control={control}
                   setValue={methods.setValue}
                   value={watch('brandId')}
+                  brands={brands?.data.items}
                 />
                 <SupplierSelector
                   control={control}
                   setValue={methods.setValue}
                   value={watch('supplierId')}
+                  suppliers={suppliers?.data.items}
                 />
                 <TemplateSelector
                   control={control}
                   setValue={methods.setValue}
                   value={watch('templateId')}
+                  templates={templates?.data.items}
                 />
                 <FileUploadSection
                   fileInputRef={fileInputRef}

@@ -45,19 +45,19 @@ export const useSupplier = (paginationParams: Props = {}) => {
 
 	return {
 		// Datos del query - manteniendo los mismos nombres
-		supplierData: query.data,
+		suppliers: query.data,
 		loading: query.isLoading,
 		error: query.error?.message,
 
 		// Funciones - manteniendo los mismos nombres
-		refetchRecords: query.refetch,
+		refetchSuppliers: query.refetch,
 
 		// Funciones CRUD - manteniendo los mismos nombres
-		createRecord: api.create,
-		updateRecord: api.update,
-		restoreRecord: api.restore,
-		softDeleteRecord: api.delete,
-		hardDeleteRecord: api.hardDelete,
+		createSupplier: api.create,
+		updateSupplier: api.update,
+		restoreSupplier: api.restore,
+		softDeleteSupplier: api.delete,
+		hardDeleteSupplier: api.hardDelete,
 
 		// Estados granulares de loading - manteniendo los mismos nombres
 		isCreating: api.isCreating,
