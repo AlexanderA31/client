@@ -19,36 +19,25 @@ interface Props {
   value: string
 }
 
-export function TemplateSelector({
-  control,
-  setValue,
-  templates,
-  loadingTemplates,
-  templateSearch,
-  setTemplateSearch,
-  templateOpen,
-  setTemplateOpen,
-  loadMoreTemplates,
-  value,
-}: Props) {
-  const templateOptions =
-    templates?.map((template) => ({
-      value: template.id,
-      label: template.name,
-    })) || []
-  return (
-    <div>
-      <SelectFieldZod
-        control={control}
-        name='templateId'
-        label='Plantilla'
-        options={templateOptions}
-        required
-        value={value}
-        onChange={(value) => {
-          setValue('templateId', value, { shouldDirty: true })
-        }}
-      />
-    </div>
-  )
+export function TemplateSelector({ control, setValue, value, templates }: Props) {
+	const templateOptions =
+		templates?.map(template => ({
+			value: template,
+			label: template.name,
+		})) || []
+	return (
+		<div>
+			<SelectFieldZod
+				control={control}
+				name='templateId'
+				label='Plantilla'
+				options={templateOptions}
+				required
+				value={value}
+				onChange={value => {
+					setValue('templateId', value, { shouldDirty: true })
+				}}
+			/>
+		</div>
+	)
 }
