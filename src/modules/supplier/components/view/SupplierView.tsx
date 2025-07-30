@@ -53,17 +53,17 @@ export function SupplierView() {
 	)
 
 	const {
-		supplierData,
+		suppliers,
 		loading,
 		error: errorSupplier,
 		createRecord,
 		updateRecord,
 		hardDeleteRecord,
-		refetchRecords,
+		refetchSuppliers,
 	} = useSupplierV2(paginationParams)
 
 	// Hook de refresh data
-	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchRecords)
+	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchSuppliers)
 
 	// Hooks de formulario y modales
 	const modalState = useModalState()
@@ -78,24 +78,24 @@ export function SupplierView() {
 
 	// ✅ Optimized next page handler
 	const handleNext = useCallback(() => {
-		handleNextPage(supplierData?.data?.pagination?.hasNextPage)
-	}, [handleNextPage, supplierData?.data?.pagination?.hasNextPage])
+		handleNextPage(suppliers?.pagination?.hasNextPage)
+	}, [handleNextPage, suppliers?.pagination?.hasNextPage])
 
 	// ✅ Memoizar datos derivados
 	const dataPaginated = useMemo(
 		() => ({
-			items: supplierData?.data?.items || [],
-			pagination: supplierData?.data?.pagination,
-			hasNextPage: supplierData?.data?.pagination?.hasNextPage,
+			items: suppliers?.items || [],
+			pagination: suppliers?.pagination,
+			hasNextPage: suppliers?.pagination?.hasNextPage,
 		}),
-		[supplierData?.data]
+		[suppliers]
 	)
 
 	// Función para reintentar la carga
 	const handleRetry = useCallback(() => {
 		setRetryCount(prev => prev + 1)
-		refetchRecords()
-	}, [refetchRecords])
+		refetchSuppliers()
+	}, [refetchSuppliers])
 
 	if (errorSupplier && retryCount < 3) return <RetryErrorState onRetry={handleRetry} />
 
@@ -157,7 +157,7 @@ export function SupplierView() {
 						onPageChange={handlePageChange}
 						onNextPage={handleNext}
 						onLimitChange={handleLimitChange}
-						metaDataPagination={supplierData?.data?.pagination}
+						metaDataPagination={suppliers?.pagination}
 					/>
 				</>
 			)}

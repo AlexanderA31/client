@@ -1,7 +1,6 @@
 import { useGenericApi } from '@/common/hooks/useGenericApi'
 import { SUPPLIER_ENDPOINTS_CONFIG } from '@/common/configs/api/supplier-endpoints.config'
 import { I_CreateSupplier, I_Supplier, I_UpdateSupplier, I_SupplierResponse } from '@/modules/supplier/types/supplier'
-import { useMemo } from 'react'
 
 interface Props {
 	page?: number
@@ -38,30 +37,18 @@ export const useSupplierV2 = (paginationParams: Props = {}) => {
 
 	const query = api.buildQuery(queryParams)
 
-    const supplierData = useMemo(() => {
-        if (query.data) {
-            return {
-                data: {
-                    items: query.data.items,
-                    pagination: query.data.pagination,
-                }
-            }
-        }
-        return { data: { items: [], pagination: undefined } };
-    }, [query.data]);
-
 	return {
-		supplierData,
+		suppliers: query.data,
 		loading: query.isLoading,
 		error: query.error?.message,
 
-		refetchRecords: query.refetch,
+		refetchSuppliers: query.refetch,
 
-		createRecord: api.create,
-		updateRecord: api.update,
-		restoreRecord: api.restore,
-		softDeleteRecord: api.delete,
-		hardDeleteRecord: api.hardDelete,
+		createSupplier: api.create,
+		updateSupplier: api.update,
+		restoreSupplier: api.restore,
+		softDeleteSupplier: api.delete,
+		hardDeleteSupplier: api.hardDelete,
 
 		isCreating: api.isCreating,
 		isUpdating: api.isUpdating,
