@@ -11,7 +11,10 @@ interface Props {
 }
 
 export const useSupplierV2 = (paginationParams: Props = {}) => {
-	const api = useGenericApi<I_SupplierResponse, I_CreateSupplier, I_UpdateSupplier>(SUPPLIER_ENDPOINTS_CONFIG)
+	const api = useGenericApi<I_SupplierResponse, I_CreateSupplier, I_UpdateSupplier>({
+		...SUPPLIER_ENDPOINTS_CONFIG,
+		baseEndpoint: '/supplier',
+	})
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const queryParams: Record<string, any> = {}
