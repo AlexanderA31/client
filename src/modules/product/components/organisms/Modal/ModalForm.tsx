@@ -240,18 +240,21 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   setValue={methods.setValue}
                   value={watch('categoryId')}
                   categories={categories?.data.items}
+                  loadingCategories={categories?.loading}
                 />
                 <BrandSelector
                   control={control}
                   setValue={methods.setValue}
                   value={watch('brandId')}
                   brands={brands?.data.items}
+                  loadingBrands={brands?.loading}
                 />
                 <SupplierSelector
                   control={control}
                   setValue={methods.setValue}
                   value={watch('supplierId')}
                   suppliers={suppliers?.data.items}
+                  loadingSuppliers={suppliers?.loading}
                 />
                 <TemplateSelector
                   control={control}
