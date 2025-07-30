@@ -17,7 +17,6 @@ import { useTemplate } from '@/common/hooks/useTemplate'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet'
 import { SelectFieldZod } from '@/components/layout/atoms/SelectFieldZod'
-import { TextareaFieldZod } from '@/components/layout/atoms/TextareaFieldZod'
 import { CategorySelector } from './CategorySelector'
 import { BrandSelector } from './BrandSelector'
 import { SupplierSelector } from './SupplierSelector'
@@ -213,7 +212,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
               </CardHeader>
               <CardContent className='space-y-4 p-0'>
                 <UniversalFormField control={control} name='name' label='Nombre' placeholder='Ej. Camiseta de algodón' type='text' required />
-                <TextareaFieldZod label='Descripción' placeholder='Ej. Camiseta de algodón peinado, suave al tacto...' required={false} {...methods.register('description')} />
+                <UniversalFormField control={control} label='Descripción' placeholder='Ej. Camiseta de algodón peinado, suave al tacto...' required={false} {...methods.register('description')} />
                 <UniversalFormField control={control} name='price' label='Precio' placeholder='Ej. 25.99' type='number' required />
                 <UniversalFormField control={control} name='sku' label='SKU' placeholder='Ej. CAM-ALG-001' type='text' />
                 <UniversalFormField control={control} name='barCode' label='Código de barras' placeholder='Ej. 7861234567890' type='text' />
