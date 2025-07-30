@@ -1,10 +1,10 @@
 'use client'
 
 import { useCallback, useMemo, useState } from 'react'
+import { useSupplier } from '@/common/hooks/useSupplierV2'
 
 import { useModalState } from '@/modules/supplier/hooks/useModalState'
 import { usePagination } from '@/modules/supplier/hooks/usePagination'
-import { useSupplier } from '@/common/hooks/useSupplier'
 import { useSupplierHandlers } from '@/modules/supplier/hooks/useHandlers'
 import { useGenericRefresh } from '@/common/hooks/shared/useGenericRefresh'
 
@@ -46,24 +46,24 @@ export function SupplierView() {
 			search: searchTerm,
 			page: pagination.page,
 			limit: pagination.limit,
-			sort: currentSort ? [currentSort] : undefined,
+			sort: pagination.sort,
 			filters: currentStatus ? { status: currentStatus } : undefined,
 		}),
-		[pagination.page, pagination.limit, searchTerm, currentStatus, currentSort]
+		[pagination.page, pagination.limit, searchTerm, currentStatus, pagination.sort]
 	)
 
 	const {
-		paginatedSuppliers,
+		supplierData,
 		loading,
 		error: errorSupplier,
 		createRecord,
 		updateRecord,
 		hardDeleteRecord,
-		refetchSuppliers,
+		refetchRecords,
 	} = useSupplier(paginationParams)
 
 	// Hook de refresh data
-	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchSuppliers)
+	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchRecords)
 
 	// Hooks de formulario y modales
 	const modalState = useModalState()
@@ -78,24 +78,24 @@ export function SupplierView() {
 
 	// ✅ Optimized next page handler
 	const handleNext = useCallback(() => {
-		handleNextPage(paginatedSuppliers?.data.pagination?.hasNextPage)
-	}, [handleNextPage, paginatedSuppliers?.data.pagination?.hasNextPage])
+		handleNextPage(supplierData?.data?.pagination?.hasNextPage)
+	}, [handleNextPage, supplierData?.data?.pagination?.hasNextPage])
 
 	// ✅ Memoizar datos derivados
 	const dataPaginated = useMemo(
 		() => ({
-			items: paginatedSuppliers?.data.items || [],
-			pagination: paginatedSuppliers?.data.pagination,
-			hasNextPage: paginatedSuppliers?.data.pagination?.hasNextPage,
+			items: supplierData?.data?.items || [],
+			pagination: supplierData?.data?.pagination,
+			hasNextPage: supplierData?.data?.pagination?.hasNextPage,
 		}),
-		[paginatedSuppliers]
+		[supplierData?.data]
 	)
 
 	// Función para reintentar la carga
 	const handleRetry = useCallback(() => {
 		setRetryCount(prev => prev + 1)
-		refetchSuppliers()
-	}, [refetchSuppliers])
+		refetchRecords()
+	}, [refetchRecords])
 
 	if (errorSupplier && retryCount < 3) return <RetryErrorState onRetry={handleRetry} />
 
@@ -157,7 +157,7 @@ export function SupplierView() {
 						onPageChange={handlePageChange}
 						onNextPage={handleNext}
 						onLimitChange={handleLimitChange}
-						metaDataPagination={paginatedSuppliers?.data.pagination}
+						metaDataPagination={supplierData?.data?.pagination}
 					/>
 				</>
 			)}
