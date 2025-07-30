@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from 'react'
 
 import { useModalState } from '@/modules/supplier/hooks/useModalState'
 import { usePagination } from '@/modules/supplier/hooks/usePagination'
-import { useSupplierV2 } from '@/common/hooks/useSupplierV2'
+import { useSupplier } from '@/common/hooks/useSupplier'
 import { useSupplierHandlers } from '@/modules/supplier/hooks/useHandlers'
 import { useGenericRefresh } from '@/common/hooks/shared/useGenericRefresh'
 
@@ -53,14 +53,14 @@ export function SupplierView() {
 	)
 
 	const {
-		suppliers,
+		paginatedSuppliers,
 		loading,
 		error: errorSupplier,
 		createRecord,
 		updateRecord,
 		hardDeleteRecord,
 		refetchSuppliers,
-	} = useSupplierV2(paginationParams)
+	} = useSupplier(paginationParams)
 
 	// Hook de refresh data
 	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchSuppliers)
@@ -78,17 +78,17 @@ export function SupplierView() {
 
 	// ✅ Optimized next page handler
 	const handleNext = useCallback(() => {
-		handleNextPage(suppliers?.pagination?.hasNextPage)
-	}, [handleNextPage, suppliers?.pagination?.hasNextPage])
+		handleNextPage(paginatedSuppliers?.data.pagination?.hasNextPage)
+	}, [handleNextPage, paginatedSuppliers?.data.pagination?.hasNextPage])
 
 	// ✅ Memoizar datos derivados
 	const dataPaginated = useMemo(
 		() => ({
-			items: suppliers?.items || [],
-			pagination: suppliers?.pagination,
-			hasNextPage: suppliers?.pagination?.hasNextPage,
+			items: paginatedSuppliers?.data.items || [],
+			pagination: paginatedSuppliers?.data.pagination,
+			hasNextPage: paginatedSuppliers?.data.pagination?.hasNextPage,
 		}),
-		[suppliers]
+		[paginatedSuppliers]
 	)
 
 	// Función para reintentar la carga
@@ -157,7 +157,7 @@ export function SupplierView() {
 						onPageChange={handlePageChange}
 						onNextPage={handleNext}
 						onLimitChange={handleLimitChange}
-						metaDataPagination={suppliers?.pagination}
+						metaDataPagination={paginatedSuppliers?.data.pagination}
 					/>
 				</>
 			)}

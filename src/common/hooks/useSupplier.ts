@@ -10,6 +10,8 @@ interface Props {
 	sort?: Array<{ orderBy: keyof I_Supplier; order: 'asc' | 'desc' }>
 }
 
+import { useMemo } from 'react'
+
 export const useSupplier = (paginationParams: Props = {}) => {
 	const api = useGenericApi<I_SupplierResponse, I_CreateSupplier, I_UpdateSupplier>(SUPPLIER_ENDPOINTS_CONFIG)
 
@@ -43,9 +45,22 @@ export const useSupplier = (paginationParams: Props = {}) => {
 	// ✅ Usa el query dinámico con los parámetros de paginación
 	const query = api.buildQuery(queryParams)
 
+	const getPaginatedSuppliers = useMemo(() => {
+		if (query.data) {
+			return {
+				data: {
+					items: query.data.items,
+					pagination: query.data.pagination,
+				},
+			}
+		}
+		return { data: { items: [], pagination: undefined } }
+	}, [query.data])
+
 	return {
 		// Datos del query - manteniendo los mismos nombres
 		suppliers: query.data,
+		paginatedSuppliers: getPaginatedSuppliers,
 		loading: query.isLoading,
 		error: query.error?.message,
 
