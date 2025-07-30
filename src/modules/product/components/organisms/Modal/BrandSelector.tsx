@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { I_Brand } from '@/modules/brand/types/brand'
 import { ProductFormData } from '@/modules/product/components/organisms/Modal/ModalForm'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
