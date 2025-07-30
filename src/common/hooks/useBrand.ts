@@ -44,28 +44,28 @@ export const useBrand = (paginationParams: UseBrandParams = {}) => {
 	const query = api.buildQuery(queryParams)
 
 	return {
-		// Datos del query - manteniendo los mismos nombres
-		brands: query.data,
+		// Datos del query
+		brandData: query.data,
 		loading: query.isLoading,
-		error: query.error?.message,
+		error: query.error,
 
-		// Funciones - manteniendo los mismos nombres
-		refetchBrands: query.refetch,
+		// Funciones
+		refetchRecords: query.refetch,
 
-		// Funciones CRUD - manteniendo los mismos nombres
-		createBrand: api.create,
-		updateBrand: api.update,
-		hardDeleteBrand: api.hardDelete,
+		// Funciones CRUD
+		createRecord: api.create,
+		updateRecord: api.update,
+		hardDeleteRecord: api.hardDelete,
 
-		// Estados granulares de loading - manteniendo los mismos nombres
+		// Estados granulares de loading
 		isCreating: api.isCreating,
 		isUpdating: api.isUpdating,
 		isHardDeleting: api.isHardDeleting,
 
-		// Mutations para control avanzado - ahora completamente dinámicas
-		mutations: api.mutations, // Contiene todas las mutations configuradas
+		// Mutations para control avanzado
+		mutations: api.mutations,
 
-		// Funciones adicionales del API genérico - manteniendo los mismos nombres
+		// Funciones adicionales del API genérico
 		executeCustomEndpoint: api.executeCustomEndpoint,
 		apiService: api.apiService,
 	}
