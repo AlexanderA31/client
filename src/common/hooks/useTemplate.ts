@@ -16,7 +16,14 @@ export const useTemplate = (paginationParams: UseTemplateParams = {}) => {
 
 	// ✅ Memoizar queryParams para evitar recreaciones innecesarias
 	const queryParams = useMemo(() => {
-		const params: Record<string, any> = {}
+		type QueryParams = {
+			page?: number
+			limit?: number
+			search?: string
+			filters?: string
+			sort?: string
+		}
+		const params: QueryParams = {}
 
 		// Solo agregar parámetros si tienen valores válidos
 		if (paginationParams.page !== undefined) params.page = paginationParams.page
@@ -62,17 +69,17 @@ export const useTemplate = (paginationParams: UseTemplateParams = {}) => {
 	// ✅ Retornar objeto estable
 	return {
 		// Datos del query
-		templates: query.data,
+		templateData: query.data,
 		loading: query.isLoading,
-		error: query.error?.message,
+		error: query.error,
 
 		// Funciones
-		refetchTemplates: query.refetch,
+		refetchRecords: query.refetch,
 
 		// Funciones CRUD
-		createTemplate: api.create,
-		updateTemplate: api.update,
-		hardDeleteTemplate: api.hardDelete,
+		createRecord: api.create,
+		updateRecord: api.update,
+		hardDeleteRecord: api.hardDelete,
 
 		// Estados granulares de loading
 		isCreating: api.isCreating,

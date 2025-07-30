@@ -46,10 +46,10 @@ export function SupplierView() {
 			search: searchTerm,
 			page: pagination.page,
 			limit: pagination.limit,
-			sort: currentSort ? [currentSort] : undefined,
+			sort: pagination.sort,
 			filters: currentStatus ? { status: currentStatus } : undefined,
 		}),
-		[pagination.page, pagination.limit, searchTerm, currentStatus, currentSort]
+		[pagination.page, pagination.limit, searchTerm, currentStatus, pagination.sort]
 	)
 
 	const {

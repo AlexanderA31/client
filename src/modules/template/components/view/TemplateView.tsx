@@ -44,24 +44,24 @@ export function TemplateView() {
 			limit: pagination.limit,
 			search: searchTerm,
 			filters: currentStatus ? { status: currentStatus } : undefined,
-			sort: currentSort ? [currentSort] : undefined,
+			sort: pagination.sort,
 		}),
-		[pagination.page, pagination.limit, searchTerm, currentStatus, currentSort]
+		[pagination.page, pagination.limit, searchTerm, currentStatus, pagination.sort]
 	)
 
 	// ✅ Main template hook con parámetros memoizados
 	const {
-		template,
+		templateData,
 		loading,
 		error: errorTemplate,
-		createTemplate,
-		updateTemplate,
-		hardDeleteTemplate,
-		refetchTemplate,
+		createRecord,
+		updateRecord,
+		hardDeleteRecord,
+		refetchRecords,
 	} = useTemplate(paginationParams)
 
 	// ✅ Data refresh hook
-	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchTemplate)
+	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchRecords)
 
 	// ✅ Form and modal hooks
 	const modalState = useModalState()
@@ -69,31 +69,31 @@ export function TemplateView() {
 	// ✅ Handlers optimizados
 	const templateHandlers = useHandlers({
 		modalState,
-		createTemplate,
-		updateTemplate,
-		hardDeleteTemplate,
+		createRecord,
+		updateRecord,
+		hardDeleteRecord,
 	})
 
 	// ✅ Optimized next page handler
 	const handleNext = useCallback(() => {
-		handleNextPage(template?.data?.pagination?.hasNextPage)
-	}, [handleNextPage, template?.data?.pagination?.hasNextPage])
+		handleNextPage(templateData?.data?.pagination?.hasNextPage)
+	}, [handleNextPage, templateData?.data?.pagination?.hasNextPage])
 
 	// ✅ Memoizar datos derivados
-	const templateData = useMemo(
+	const dataPaginated = useMemo(
 		() => ({
-			items: template?.data?.items || [],
-			pagination: template?.data?.pagination,
-			hasNextPage: template?.data?.pagination?.hasNextPage,
+			items: templateData?.data?.items || [],
+			pagination: templateData?.data?.pagination,
+			hasNextPage: templateData?.data?.pagination?.hasNextPage,
 		}),
-		[template?.data]
+		[templateData?.data]
 	)
 
 	// Función para reintentar la carga
 	const handleRetry = useCallback(() => {
 		setRetryCount(prev => prev + 1)
-		refetchTemplate()
-	}, [refetchTemplate])
+		refetchRecords()
+	}, [refetchRecords])
 
 	if (errorTemplate && retryCount < 3) return <RetryErrorState onRetry={handleRetry} />
 
@@ -101,7 +101,7 @@ export function TemplateView() {
 
 	return (
 		<div className='flex flex-1 flex-col space-y-6'>
-			{templateData?.pagination?.totalRecords === 0 ? (
+			{dataPaginated?.pagination?.totalRecords === 0 ? (
 				<Card className='flex h-screen items-center justify-center border-none bg-transparent shadow-none'>
 					<UtilBanner
 						icon={<Icons.dataBase />}
@@ -139,7 +139,7 @@ export function TemplateView() {
 
 					{/* Table */}
 					<TemplateTable
-						recordData={templateData.items}
+						recordData={dataPaginated.items}
 						loading={loading}
 						onEdit={templateHandlers.handleEdit}
 						onHardDelete={modalState.openHardDeleteModal}
@@ -154,7 +154,7 @@ export function TemplateView() {
 						onPageChange={handlePageChange}
 						onNextPage={handleNext}
 						onLimitChange={handleLimitChange}
-						metaDataPagination={template?.data?.pagination}
+						metaDataPagination={templateData?.data?.pagination}
 					/>
 				</>
 			)}
