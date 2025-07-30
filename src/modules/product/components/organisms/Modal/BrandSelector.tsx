@@ -15,11 +15,7 @@ interface BrandSelectorProps {
 	setValue: UseFormSetValue<ProductFormData>
 	brands: I_Brand[]
 	loadingBrands: boolean
-	brandSearch: string
-	setBrandSearch: (search: string) => void
-	brandOpen: boolean
-	setBrandOpen: (open: boolean) => void
-	loadMoreBrands: () => void
+	value: string
 }
 
 export function BrandSelector({ control, setValue, value, brands }: BrandSelectorProps) {

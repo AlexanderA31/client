@@ -16,11 +16,7 @@ interface CategorySelectorProps {
 	setValue: UseFormSetValue<ProductFormData>
 	categories: I_Category[]
 	loadingCategories: boolean
-	categorySearch: string
-	setCategorySearch: (search: string) => void
-	categoryOpen: boolean
-	setCategoryOpen: (open: boolean) => void
-	loadMoreCategories: () => void
+	value: string
 }
 
 export function CategorySelector({ control, setValue, value, categories }: CategorySelectorProps) {

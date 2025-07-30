@@ -11,11 +11,6 @@ interface Props {
   setValue: UseFormSetValue<ProductFormData>
   templates: I_Template[]
   loadingTemplates: boolean
-  templateSearch: string
-  setTemplateSearch: (value: string) => void
-  templateOpen: boolean
-  setTemplateOpen: (value: boolean) => void
-  loadMoreTemplates: () => void
   value: string
 }
 

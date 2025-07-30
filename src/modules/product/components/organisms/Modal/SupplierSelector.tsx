@@ -15,11 +15,6 @@ interface SupplierSelectorProps {
 	setValue: UseFormSetValue<ProductFormData>
 	suppliers: I_Supplier[]
 	loadingSuppliers: boolean
-	supplierSearch: string
-	setSupplierSearch: (search: string) => void
-	supplierOpen: boolean
-	setSupplierOpen: (open: boolean) => void
-	loadMoreSuppliers: () => void
 	value: string
 }
 
