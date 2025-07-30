@@ -16,7 +16,6 @@ interface Props {
 	className?: string
 	rows?: number
 	description?: string
-	name: string;
 }
 
 export const TextareaFieldZod: React.FC<Props> = ({
