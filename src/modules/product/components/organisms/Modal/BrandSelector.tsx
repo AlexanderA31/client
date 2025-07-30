@@ -18,7 +18,7 @@ interface BrandSelectorProps {
 	value: string
 }
 
-export function BrandSelector({ control, setValue, value, brands }: BrandSelectorProps) {
+export function BrandSelector({ control, setValue, value, brands, loadingBrands }: BrandSelectorProps) {
 	const [open, setOpen] = useState(false)
 	const brandOptions =
 		brands?.map(brand => ({

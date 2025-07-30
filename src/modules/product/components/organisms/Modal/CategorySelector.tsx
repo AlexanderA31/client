@@ -19,7 +19,7 @@ interface CategorySelectorProps {
 	value: string
 }
 
-export function CategorySelector({ control, setValue, value, categories }: CategorySelectorProps) {
+export function CategorySelector({ control, setValue, value, categories, loadingCategories }: CategorySelectorProps) {
 	const [open, setOpen] = useState(false)
 	const categoryOptions =
 		categories?.map(category => ({

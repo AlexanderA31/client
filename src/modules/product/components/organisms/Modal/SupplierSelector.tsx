@@ -18,7 +18,7 @@ interface SupplierSelectorProps {
 	value: string
 }
 
-export function SupplierSelector({ control, setValue, value, suppliers }: SupplierSelectorProps) {
+export function SupplierSelector({ control, setValue, value, suppliers, loadingSuppliers }: SupplierSelectorProps) {
 	const [open, setOpen] = useState(false)
 	const supplierOptions =
 		suppliers?.map(supplier => ({
