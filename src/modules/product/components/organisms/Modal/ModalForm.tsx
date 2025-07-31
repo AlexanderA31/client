@@ -14,6 +14,7 @@ import { useCategory } from '@/common/hooks/useCategory'
 import { useBrand } from '@/common/hooks/useBrand'
 import { useSupplier } from '@/common/hooks/useSupplier'
 import { useTemplate } from '@/common/hooks/useTemplate'
+import { useFileUpload } from '@/common/hooks/useFileUpload'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from '@/components/ui/sheet'
 import { SelectFieldZod } from '@/components/layout/atoms/SelectFieldZod'
@@ -62,9 +63,15 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
   const { brands } = useBrand()
   const { suppliers } = useSupplier()
   const { templates } = useTemplate()
-  const [previewImage, setPreviewImage] = React.useState<string | null>(null)
-  const [isUploading, setIsUploading] = React.useState(false)
-  const fileInputRef = React.useRef<HTMLInputElement>(null)
+  const {
+    previewImage,
+    isUploading,
+    fileInputRef,
+    handleFileChange,
+    clearPreview,
+    triggerFileInput,
+    setPreviewImage,
+  } = useFileUpload()
 
   const methods = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
@@ -136,7 +143,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
     if (isOpen) {
       fetchProduct();
     }
-  }, [isOpen, currentRecord, reset, getProductById, categories, brands, suppliers, templates]);
+  }, [isOpen, currentRecord, reset, getProductById, categories, brands, suppliers, templates, setPreviewImage]);
 
   const handleFormSubmit = async (data: ProductFormData) => {
     
@@ -162,22 +169,22 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
   const handleClose = () => {
     reset()
     onClose()
-    setPreviewImage(null)
+    clearPreview()
   }
 
   const handleFileChangeWithForm = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const fileId = await handleFileChange(e);
-    // if (fileId) {
-    //   setValue('photo', fileId, { shouldDirty: true });
-    //   setValue('removePhoto', false, { shouldDirty: true });
-    // }
-  };
+    const fileId = await handleFileChange(e)
+    if (fileId) {
+      setValue('photo', fileId, { shouldDirty: true })
+      setValue('removePhoto', false, { shouldDirty: true })
+    }
+  }
 
   const handleClearPreviewWithForm = () => {
-    setValue('photo', '', { shouldDirty: true });
-    setValue('removePhoto', true, { shouldDirty: true });
-    setPreviewImage(null);
-  };
+    setValue('photo', '', { shouldDirty: true })
+    setValue('removePhoto', true, { shouldDirty: true })
+    clearPreview()
+  }
 
   return (
     <Sheet open={isOpen} onOpenChange={handleClose}>
@@ -259,7 +266,7 @@ export function RecordFormModal({ isOpen, currentRecord, onClose, onSubmit }: Pr
                   previewImage={previewImage}
                   isUploading={isUploading}
                   onFileChange={handleFileChangeWithForm}
-                  onTriggerFileInput={() => fileInputRef.current?.click()}
+                  onTriggerFileInput={triggerFileInput}
                   onClearPreview={handleClearPreviewWithForm}
                   currentImage={currentRecord?.photo}
                   shouldHideCurrentImage={watch('removePhoto')}
