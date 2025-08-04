@@ -76,23 +76,15 @@ export const createTableColumns = ({ onViewDetails }: TableColumnsProps): Column
         cell: ({ row }) => formatPrice(row.original.total)
     },
     {
-        accessorKey: 'stockBefore',
-        header: 'Stock Antes',
-    },
-    {
         accessorKey: 'stockAfter',
-        header: 'Stock Después',
+        header: 'Stock Actual',
     },
 	{
 		accessorKey: 'user.id',
 		header: 'Responsable',
         cell: ({ row }) => <UserNameCell userId={row.original.user.id} />
 	},
-    {
-        accessorKey: 'updatedAt',
-        header: 'Fecha Act.',
-        cell: ({ row }) => formatDate(row.original.updatedAt, 'es-ES', { dateStyle: 'short', timeStyle: 'short' }),
-    },
+   
 	{
 		id: 'actions',
 		cell: ({ row }) => (
