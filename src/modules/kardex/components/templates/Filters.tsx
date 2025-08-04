@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/badge'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ActionButton } from '@/components/layout/atoms/ActionButton'
 import { SORT_OPTIONS, KARDEX_TYPE_OPTIONS } from '@/modules/kardex/constants/filters.constants'
-import { ViewSelector, ViewType } from '@/modules/category/components/molecules/ViewSelector'
+import { ViewSelector, ViewType } from '@/modules/kardex/components/molecules/ViewSelector'
 
 interface Props {
 	searchValue: string

@@ -89,8 +89,11 @@ import {
 	IconInfoCircle,
 	IconInfoSmall,
 	IconLayersSelected,
+	IconLayoutBoard,
 	IconLayoutDashboard,
+	IconLayoutGrid,
 	IconLayoutKanban,
+	IconLayoutList,
 	IconList,
 	IconListDetails,
 	IconLoader,
@@ -255,6 +258,9 @@ export const Icons = {
 	search: IconSearch,
 	click: IconClick,
 	listDetails: IconListDetails,
+    viewTable: IconLayoutBoard,
+    viewCard: IconLayoutGrid,
+    viewList: IconLayoutList,
 
 	// TABLE
 	rotate: IconRotate,
