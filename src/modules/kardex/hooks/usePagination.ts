@@ -1,12 +1,13 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { Pagination } from '@/modules/kardex/types/pagination'
 import { INITIAL_PAGINATION } from '@/modules/kardex/constants/filters.constants'
+import { KardexMovementType } from '../types/kardex-movement-type'
 
 export function usePagination() {
 	const [pagination, setPagination] = useState<Pagination>(INITIAL_PAGINATION)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [currentSort, setCurrentSort] = useState<string>('')
-	const [currentType, setCurrentType] = useState<'IN' | 'OUT' | 'ADJUSTMENT' | ''>('')
+	const [currentType, setCurrentType] = useState<KardexMovementType>('')
 	const debounceTimer = useRef<NodeJS.Timeout | null>(null)
 
 	const handleNextPage = useCallback((hasNextPage: boolean) => {
@@ -73,7 +74,7 @@ export function usePagination() {
 		}))
 	}, [])
 
-	const handleTypeChange = useCallback((type: 'IN' | 'OUT' | 'ADJUSTMENT' | '') => {
+	const handleTypeChange = useCallback((type: KardexMovementType) => {
 		setCurrentType(type)
 		setPagination(prev => ({
 			...prev,

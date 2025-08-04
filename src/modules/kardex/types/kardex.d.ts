@@ -1,20 +1,5 @@
-// Assuming Product and Warehouse types are defined elsewhere and can be imported.
-// For now, defining simple reference types.
-interface I_ProductReference {
-    id: string;
-    name: string;
-    code?: string;
-}
-
-interface I_WarehouseReference {
-    id: string;
-    name: string;
-}
-
-interface I_UserReference {
-    id: string;
-    name: string;
-}
+import { I_ProductReference, I_WarehouseReference, I_UserReference } from '@/modules/kardex/types/kardex-references.d'
+import { KardexMovementType } from '@/modules/kardex/types/kardex-movement-type.d'
 
 /**
  * Represents a single entry in the Kardex (inventory log).
@@ -22,7 +7,7 @@ interface I_UserReference {
 export interface I_Kardex {
     id: string;
     product: I_ProductReference;
-    movementType: 'purchase' | 'sale' | 'adjustment';
+    type: KardexMovementType;
     quantity: number;
     unitCost: number;
     subtotal: number;
@@ -35,14 +20,13 @@ export interface I_Kardex {
     createdAt: string;
     updatedAt: string;
     deletedAt?: string | null;
-    status?: string; // This was in the old definition, I'll keep it for now.
-    warehouse?: I_WarehouseReference; // Making this optional to avoid crashes.
-    concept?: string; // This was in the old definition, I'll keep it for now.
-    type?: 'IN' | 'OUT' | 'ADJUSTMENT'; // This was in the old definition, I'll keep it for now.
-    unitPrice?: number; // This was in the old definition, I'll keep it for now.
-    totalPrice?: number; // This was in the old definition, I'll keep it for now.
-    balance?: number; // This was in the old definition, I'll keep it for now.
-    date?: string; // This was in the old definition, I'll keep it for now.
+    status?: string;
+    warehouse?: I_WarehouseReference;
+    concept?: string;
+    unitPrice?: number;
+    totalPrice?: number;
+    balance?: number;
+    date?: string;
 }
 
 /**
@@ -52,7 +36,7 @@ export interface I_CreateKardex {
     productId: string;
     warehouseId: string;
     date: string;
-    type: 'IN' | 'OUT' | 'ADJUSTMENT';
+    type: KardexMovementType;
     concept: string;
     quantity: number;
     unitPrice: number;

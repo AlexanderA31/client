@@ -39,13 +39,15 @@ export function KardexView() {
 	} = usePagination()
 
 	const paginationParams = useMemo(
-		() => ({
+		() => {
+			const [field, order] = currentSort ? currentSort.split(':') : [undefined, undefined]
+		return ({
 			search: searchTerm,
 			page: pagination.page,
 			limit: pagination.limit,
-			sort: currentSort ? [currentSort] : undefined,
+			sort: field && order ? [{ orderBy: field, order: order as 'asc' | 'desc' }] : undefined,
 			filters: currentType ? { type: currentType } : undefined,
-		}),
+		})},
 		[pagination.page, pagination.limit, searchTerm, currentType, currentSort]
 	)
 

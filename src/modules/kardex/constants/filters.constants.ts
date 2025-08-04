@@ -19,7 +19,21 @@ export const INITIAL_PAGINATION: Pagination = {
 
 export const KARDEX_TYPE_OPTIONS = [
     { label: 'Todos', value: ''},
-    { label: 'Entradas', value: 'IN' },
-    { label: 'Salidas', value: 'OUT' },
-    { label: 'Ajustes', value: 'ADJUSTMENT' },
+    // ENTRADAS PRINCIPALES
+    { label: '🛒 Compra a proveedor', value: 'purchase' },
+    { label: '🔄 Devolución de cliente', value: 'return_in' },
+    { label: '🚚 Transferencia entrante', value: 'transfer_in' },
+
+    // SALIDAS PRINCIPALES
+    { label: '💰 Venta a cliente', value: 'sale' },
+    { label: '📦 Devolución a proveedor', value: 'return_out' },
+    { label: '🚚 Transferencia saliente', value: 'transfer_out' },
+
+    // AJUSTES DE INVENTARIO
+    { label: '➕ Ajuste positivo', value: 'adjustment_in' },
+    { label: '➖ Ajuste negativo', value: 'adjustment_out' },
+
+    // PÉRDIDAS NO OPERACIONALES
+    { label: '🧃 Mercancía dañada', value: 'damaged' },
+    { label: '⏳ Mercancía vencida', value: 'expired' },
 ]
