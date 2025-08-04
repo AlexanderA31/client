@@ -23,6 +23,11 @@ const UserNameCell = ({ userId }: { userId: string }) => {
 
 export const createTableColumns = ({ onViewDetails }: TableColumnsProps): ColumnDef<I_Kardex>[] => [
 	{
+		accessorKey: 'date',
+		header: 'Fecha',
+		cell: ({ row }) => formatDate(row.original.date as string),
+	},
+	{
 		accessorKey: 'product.code',
 		header: 'Cód. Producto',
 		id: 'product.code',
@@ -31,6 +36,11 @@ export const createTableColumns = ({ onViewDetails }: TableColumnsProps): Column
 		accessorKey: 'product.name',
 		header: 'Producto',
 		id: 'product.name',
+	},
+	{
+		accessorKey: 'warehouse.name',
+		header: 'Almacén',
+		id: 'warehouse.name',
 	},
 	{
 		accessorKey: 'movementType',
