@@ -52,6 +52,7 @@ export function KardexTable({ kardexData, loading, viewType, onViewDetails }: Pr
 	})
 
 	if (loading) return <LoadingStates viewType={viewType} />
+
 	if (kardexData?.length === 0) return <EmptyState />
 
 	return (

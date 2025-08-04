@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 
 import { Icons } from '@/components/icons'
 import { Card } from '@/components/ui/card'
-import { UtilBanner } from '@/components/UtilBanner'
+import { EmptyState } from '@/components/layout/organims/EmptyState'
 import { ViewType } from '@/modules/kardex/components/molecules/ViewSelector'
 import { KardexHeader } from '@/modules/kardex/components/templates/Header'
 import { KardexFilters } from '@/modules/kardex/components/templates/Filters'
@@ -84,50 +84,38 @@ export function KardexView() {
 
 	return (
 		<div className='flex flex-1 flex-col space-y-6'>
-			{kardexData?.items.length === 0 && !loading ? (
-				<Card className='flex h-screen items-center justify-center border-none bg-transparent shadow-none'>
-					<UtilBanner
-						icon={<Icons.dataBase />}
-						title='Sin registros'
-						description='No hay datos de kardex disponibles para los filtros seleccionados.'
-					/>
-				</Card>
-			) : (
-				<>
-					<KardexHeader />
+			<KardexHeader />
 
-					<KardexFilters
-						searchValue={searchTerm}
-						currentSort={currentSort}
-						currentType={currentType}
-						isRefreshing={isRefreshing}
-						onSearchChange={handleSearchChange}
-						onSort={handleSort}
-						onTypeChange={handleTypeChange}
-						onRefresh={handleRefresh}
-						onResetAll={handleResetAll}
-						viewType={viewType}
-						onViewChange={setViewType}
-					/>
+			<KardexFilters
+				searchValue={searchTerm}
+				currentSort={currentSort}
+				currentType={currentType}
+				isRefreshing={isRefreshing}
+				onSearchChange={handleSearchChange}
+				onSort={handleSort}
+				onTypeChange={handleTypeChange}
+				onRefresh={handleRefresh}
+				onResetAll={handleResetAll}
+				viewType={viewType}
+				onViewChange={setViewType}
+			/>
 
-					<KardexTable
-						kardexData={kardexData.items}
-						loading={loading}
-						onViewDetails={handleViewDetails}
-						viewType={viewType}
-					/>
+			<KardexTable
+				kardexData={kardexData.items}
+				loading={loading}
+				onViewDetails={handleViewDetails}
+				viewType={viewType}
+			/>
 
-					<PaginationControls
-						loading={loading}
-						pagination={pagination}
-						onPrevPage={handlePrevPage}
-						onPageChange={handlePageChange}
-						onNextPage={handleNext}
-						onLimitChange={handleLimitChange}
-						metaDataPagination={kardex?.data?.pagination}
-					/>
-				</>
-			)}
+			<PaginationControls
+				loading={loading}
+				pagination={pagination}
+				onPrevPage={handlePrevPage}
+				onPageChange={handlePageChange}
+				onNextPage={handleNext}
+				onLimitChange={handleLimitChange}
+				metaDataPagination={kardex?.data?.pagination}
+			/>
 		</div>
 	)
 }
