@@ -8,6 +8,7 @@ import { TableActions } from '@/modules/kardex/components/organisms/Table/TableA
 import { formatPrice } from '@/common/utils/formatPrice-util'
 import { useUser } from '@/common/hooks/useUser'
 import { I_User } from '@/modules/user/types/user'
+import { TableInfoDate } from '@/modules/kardex/components/organisms/Table/TableInfoDate'
 
 interface TableColumnsProps {
 	onViewDetails: (kardexData: I_Kardex) => void
@@ -79,7 +80,12 @@ export const createTableColumns = ({ onViewDetails }: TableColumnsProps): Column
 		header: 'Responsable',
         cell: ({ row }) => <UserNameCell userId={row.original.user.id} />
 	},
-   
+	{
+		accessorKey: 'createdAt',
+		header: 'Información',
+		cell: ({ row }) => <TableInfoDate kardexData={row.original} />,
+		
+	},
 	{
 		id: 'actions',
 		cell: ({ row }) => (
