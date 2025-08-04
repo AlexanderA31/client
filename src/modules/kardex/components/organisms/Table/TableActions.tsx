@@ -39,7 +39,7 @@ export const TableActions = ({ kardexData, onViewDetails }: Props) => {
 					Detalles
 				</DropdownMenuItem>
 				<DropdownMenuItem onClick={handleReportsClick}>
-					<Icons.fileText className='mr-2 h-3.5 w-3.5 text-muted-foreground/70' />
+					<Icons.report className='mr-2 h-3.5 w-3.5 text-muted-foreground/70' />
 					Reportes
 				</DropdownMenuItem>
 			</DropdownMenuContent>
