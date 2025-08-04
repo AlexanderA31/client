@@ -6,16 +6,21 @@ import { I_Kardex } from '@/modules/kardex/types/kardex'
 import { TableActions } from '@/modules/kardex/components/organisms/Table/TableActions'
 import { formatDate } from '@/common/utils/dateFormater-util'
 import { formatPrice } from '@/common/utils/formatPrice-util'
+import { useUser } from '@/common/hooks/useUser'
+import { I_User } from '@/modules/user/types/user'
 
 interface TableColumnsProps {
 	onViewDetails: (kardexData: I_Kardex) => void
 }
 
+const UserNameCell = ({ userId }: { userId: string }) => {
+    const { users, loading } = useUser()
+    if (loading) return 'Cargando...'
+    const user = users?.data.items.find((user: I_User) => user.id === userId)
+    return user ? user.name : 'Desconocido'
+}
+
 export const createTableColumns = ({ onViewDetails }: TableColumnsProps): ColumnDef<I_Kardex>[] => [
-	{
-		accessorKey: 'id',
-		header: 'ID',
-	},
 	{
 		accessorKey: 'product.code',
 		header: 'Cód. Producto',
@@ -68,8 +73,9 @@ export const createTableColumns = ({ onViewDetails }: TableColumnsProps): Column
         header: 'Stock Después',
     },
 	{
-		accessorKey: 'user.name',
+		accessorKey: 'user.id',
 		header: 'Responsable',
+        cell: ({ row }) => <UserNameCell userId={row.original.user.id} />
 	},
 	{
 		accessorKey: 'createdAt',

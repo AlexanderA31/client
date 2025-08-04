@@ -26,13 +26,6 @@ export const animations = {
 				duration: 0.2,
 			},
 		},
-		hover: {
-			scale: 1.02,
-			transition: {
-				type: 'spring',
-				stiffness: 300,
-			},
-		},
 	},
 	viewTransition: {
 		initial: { opacity: 0, y: 20 },
