@@ -1,43 +1,53 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import { Icons } from '@/components/icons'
 import { ActionButton } from '@/components/layout/atoms/ActionButton'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 export type ViewType = 'table' | 'card' | 'list'
 
+const viewOptions = [
+	{
+		key: 'table' as ViewType,
+		label: 'Tabla',
+		icon: <Icons.table />,
+		description: 'Vista de tabla',
+	},
+	{
+		key: 'card' as ViewType,
+		label: 'Tarjetas',
+		icon: <Icons.gridDots />,
+		description: 'Vista de tarjetas',
+	},
+	{
+		key: 'list' as ViewType,
+		label: 'Lista',
+		icon: <Icons.list />,
+		description: 'Vista de lista',
+	},
+]
+
 interface ViewSelectorProps {
 	currentView: ViewType
-	onViewChange: (view: ViewType) => void
+	onViewChange?: (view: ViewType) => void
+	className?: string
 }
 
-export const ViewSelector = ({ currentView, onViewChange }: ViewSelectorProps) => {
-	const views: { type: ViewType; icon: JSX.Element; label: string }[] = [
-		{ type: 'table', icon: <Icons.viewTable />, label: 'Vista de Tabla' },
-		{ type: 'card', icon: <Icons.viewCard />, label: 'Vista de Tarjeta' },
-		{ type: 'list', icon: <Icons.viewList />, label: 'Vista de Lista' },
-	]
-
+export function ViewSelector({ currentView, onViewChange, className = '' }: ViewSelectorProps) {
 	return (
-		<div className='bg-accent/30 border-border/50 flex items-center gap-1 rounded-xl border p-1'>
-			<TooltipProvider>
-				{views.map(({ type, icon, label }) => (
-					<Tooltip key={type}>
-						<TooltipTrigger asChild>
-							<ActionButton
-								variant={currentView === type ? 'default' : 'ghost'}
-								size='icon'
-								onClick={() => onViewChange(type)}
-								className={`rounded-lg ${currentView === type ? 'shadow-md' : ''}`}>
-								{icon}
-							</ActionButton>
-						</TooltipTrigger>
-						<TooltipContent className='bg-primary/90 text-primary-foreground border-border/20 rounded-xl border backdrop-blur-xl'>
-							<p>{label}</p>
-						</TooltipContent>
-					</Tooltip>
-				))}
-			</TooltipProvider>
+		<div className={`bg-card/50 flex items-center gap-1 rounded-2xl border border-dashed p-0.5 ${className}`}>
+			{viewOptions.map(option => (
+				<motion.div key={option.key} className='relative' whileHover={{ scale: 1 }} whileTap={{ scale: 1 }}>
+					<ActionButton
+						onClick={() => onViewChange?.(option.key)}
+						icon={option.icon}
+						size='icon'
+						variant={currentView === option.key ? 'secondary' : 'ghost'}
+						tooltip={option.description}
+						disabled={!onViewChange}
+					/>
+				</motion.div>
+			))}
 		</div>
 	)
 }
