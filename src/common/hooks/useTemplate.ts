@@ -62,12 +62,12 @@ export const useTemplate = (paginationParams: UseTemplateParams = {}) => {
 	// ✅ Retornar objeto estable
 	return {
 		// Datos del query
-		templates: query.data,
+		template: query.data,
 		loading: query.isLoading,
 		error: query.error?.message,
 
 		// Funciones
-		refetchTemplates: query.refetch,
+		refetchTemplate: query.refetch,
 
 		// Funciones CRUD
 		createTemplate: api.create,

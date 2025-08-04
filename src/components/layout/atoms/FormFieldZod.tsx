@@ -28,10 +28,10 @@ type IconOption = {
 type UniversalFormFieldProps<T extends FieldValues> = {
 	control: Control<T>
 	name: FieldPath<T>
-	label: string
+	label?: string
 	placeholder?: string
 	description?: string | ReactNode
-	type?: 'text' | 'number' | 'email' | 'password' | 'textarea' | 'switch' | 'checkbox' | 'select' | 'command'
+	type?: 'text' | 'number' | 'email' | 'password' | 'textarea' | 'switch' | 'checkbox' | 'select' | 'command' | 'hidden'
 	required?: boolean
 	className?: string
 	options?: IconOption[]
@@ -70,6 +70,32 @@ export function UniversalFormField<T extends FieldValues>({
 	groupByCategory = false,
 }: UniversalFormFieldProps<T>) {
 	const [commandOpen, setCommandOpen] = React.useState(false)
+
+	// Para campos hidden, no mostrar ningún UI
+	if (type === 'hidden') {
+		return (
+			<FormField
+				control={control}
+				name={name}
+				render={({ field }) => (
+					<FormItem className='hidden'>
+						<FormControl>
+							<input
+								type='hidden'
+								{...field}
+								value={field.value ?? ''}
+								onChange={e => {
+									field.onChange(e.target.value)
+									onChange?.(e.target.value)
+								}}
+							/>
+						</FormControl>
+					</FormItem>
+				)}
+			/>
+		)
+	}
+
 	// Agrupar opciones por categoría si groupByCategory es true
 	const groupedOptions = React.useMemo(() => {
 		if (!groupByCategory || !options) return null
@@ -391,8 +417,10 @@ export function UniversalFormField<T extends FieldValues>({
 											step={step}
 											disabled={disabled}
 											onChange={e => {
-												// eslint-disable-next-line @typescript-eslint/no-explicit-any
-												let value: any = e.target.value
+												const rawValue = e.target.value
+
+												// Comportamiento original para otros casos
+												let value: any = rawValue
 												if (type === 'number') value = value === '' ? null : Number(value)
 												field.onChange(value)
 												onChange?.(value)
@@ -405,15 +433,18 @@ export function UniversalFormField<T extends FieldValues>({
 							</div>
 						</FormControl>
 
-						<div className='flex items-center justify-between'>
-							{description && (
-								<FormDescription
-									className={cn(hasError && 'text-muted-foreground', isValid && 'text-muted-foreground')}>
-									{description}
-								</FormDescription>
-							)}
-							<FormMessage />
-						</div>
+						{/* Solo mostrar descripción y mensaje de error para campos visibles */}
+						{type !== 'hidden' && (
+							<div className='flex items-center justify-between'>
+								{description && (
+									<FormDescription
+										className={cn(hasError && 'text-muted-foreground', isValid && 'text-muted-foreground')}>
+										{description}
+									</FormDescription>
+								)}
+								<FormMessage />
+							</div>
+						)}
 					</FormItem>
 				)
 			}}

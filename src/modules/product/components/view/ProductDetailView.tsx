@@ -1,30 +1,30 @@
 'use client'
 
-import { useProductV2 } from '@/common/hooks/useProduct'
+import { useProduct } from '@/common/hooks/useProduct'
 import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/layout/atoms/Badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { I_Product } from '../../types/product'
+import { I_Product } from '@/modules/product/types/product'
 import { SpinnerLoader } from '@/components/layout/SpinnerLoader'
-import { ProductImage } from '../molecules/ProductImage'
+import { ImageControl } from '@/components/layout/organims/ImageControl'
 import { Typography } from '@/components/ui/typography'
-import { ProductAnalytics } from '../organisms/Chart/ProductAnalytics'
+import { ProductAnalytics } from '@/modules/product/components/organisms/Chart/ProductAnalytics'
 import { formatDate } from '@/common/utils/dateFormater-util'
-import { ProductStatusBadge } from '../atoms/ProductStatusBadge'
+import { ProductStatusBadge } from '@/modules/product/components/atoms/ProductStatusBadge'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { FatalErrorState } from '@/components/layout/organims/ErrorStateCard'
 import { NotFoundState } from '@/components/layout/organims/NotFoundState'
+import { formatPrice } from '@/common/utils/formatPrice-util'
 
 type Props = {
 	productId: string
 }
 
 export function ProductDetailView({ productId }: Props) {
-	const { getProductById } = useProductV2()
+	const { getProductById } = useProduct()
 	const [product, setProduct] = useState<I_Product | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
@@ -35,7 +35,7 @@ export function ProductDetailView({ productId }: Props) {
 				setLoading(true)
 				setError(null)
 				const productData = await getProductById(productId)
-		
+
 				setProduct(productData)
 			} catch (err) {
 				setError(err.response.data.error.message)
@@ -102,7 +102,7 @@ export function ProductDetailView({ productId }: Props) {
 				<CardContent className='p-0'>
 					<div className='flex items-center gap-4'>
 						<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
-							<ProductImage
+							<ImageControl
 								recordData={product}
 								enableHover={false}
 								enableClick={false}
@@ -113,15 +113,8 @@ export function ProductDetailView({ productId }: Props) {
 						</div>
 
 						<div className='flex-1'>
-							<div className='mb-2 line-clamp-1 flex items-center justify-between gap-6 break-words'>
+							<div className='mb-2 line-clamp-1 break-words'>
 								<Typography variant='h3'>{product.name}</Typography>
-
-								<div className='flex gap-2'>
-									<Button variant='outline' size='sm'>
-										<Icons.dots className='h-4 w-4' />
-										Más
-									</Button>
-								</div>
 							</div>
 
 							<div className='flex items-center justify-between'>
@@ -130,14 +123,17 @@ export function ProductDetailView({ productId }: Props) {
 
 									<span className='mx-1'>•</span>
 
-									{product.isVariant ? (
-										<Badge variant='default' text='Producto variante' />
-									) : (
-										<Badge variant='info' text='Producto principal' />
-									)}
+									{product.isVariant && <Badge variant='default' text='Producto variante' />}
 
 									<ProductStatusBadge status={product.status} />
+
+									{product?.deletedAt && <Badge variant='destructive' text='Producto removido' />}
 								</div>
+
+								<Button variant='outline' size='sm'>
+									<Icons.dots className='h-4 w-4' />
+									Más
+								</Button>
 							</div>
 						</div>
 					</div>
@@ -155,12 +151,12 @@ export function ProductDetailView({ productId }: Props) {
 							</Card>
 
 							<Card className='border-border/50 bg-accent/20 w-full rounded-2xl border-none p-4 shadow-none'>
-								<Typography variant='h4'>{product.price?.toFixed(2)} USD</Typography>
+								<Typography variant='h4'>{formatPrice(product.price)} USD</Typography>
 								<Typography variant='overline'>Precio base</Typography>
 							</Card>
 
 							<Card className='border-border/50 bg-accent/20 w-full rounded-2xl border-none p-4 shadow-none'>
-								<Typography variant='h4'>{(product.price * product.stock)?.toFixed(2)} USD</Typography>
+								<Typography variant='h4'>{formatPrice(product.price * product.stock)} USD</Typography>
 								<Typography variant='overline'>Caja total</Typography>
 							</Card>
 						</CardContent>

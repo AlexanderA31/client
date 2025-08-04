@@ -1,8 +1,8 @@
 'use client'
 
+import api from '@/lib/axios'
 import { toast } from 'sonner'
 import { useCallback, useRef, useState } from 'react'
-import api from '@/lib/axios'
 import { FileUploadResponse_I } from '@/common/types/file'
 import { FILE_SIZES, MAX_FILE_SIZE, ALLOWED_IMAGE_TYPES } from '@/common/constants/file-const'
 
@@ -41,11 +41,8 @@ export const useFileUpload = (options?: UseFileUploadOptions) => {
 		[config.maxSize, config.allowedTypes]
 	)
 
-	const handleFileChange = useCallback(
-		async (event: React.ChangeEvent<HTMLInputElement>): Promise<string | null> => {
-			const file = event.target.files?.[0]
-			if (!file) return null
-
+	const uploadFile = useCallback(
+		async (file: File): Promise<string | null> => {
 			const validationError = validateFile(file)
 			if (validationError) {
 				toast.error(validationError)
@@ -61,6 +58,7 @@ export const useFileUpload = (options?: UseFileUploadOptions) => {
 					headers: { 'Content-Type': 'multipart/form-data' },
 				})
 
+				// Generar preview solo si está habilitado
 				if (config.showPreview) {
 					const reader = new FileReader()
 					reader.onload = () => setPreviewImage(reader.result as string)
@@ -93,7 +91,7 @@ export const useFileUpload = (options?: UseFileUploadOptions) => {
 		previewImage,
 		isUploading,
 		fileInputRef,
-		handleFileChange,
+		uploadFile,
 		clearPreview,
 		triggerFileInput,
 		setPreviewImage,

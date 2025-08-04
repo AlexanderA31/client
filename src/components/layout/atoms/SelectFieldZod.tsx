@@ -38,9 +38,7 @@ export const SelectFieldZod: React.FC<Props> = ({
 		</div>
 		<Select value={value} onValueChange={onChange}>
 			<SelectTrigger id={id} className={`${error ? 'border-destructive dark:border-destructive' : ''}`}>
-				<SelectValue placeholder={placeholder}>
-					{options.find(option => option.value === value)?.label || placeholder}
-				</SelectValue>
+				<SelectValue placeholder={placeholder} />
 			</SelectTrigger>
 			<SelectContent>
 				{options.map(option => (

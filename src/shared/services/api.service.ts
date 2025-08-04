@@ -51,10 +51,4 @@ export class ApiService {
 
 		return data
 	}
-
-	async getById<T>(id: string | number): Promise<T> {
-		const url = `${this.baseEndpoint}/${id}`
-		const { data } = await api.get<T>(url)
-		return data
-	}
 }

@@ -1,30 +1,32 @@
 'use client'
 
 import { useCallback, useMemo, useState } from 'react'
-import { useProduct } from '@/common/hooks/useProduct'
 
-import { useModalState } from '@/modules/product/hooks/useModalState'
-import { usePagination } from '@/modules/product/hooks/usePagination'
-import { useProductHandlers } from '@/modules/product/hooks/useHandlers'
+import { useProduct } from '@/common/hooks/useProduct'
+import { useHandlers } from '@/modules/product/hooks/useHandlers'
 import { useGenericRefresh } from '@/common/hooks/shared/useGenericRefresh'
+
+import { ViewType } from '@/modules/product/components/molecules/ViewSelector'
 
 import { Icons } from '@/components/icons'
 import { Card } from '@/components/ui/card'
 import { UtilBanner } from '@/components/UtilBanner'
 import { ActionButton } from '@/components/layout/atoms/ActionButton'
-import { ProductHeader } from '@/modules/product/components/templates/ProductHeader'
-import { ModalsProduct } from '@/modules/product/components/templates/Modals'
-import { ProductFilters } from '@/modules/product/components/templates/ProductFilters'
+import { useModalState } from '@/modules/product/hooks/useModalState'
+import { usePagination } from '@/modules/product/hooks/usePagination'
+
+import { ProductModals } from '@/modules/product/components/templates/Modals'
+import { ProductHeader } from '@/modules/product/components/templates/Header'
+import { ProductFilters } from '@/modules/product/components/templates/Filters'
 import { PaginationControls } from '@/modules/product/components/templates/Pagination'
 import { TableProduct } from '@/modules/product/components/organisms/Table/TableProduct'
-import { ViewType } from '@/modules/product/components/molecules/ViewSelector'
 import { FatalErrorState, RetryErrorState } from '@/components/layout/organims/ErrorStateCard'
 
 export function ProductView() {
 	const [retryCount, setRetryCount] = useState(0)
 	const [viewType, setViewType] = useState<ViewType>('table')
 
-	// Hooks de paginación
+	// ✅ URL-synced pagination hooks
 	const {
 		pagination,
 		searchTerm,
@@ -34,8 +36,8 @@ export function ProductView() {
 		handlePrevPage,
 		handleLimitChange,
 		handleSearchChange,
-		handleSort,
 		handleStatusChange,
+		handleSort,
 		handleResetAll,
 		handlePageChange,
 	} = usePagination()
@@ -43,67 +45,68 @@ export function ProductView() {
 	// ✅ Memoizar parámetros de paginación para evitar recreaciones
 	const paginationParams = useMemo(
 		() => ({
-			search: searchTerm,
 			page: pagination.page,
 			limit: pagination.limit,
-			sort: currentSort ? [currentSort] : undefined,
+			search: searchTerm,
 			filters: currentStatus ? { status: currentStatus } : undefined,
+			sort: currentSort ? [currentSort] : undefined,
 		}),
 		[pagination.page, pagination.limit, searchTerm, currentStatus, currentSort]
 	)
 
+	// ✅ Main product hook con parámetros memoizados
 	const {
-		products,
+		recordsData,
 		loading,
-		error: errorProducts,
-		createProduct,
-		updateProduct,
-		hardDeleteProduct,
-		refetchProducts,
+		error: errorProduct,
+		createRecord,
+		updateRecord,
+		hardDeleteRecord,
+		refetchRecords,
 	} = useProduct(paginationParams)
 
-	// Hook de refresh data
-	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchProducts)
+	// ✅ Data refresh hook
+	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchRecords)
 
-	// Hooks de formulario y modales
+	// ✅ Form and modal hooks
 	const modalState = useModalState()
 
-	// Handlers
-	const recordsHandlers = useProductHandlers({
+	// ✅ Handlers optimizados
+	const productHandlers = useHandlers({
 		modalState,
-		createRecord: createProduct,
-		updateRecord: updateProduct,
-		hardDeleteRecord: hardDeleteProduct,
+		createRecord,
+		updateRecord,
+		hardDeleteRecord,
 	})
 
 	// ✅ Optimized next page handler
 	const handleNext = useCallback(() => {
-		handleNextPage(products?.pagination?.hasNextPage)
-	}, [handleNextPage, products?.pagination?.hasNextPage])
+		handleNextPage(recordsData?.data?.pagination?.hasNextPage)
+	}, [handleNextPage, recordsData?.data?.pagination?.hasNextPage])
 
 	// ✅ Memoizar datos derivados
-	const dataPaginated = useMemo(
+	const productData = useMemo(
 		() => ({
-			items: products?.items || [],
-			pagination: products?.pagination,
-			hasNextPage: products?.pagination?.hasNextPage,
+			items: recordsData?.data?.items || [],
+			pagination: recordsData?.data?.pagination,
+			hasNextPage: recordsData?.data?.pagination?.hasNextPage,
 		}),
-		[products]
+		[recordsData?.data]
 	)
 
 	// Función para reintentar la carga
 	const handleRetry = useCallback(() => {
 		setRetryCount(prev => prev + 1)
-		refetchProducts()
-	}, [refetchProducts])
+		refetchRecords()
+	}, [refetchRecords])
 
-	if (errorProducts && retryCount < 3) return <RetryErrorState onRetry={handleRetry} />
+	if (errorProduct && retryCount < 3) return <RetryErrorState onRetry={handleRetry} />
 
-	if (errorProducts) return <FatalErrorState />
+	if (errorProduct) return <FatalErrorState />
 
 	return (
 		<div className='flex flex-1 flex-col space-y-6'>
-			{dataPaginated?.pagination?.totalRecords === 0 ? (
+			{productData?.pagination?.totalRecords === 0 ? (
 				<Card className='flex h-screen items-center justify-center border-none bg-transparent shadow-none'>
 					<UtilBanner
 						icon={<Icons.dataBase />}
@@ -125,31 +128,31 @@ export function ProductView() {
 					{/* Header */}
 					<ProductHeader onCreateClick={modalState.openCreateDialog} />
 
-					{/* Filtros y búsqueda */}
+					{/* Filters and search */}
 					<ProductFilters
 						searchValue={searchTerm}
 						currentSort={currentSort}
 						currentStatus={currentStatus}
 						isRefreshing={isRefreshing}
+						onStatusChange={handleStatusChange}
 						onSearchChange={handleSearchChange}
 						onSort={handleSort}
-						onStatusChange={handleStatusChange}
 						onRefresh={handleRefresh}
 						onResetAll={handleResetAll}
 						viewType={viewType}
 						onViewChange={setViewType}
 					/>
 
-					{/* Tabla */}
+					{/* Table */}
 					<TableProduct
-						recordsData={dataPaginated.items}
+						recordsData={productData.items}
 						loading={loading}
-						onEdit={recordsHandlers.handleEdit}
+						onEdit={productHandlers.handleEdit}
 						onHardDelete={modalState.openHardDeleteModal}
 						viewType={viewType}
 					/>
 
-					{/* Controles de paginación */}
+					{/* Pagination controls */}
 					<PaginationControls
 						loading={loading}
 						pagination={pagination}
@@ -157,13 +160,13 @@ export function ProductView() {
 						onPageChange={handlePageChange}
 						onNextPage={handleNext}
 						onLimitChange={handleLimitChange}
-						metaDataPagination={products?.pagination}
+						metaDataPagination={recordsData?.data?.pagination}
 					/>
 				</>
 			)}
 
-			{/* Modales */}
-			<ModalsProduct modalState={modalState} recordHandlers={recordsHandlers} />
+			{/* Modals */}
+			<ProductModals modalState={modalState} productHandlers={productHandlers} />
 		</div>
 	)
 }
