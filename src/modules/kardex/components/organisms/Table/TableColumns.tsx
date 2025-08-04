@@ -4,7 +4,6 @@ import { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@/components/layout/atoms/Badge'
 import { I_Kardex } from '@/modules/kardex/types/kardex'
 import { TableActions } from '@/modules/kardex/components/organisms/Table/TableActions'
-import { TableInfoDate } from '@/modules/kardex/components/organisms/Table/TableInfoDate'
 import { formatDate } from '@/common/utils/dateFormater-util'
 import { formatPrice } from '@/common/utils/formatPrice-util'
 
@@ -14,69 +13,74 @@ interface TableColumnsProps {
 
 export const createTableColumns = ({ onViewDetails }: TableColumnsProps): ColumnDef<I_Kardex>[] => [
 	{
-		accessorKey: 'date',
-		header: 'Fecha',
-		cell: ({ row }) => formatDate(row.original.date, 'es-ES', { dateStyle: 'medium' }),
+		accessorKey: 'id',
+		header: 'ID',
 	},
 	{
-		accessorKey: 'product',
-		header: 'Producto',
-		cell: ({ row }) => row.original.product.name,
+		accessorKey: 'product.code',
+		header: 'Cód. Producto',
 	},
 	{
-		accessorKey: 'warehouse',
-		header: 'Almacén',
-		cell: ({ row }) => row.original.warehouse?.name || 'N/A',
-	},
-	{
-		accessorKey: 'concept',
-		header: 'Concepto',
-	},
-	{
-		accessorKey: 'type',
-		header: 'Tipo',
-		cell: ({ row }) => (
-			<Badge
-				variant={row.original.type === 'IN' ? 'success' : row.original.type === 'OUT' ? 'destructive' : 'warning'}
-				text={row.original.type === 'IN' ? 'Entrada' : row.original.type === 'OUT' ? 'Salida' : 'Ajuste'}
-			/>
-		),
+		accessorKey: 'movementType',
+		header: 'Tipo Movimiento',
+        cell: ({ row }) => (
+            <Badge
+                variant={row.original.movementType === 'purchase' ? 'success' : row.original.movementType === 'sale' ? 'destructive' : 'warning'}
+                text={row.original.movementType}
+            />
+        )
 	},
 	{
 		accessorKey: 'quantity',
 		header: 'Cantidad',
-		cell: ({ row }) => <div className='text-right'>{row.original.quantity}</div>,
 	},
 	{
-		accessorKey: 'unitPrice',
-		header: 'Precio Unit.',
-		cell: ({ row }) => <div className='text-right'>{formatPrice(row.original.unitPrice)}</div>,
-	},
-	{
-		accessorKey: 'totalPrice',
-		header: 'Precio Total',
-		cell: ({ row }) => <div className='text-right'>{formatPrice(row.original.totalPrice)}</div>,
+		accessorKey: 'unitCost',
+		header: 'Costo Unit.',
+        cell: ({ row }) => formatPrice(row.original.unitCost)
 	},
     {
-        accessorKey: 'balance',
-        header: 'Saldo',
-        cell: ({ row }) => <div className='text-right'>{row.original.balance}</div>,
+        accessorKey: 'subtotal',
+        header: 'Subtotal',
+        cell: ({ row }) => formatPrice(row.original.subtotal)
+    },
+    {
+        accessorKey: 'taxRate',
+        header: 'Tasa Imp.',
+        cell: ({ row }) => `${row.original.taxRate}%`
+    },
+    {
+        accessorKey: 'taxAmount',
+        header: 'Monto Imp.',
+        cell: ({ row }) => formatPrice(row.original.taxAmount)
+    },
+    {
+        accessorKey: 'total',
+        header: 'Total',
+        cell: ({ row }) => formatPrice(row.original.total)
+    },
+    {
+        accessorKey: 'stockBefore',
+        header: 'Stock Antes',
+    },
+    {
+        accessorKey: 'stockAfter',
+        header: 'Stock Después',
     },
 	{
-		accessorKey: 'status',
-		header: 'Estado',
-		cell: ({ row }) => (
-			<Badge
-				variant={row.original.status === 'active' ? 'success' : 'warning'}
-				text={row.original.status === 'active' ? 'Activo' : 'Inactivo'}
-			/>
-		),
+		accessorKey: 'user.name',
+		header: 'Responsable',
 	},
 	{
-		accessorKey: 'info',
-		header: 'Información',
-		cell: ({ row }) => <TableInfoDate kardexData={row.original} />,
+		accessorKey: 'createdAt',
+		header: 'Fecha Creación',
+		cell: ({ row }) => formatDate(row.original.createdAt, 'es-ES', { dateStyle: 'short', timeStyle: 'short' }),
 	},
+    {
+        accessorKey: 'updatedAt',
+        header: 'Fecha Act.',
+        cell: ({ row }) => formatDate(row.original.updatedAt, 'es-ES', { dateStyle: 'short', timeStyle: 'short' }),
+    },
 	{
 		id: 'actions',
 		cell: ({ row }) => (

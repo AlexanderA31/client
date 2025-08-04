@@ -34,8 +34,11 @@ export const useKardex = (paginationParams: UseKardexParams = {}) => {
 
     const getKardexById = useCallback(
         async (id: string) => {
-            const response = await api.apiService.get<I_ApiResponse<I_Kardex>>(`${KARDEX_ENDPOINTS_CONFIG.baseEndpoint}/${id}`)
-            return response.data.data
+            const response = await api.apiService.executeRequest<I_ApiResponse<I_Kardex>>(
+                KARDEX_ENDPOINTS_CONFIG.endpoints.getById,
+                { urlParams: { id } }
+            )
+            return response.data
         },
         [api.apiService]
     )

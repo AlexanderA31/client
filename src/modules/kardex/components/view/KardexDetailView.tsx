@@ -1,7 +1,6 @@
 'use client'
 
 import { useKardex } from '@/common/hooks/useKardex'
-import { Icons } from '@/components/icons'
 import { Badge } from '@/components/layout/atoms/Badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -100,10 +99,6 @@ export function KardexDetailView({ id }: Props) {
 							</div>
 							<div className='text-muted-foreground flex items-center gap-2'>
 								<Typography variant='overline'>ID: {kardexEntry.id}</Typography>
-								<span className='mx-1'>•</span>
-								<Badge variant={kardexEntry.status === 'active' ? 'success' : 'warning'}
-									text={kardexEntry.status === 'active' ? 'Activo' : 'Inactivo'}
-								/>
 							</div>
 						</div>
 					</div>
@@ -113,30 +108,35 @@ export function KardexDetailView({ id }: Props) {
 			<div className='grid gap-8 pt-4 lg:grid-cols-3'>
 				<div className='space-y-8 lg:col-span-2'>
                     <Card className='text-muted-foreground border-none bg-transparent p-0 shadow-none'>
+                        <CardHeader className='p-0 mb-4'>
+                            <CardTitle>Detalles del Movimiento</CardTitle>
+                        </CardHeader>
                         <CardContent className='p-0'>
                             <div className='space-y-4'>
-                                <InfoRow label='Fecha' value={formatDate(kardexEntry.date, 'es-ES', { dateStyle: 'full' })} />
-                                <InfoRow label='Concepto' value={kardexEntry.concept} />
-                                <InfoRow label='Tipo' value={
+                                <InfoRow label='Tipo de Movimiento' value={
                                     <Badge
-                                        variant={kardexEntry.type === 'IN' ? 'success' : kardexEntry.type === 'OUT' ? 'destructive' : 'warning'}
-                                        text={kardexEntry.type === 'IN' ? 'Entrada' : kardexEntry.type === 'OUT' ? 'Salida' : 'Ajuste'}
+                                        variant={kardexEntry.movementType === 'purchase' ? 'success' : kardexEntry.movementType === 'sale' ? 'destructive' : 'warning'}
+                                        text={kardexEntry.movementType}
                                     />
                                 } />
+                                <InfoRow label='Producto' value={kardexEntry.product.name} />
+                                <InfoRow label='Cód. Producto' value={kardexEntry.product.code} mono />
+                                <InfoRow label='Responsable' value={kardexEntry.user.name} />
                             </div>
                         </CardContent>
                     </Card>
 
                     <Separator/>
 
-					<Card className='text-muted-foreground border-none bg-transparent p-0 shadow-none'>
+                    <Card className='text-muted-foreground border-none bg-transparent p-0 shadow-none'>
                         <CardHeader className='p-0 mb-4'>
-                            <CardTitle>Detalles del Producto</CardTitle>
+                            <CardTitle>Detalles de Stock</CardTitle>
                         </CardHeader>
 						<CardContent className='p-0'>
 							<div className='space-y-4'>
-								<InfoRow label='Producto' value={kardexEntry.product.name} />
-								<InfoRow label='Almacén' value={kardexEntry.warehouse.name} />
+								<InfoRow label='Stock Anterior' value={`${kardexEntry.stockBefore} unidades`} />
+								<InfoRow label='Cantidad' value={`${kardexEntry.quantity} unidades`} bold />
+								<InfoRow label='Stock Posterior' value={`${kardexEntry.stockAfter} unidades`} />
 							</div>
 						</CardContent>
 					</Card>
@@ -149,10 +149,11 @@ export function KardexDetailView({ id }: Props) {
                         </CardHeader>
 						<CardContent className='p-0'>
 							<div className='space-y-4'>
-								<InfoRow label='Cantidad' value={`${kardexEntry.quantity} unidades`} bold />
-								<InfoRow label='Precio Unitario' value={formatPrice(kardexEntry.unitPrice)} bold />
-								<InfoRow label='Precio Total' value={formatPrice(kardexEntry.totalPrice)} bold />
-                                <InfoRow label='Saldo en Stock' value={`${kardexEntry.balance} unidades`} bold />
+								<InfoRow label='Costo Unitario' value={formatPrice(kardexEntry.unitCost)} />
+								<InfoRow label='Subtotal' value={formatPrice(kardexEntry.subtotal)} />
+								<InfoRow label='Tasa de Impuesto' value={`${kardexEntry.taxRate}%`} />
+                                <InfoRow label='Monto de Impuesto' value={formatPrice(kardexEntry.taxAmount)} />
+                                <InfoRow label='Total' value={formatPrice(kardexEntry.total)} bold />
 							</div>
 						</CardContent>
 					</Card>
@@ -166,7 +167,6 @@ export function KardexDetailView({ id }: Props) {
                         <CardContent className='p-0 space-y-2 text-sm'>
                             <p>Creado: {formatDate(kardexEntry.createdAt, 'es-ES', { dateStyle: 'full', timeStyle: 'long' })}</p>
                             <p>Última actualización: {formatDate(kardexEntry.updatedAt, 'es-ES', { dateStyle: 'full', timeStyle: 'long' })}</p>
-                            {kardexEntry.deletedAt && <p className='text-destructive'>Eliminado: {formatDate(kardexEntry.deletedAt, 'es-ES', { dateStyle: 'full', timeStyle: 'long' })}</p>}
                         </CardContent>
                     </Card>
                 </div>

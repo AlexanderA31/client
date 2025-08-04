@@ -3,9 +3,15 @@
 interface I_ProductReference {
     id: string;
     name: string;
+    code?: string;
 }
 
 interface I_WarehouseReference {
+    id: string;
+    name: string;
+}
+
+interface I_UserReference {
     id: string;
     name: string;
 }
@@ -15,19 +21,28 @@ interface I_WarehouseReference {
  */
 export interface I_Kardex {
     id: string;
-    date: string; // ISO 8601 format
-    concept: string;
-    type: 'IN' | 'OUT' | 'ADJUSTMENT';
-    quantity: number;
-    unitPrice: number;
-    totalPrice: number;
-    balance: number;
     product: I_ProductReference;
-    warehouse: I_WarehouseReference;
-    status: string;
+    movementType: 'purchase' | 'sale' | 'adjustment';
+    quantity: number;
+    unitCost: number;
+    subtotal: number;
+    taxRate: number;
+    taxAmount: number;
+    total: number;
+    stockBefore: number;
+    stockAfter: number;
+    user: I_UserReference;
     createdAt: string;
     updatedAt: string;
     deletedAt?: string | null;
+    status?: string; // This was in the old definition, I'll keep it for now.
+    warehouse?: I_WarehouseReference; // Making this optional to avoid crashes.
+    concept?: string; // This was in the old definition, I'll keep it for now.
+    type?: 'IN' | 'OUT' | 'ADJUSTMENT'; // This was in the old definition, I'll keep it for now.
+    unitPrice?: number; // This was in the old definition, I'll keep it for now.
+    totalPrice?: number; // This was in the old definition, I'll keep it for now.
+    balance?: number; // This was in the old definition, I'll keep it for now.
+    date?: string; // This was in the old definition, I'll keep it for now.
 }
 
 /**
@@ -41,6 +56,7 @@ export interface I_CreateKardex {
     concept: string;
     quantity: number;
     unitPrice: number;
+    userId: string;
 }
 
 /**
