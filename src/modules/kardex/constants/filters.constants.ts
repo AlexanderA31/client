@@ -1,12 +1,10 @@
 import { Pagination } from '@/modules/kardex/types/pagination'
 
 export const SORT_OPTIONS = [
-	{ label: 'Fecha reciente', field: 'date', order: 'desc', key: 'date:desc' },
-	{ label: 'Fecha antigua', field: 'date', order: 'asc', key: 'date:asc' },
-    { label: 'Producto (A-Z)', field: 'productName', order: 'asc', key: 'productName:asc' },
-    { label: 'Producto (Z-A)', field: 'productName', order: 'desc', key: 'productName:desc' },
-    { label: 'Almacén (A-Z)', field: 'warehouseName', order: 'asc', key: 'warehouseName:asc' },
-    { label: 'Almacén (Z-A)', field: 'warehouseName', order: 'desc', key: 'warehouseName:desc' },
+	{ label: 'Fecha reciente', field: 'createdAt', order: 'desc', key: 'createdAt:desc' },
+	{ label: 'Fecha antigua', field: 'createdAt', order: 'asc', key: 'createdAt:asc' },
+	{ label: 'Cantidad (menor a mayor)', field: 'quantity', order: 'asc', key: 'quantity:asc' },
+	{ label: 'Cantidad (mayor a menor)', field: 'quantity', order: 'desc', key: 'quantity:desc' },
 ]
 
 export const INITIAL_PAGINATION: Pagination = {
