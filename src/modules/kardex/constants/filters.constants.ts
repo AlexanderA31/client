@@ -19,14 +19,7 @@ export const INITIAL_PAGINATION: Pagination = {
 
 export const KARDEX_TYPE_OPTIONS = [
     { label: 'Todos', value: ''},
-    { label: 'Compra de mercancía desde proveedor', value: 'purchase' },
-    { label: 'Devolución de cliente', value: 'return_in' },
-    { label: 'Transferencia entrante desde otro almacén', value: 'transfer_in' },
-    { label: 'Venta de mercancía a cliente', value: 'sale' },
-    { label: 'Devolución a proveedor', value: 'return_out' },
-    { label: 'Transferencia saliente hacia otro almacén', value: 'transfer_out' },
-    { label: 'Ajuste manual positivo', value: 'adjustment_in' },
-    { label: 'Ajuste manual negativo', value: 'adjustment_out' },
-    { label: 'Mercancía dañada', value: 'damaged' },
-    { label: 'Mercancía vencida', value: 'expired' },
+    { label: 'Entradas', value: 'IN' },
+    { label: 'Salidas', value: 'OUT' },
+    { label: 'Ajustes', value: 'ADJUSTMENT' },
 ]
