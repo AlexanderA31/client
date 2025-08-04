@@ -26,7 +26,7 @@ export const createTableColumns = ({ onViewDetails }: TableColumnsProps): Column
 	{
 		accessorKey: 'warehouse',
 		header: 'Almacén',
-		cell: ({ row }) => row.original.warehouse.name,
+		cell: ({ row }) => row.original.warehouse?.name || 'N/A',
 	},
 	{
 		accessorKey: 'concept',

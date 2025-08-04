@@ -5,6 +5,7 @@ import { useKardex } from '@/common/hooks/useKardex'
 import { usePagination } from '@/modules/kardex/hooks/usePagination'
 import { useGenericRefresh } from '@/common/hooks/shared/useGenericRefresh'
 import { I_Kardex } from '@/modules/kardex/types/kardex'
+import { useRouter } from 'next/navigation'
 
 import { Icons } from '@/components/icons'
 import { Card } from '@/components/ui/card'
@@ -15,10 +16,12 @@ import { KardexFilters } from '@/modules/kardex/components/templates/Filters'
 import { PaginationControls } from '@/modules/kardex/components/templates/Pagination'
 import { KardexTable } from '@/modules/kardex/components/organisms/Table/KardexTable'
 import { FatalErrorState, RetryErrorState } from '@/components/layout/organims/ErrorStateCard'
+import { ROUTE_PATH } from '@/common/constants/routes-const'
 
 export function KardexView() {
 	const [retryCount, setRetryCount] = useState(0)
 	const [viewType, setViewType] = useState<ViewType>('table')
+    const router = useRouter()
 
 	const {
 		pagination,
@@ -61,10 +64,8 @@ export function KardexView() {
 	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchKardex)
 
     const handleViewDetails = useCallback((kardexData: I_Kardex) => {
-        // For now, just log the data.
-        // In a real application, this would open a details modal or navigate to a details page.
-        console.log('View details for:', kardexData)
-    }, [])
+        router.push(`${ROUTE_PATH.ADMIN.KARDEX}/${kardexData.id}`)
+    }, [router])
 
 	const handleNext = useCallback(() => {
 		handleNextPage(kardex?.data?.pagination?.hasNextPage)

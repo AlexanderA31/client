@@ -2,6 +2,7 @@ import { useGenericApi } from '@/common/hooks/useGenericApi'
 import { KARDEX_ENDPOINTS_CONFIG } from '@/common/configs/api/kardex-endpoints.config'
 import { I_Kardex } from '@/modules/kardex/types/kardex'
 import { I_ApiResponse, I_PaginatedResponse } from '@/common/types/api'
+import { useCallback } from 'react'
 
 interface UseKardexParams {
 	page?: number
@@ -31,10 +32,19 @@ export const useKardex = (paginationParams: UseKardexParams = {}) => {
 
 	const query = api.buildQuery(queryParams)
 
+    const getKardexById = useCallback(
+        async (id: string) => {
+            const response = await api.apiService.get<I_ApiResponse<I_Kardex>>(`${KARDEX_ENDPOINTS_CONFIG.baseEndpoint}/${id}`)
+            return response.data.data
+        },
+        [api.apiService]
+    )
+
 	return {
 		kardex: query.data,
 		loading: query.isLoading,
 		error: query.error?.message,
 		refetchKardex: query.refetch,
+        getKardexById,
 	}
 }
