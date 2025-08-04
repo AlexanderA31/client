@@ -27,6 +27,8 @@ export function KardexView() {
 		pagination,
 		searchTerm,
 		currentSort,
+		clientSort,
+		setClientSort,
 		currentType,
 		handleNextPage,
 		handlePrevPage,
@@ -46,7 +48,7 @@ export function KardexView() {
 			sort: pagination.sort,
 			filters: currentType ? { movementType: currentType } : undefined,
 		}),
-		[pagination.page, pagination.limit, searchTerm, currentType, currentSort]
+		[pagination.page, pagination.limit, searchTerm, currentType, pagination.sort]
 	)
 
 	const {
@@ -105,6 +107,8 @@ export function KardexView() {
 				loading={loading}
 				onViewDetails={handleViewDetails}
 				viewType={viewType}
+				clientSort={clientSort}
+				setClientSort={setClientSort}
 			/>
 
 			<PaginationControls

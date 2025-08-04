@@ -26,10 +26,18 @@ interface Props {
 	kardexData: I_Kardex[]
 	viewType: ViewType
 	onViewDetails: (kardexData: I_Kardex) => void
+	clientSort: SortingState
+	setClientSort: (sorting: SortingState) => void
 }
 
-export function KardexTable({ kardexData, loading, viewType, onViewDetails }: Props) {
-	const [sorting, setSorting] = useState<SortingState>([])
+export function KardexTable({
+	kardexData,
+	loading,
+	viewType,
+	onViewDetails,
+	clientSort,
+	setClientSort,
+}: Props) {
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 	const [globalFilter, setGlobalFilter] = useState('')
 
@@ -39,12 +47,12 @@ export function KardexTable({ kardexData, loading, viewType, onViewDetails }: Pr
 		data: kardexData,
 		columns,
 		state: {
-			sorting,
+			sorting: clientSort,
 			rowSelection,
 			globalFilter,
 		},
 		getRowId: row => row.id,
-		onSortingChange: setSorting,
+		onSortingChange: setClientSort,
 		onRowSelectionChange: setRowSelection,
 		onGlobalFilterChange: setGlobalFilter,
 		getCoreRowModel: getCoreRowModel(),

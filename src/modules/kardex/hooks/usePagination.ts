@@ -1,11 +1,15 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { Pagination } from '@/modules/kardex/types/pagination'
 import { INITIAL_PAGINATION } from '@/modules/kardex/constants/filters.constants'
+import { SortingState } from '@tanstack/react-table'
+
+const CLIENT_SIDE_SORT_KEYS = ['product.name', 'user.id']
 
 export function usePagination() {
 	const [pagination, setPagination] = useState<Pagination>(INITIAL_PAGINATION)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [currentSort, setCurrentSort] = useState<string>('')
+	const [clientSort, setClientSort] = useState<SortingState>([])
 	const [currentType, setCurrentType] = useState<
 		| 'purchase'
 		| 'return_in'
@@ -72,17 +76,25 @@ export function usePagination() {
 	const handleSort = useCallback((sortKey: string) => {
 		if (!sortKey) {
 			setCurrentSort('')
+			setClientSort([])
 			setPagination(prev => ({ ...prev, sort: [], page: 1 }))
 			return
 		}
 
 		const [field, order] = sortKey.split(':')
 		setCurrentSort(sortKey)
-		setPagination(prev => ({
-			...prev,
-			sort: [{ orderBy: field, order: order as 'asc' | 'desc' }],
-			page: 1,
-		}))
+
+		if (CLIENT_SIDE_SORT_KEYS.includes(field)) {
+			setClientSort([{ id: field, desc: order === 'desc' }])
+			setPagination(prev => ({ ...prev, sort: [] }))
+		} else {
+			setClientSort([])
+			setPagination(prev => ({
+				...prev,
+				sort: [{ orderBy: field, order: order as 'asc' | 'desc' }],
+				page: 1,
+			}))
+		}
 	}, [])
 
 	const handleTypeChange = useCallback(
@@ -114,6 +126,7 @@ export function usePagination() {
 		setSearchTerm('')
 		setCurrentSort('')
 		setCurrentType('')
+		setClientSort([])
 		setPagination(INITIAL_PAGINATION)
 	}, [])
 
@@ -121,6 +134,8 @@ export function usePagination() {
 		pagination,
 		searchTerm,
 		currentSort,
+		clientSort,
+		setClientSort,
 		currentType,
 		handleNextPage,
 		handlePrevPage,
