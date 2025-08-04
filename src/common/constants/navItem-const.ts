@@ -51,7 +51,7 @@ export const ALL_NAV_ITEMS: NavConfig = [
             {
                 title: 'Kardex',
                 url: ROUTE_PATH.ADMIN.KARDEX,
-                icon: 'fileText',
+                icon: 'post',
                 isActive: false,
                 permission: PERMISSIONS.KARDEX,
             },
