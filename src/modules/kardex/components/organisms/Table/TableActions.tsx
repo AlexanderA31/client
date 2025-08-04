@@ -16,6 +16,9 @@ export const TableActions = ({ kardexData, onViewDetails }: Props) => (
 		tooltip='Ver Detalles'
 		size='icon'
 		className='rounded-full'
-        onClick={() => onViewDetails(kardexData)}
+        onClick={(e) => {
+            e.stopPropagation()
+            onViewDetails(kardexData)
+        }}
 	/>
 )
