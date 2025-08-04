@@ -1,16 +1,16 @@
 import { I_Kardex } from '@/modules/kardex/types/kardex'
 
 const movementTypeTranslations: Record<I_Kardex['movementType'], string> = {
-	PURCHASE: '🛒 Compra',
-	RETURN_IN: '🔄 Devolución de cliente',
-	TRANSFER_IN: '🚚 Transferencia entrante',
-	SALE: '💰 Venta',
-	RETURN_OUT: '📦 Devolución a proveedor',
-	TRANSFER_OUT: '🚚 Transferencia saliente',
-	ADJUSTMENT_IN: '➕ Ajuste positivo',
-	ADJUSTMENT_OUT: '➖ Ajuste negativo',
-	DAMAGED: '🧃 Dañado',
-	EXPIRED: '⏳ Vencido',
+	purchase: '🛒 Compra',
+	return_in: '🔄 Devolución de cliente',
+	transfer_in: '🚚 Transferencia entrante',
+	sale: '💰 Venta',
+	return_out: '📦 Devolución a proveedor',
+	transfer_out: '🚚 Transferencia saliente',
+	adjustment_in: '➕ Ajuste positivo',
+	adjustment_out: '➖ Ajuste negativo',
+	damaged: '🧃 Dañado',
+	expired: '⏳ Vencido',
 }
 
 export const translateMovementType = (movementType: I_Kardex['movementType']): string => {

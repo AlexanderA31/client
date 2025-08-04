@@ -36,9 +36,9 @@ export const createTableColumns = ({ onViewDetails }: TableColumnsProps): Column
 		cell: ({ row }) => (
 			<Badge
 				variant={
-					row.original.movementType.includes('IN') || row.original.movementType.includes('PURCHASE')
+					row.original.movementType.includes('in') || row.original.movementType.includes('purchase')
 						? 'success'
-						: row.original.movementType.includes('OUT') || row.original.movementType.includes('SALE')
+						: row.original.movementType.includes('out') || row.original.movementType.includes('sale')
 						? 'destructive'
 						: 'warning'
 				}

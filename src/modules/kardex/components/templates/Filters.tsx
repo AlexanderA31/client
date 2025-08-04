@@ -23,31 +23,31 @@ interface Props {
 	isRefreshing: boolean
 	currentSort?: string
 	currentType?:
-		| 'PURCHASE'
-		| 'RETURN_IN'
-		| 'TRANSFER_IN'
-		| 'SALE'
-		| 'RETURN_OUT'
-		| 'TRANSFER_OUT'
-		| 'ADJUSTMENT_IN'
-		| 'ADJUSTMENT_OUT'
-		| 'DAMAGED'
-		| 'EXPIRED'
+		| 'purchase'
+		| 'return_in'
+		| 'transfer_in'
+		| 'sale'
+		| 'return_out'
+		| 'transfer_out'
+		| 'adjustment_in'
+		| 'adjustment_out'
+		| 'damaged'
+		| 'expired'
 		| ''
 	onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 	onSort: (sortKey: string) => void
 	onTypeChange: (
 		type:
-			| 'PURCHASE'
-			| 'RETURN_IN'
-			| 'TRANSFER_IN'
-			| 'SALE'
-			| 'RETURN_OUT'
-			| 'TRANSFER_OUT'
-			| 'ADJUSTMENT_IN'
-			| 'ADJUSTMENT_OUT'
-			| 'DAMAGED'
-			| 'EXPIRED'
+			| 'purchase'
+			| 'return_in'
+			| 'transfer_in'
+			| 'sale'
+			| 'return_out'
+			| 'transfer_out'
+			| 'adjustment_in'
+			| 'adjustment_out'
+			| 'damaged'
+			| 'expired'
 			| ''
 	) => void
 	onRefresh: () => void
@@ -208,16 +208,16 @@ export function KardexFilters({
 										onClick={() =>
 											onTypeChange(
 												type.value as
-													| 'PURCHASE'
-													| 'RETURN_IN'
-													| 'TRANSFER_IN'
-													| 'SALE'
-													| 'RETURN_OUT'
-													| 'TRANSFER_OUT'
-													| 'ADJUSTMENT_IN'
-													| 'ADJUSTMENT_OUT'
-													| 'DAMAGED'
-													| 'EXPIRED'
+													| 'purchase'
+													| 'return_in'
+													| 'transfer_in'
+													| 'sale'
+													| 'return_out'
+													| 'transfer_out'
+													| 'adjustment_in'
+													| 'adjustment_out'
+													| 'damaged'
+													| 'expired'
 													| ''
 											)
 										}

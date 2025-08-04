@@ -7,16 +7,16 @@ export function usePagination() {
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [currentSort, setCurrentSort] = useState<string>('')
 	const [currentType, setCurrentType] = useState<
-		| 'PURCHASE'
-		| 'RETURN_IN'
-		| 'TRANSFER_IN'
-		| 'SALE'
-		| 'RETURN_OUT'
-		| 'TRANSFER_OUT'
-		| 'ADJUSTMENT_IN'
-		| 'ADJUSTMENT_OUT'
-		| 'DAMAGED'
-		| 'EXPIRED'
+		| 'purchase'
+		| 'return_in'
+		| 'transfer_in'
+		| 'sale'
+		| 'return_out'
+		| 'transfer_out'
+		| 'adjustment_in'
+		| 'adjustment_out'
+		| 'damaged'
+		| 'expired'
 		| ''
 	>('')
 	const debounceTimer = useRef<NodeJS.Timeout | null>(null)
@@ -88,16 +88,16 @@ export function usePagination() {
 	const handleTypeChange = useCallback(
 		(
 			type:
-				| 'PURCHASE'
-				| 'RETURN_IN'
-				| 'TRANSFER_IN'
-				| 'SALE'
-				| 'RETURN_OUT'
-				| 'TRANSFER_OUT'
-				| 'ADJUSTMENT_IN'
-				| 'ADJUSTMENT_OUT'
-				| 'DAMAGED'
-				| 'EXPIRED'
+				| 'purchase'
+				| 'return_in'
+				| 'transfer_in'
+				| 'sale'
+				| 'return_out'
+				| 'transfer_out'
+				| 'adjustment_in'
+				| 'adjustment_out'
+				| 'damaged'
+				| 'expired'
 				| ''
 		) => {
 			setCurrentType(type)
