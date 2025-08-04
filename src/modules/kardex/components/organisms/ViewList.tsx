@@ -9,8 +9,8 @@ import { Table as ReactTable } from '@tanstack/react-table'
 import { I_Kardex } from '@/modules/kardex/types/kardex'
 import { animations } from '@/modules/kardex/components/atoms/animations'
 import { TableActions } from '@/modules/kardex/components/organisms/Table/TableActions'
-import { TableInfoDate } from '@/modules/kardex/components/organisms/Table/TableInfoDate'
 import { formatPrice } from '@/common/utils/formatPrice-util'
+import { formatDate } from '@/common/utils/dateFormater-util'
 
 interface ListViewProps {
 	table: ReactTable<I_Kardex>
@@ -31,11 +31,10 @@ export const ListView = ({ table, onViewDetails }: ListViewProps) => (
 					return (
 						<motion.div
 							key={row.id}
-							variants={animations.rowItem} // using rowItem for consistency
+							variants={animations.rowItem}
 							initial='hidden'
 							animate='visible'
 							exit='exit'
-							whileHover='hover'
 							layout
 							className='group'>
 							<Card className='border-border/50 overflow-hidden border shadow-none transition-all duration-300'>
@@ -50,7 +49,7 @@ export const ListView = ({ table, onViewDetails }: ListViewProps) => (
                                                                 {kardexData.product.name}
                                                             </Typography>
                                                             <Typography variant='span' className='text-muted-foreground text-sm'>
-                                                                {kardexData.concept}
+                                                                {kardexData.product.code}
                                                             </Typography>
                                                         </div>
 														<div className='flex-shrink-0'>
@@ -64,8 +63,8 @@ export const ListView = ({ table, onViewDetails }: ListViewProps) => (
                                                         <div className='flex items-center justify-between col-span-3'>
                                                             <span className='text-muted-foreground'>Tipo:</span>
                                                             <Badge
-                                                                variant={kardexData.type === 'IN' ? 'success' : kardexData.type === 'OUT' ? 'destructive' : 'warning'}
-                                                                text={kardexData.type === 'IN' ? 'Entrada' : kardexData.type === 'OUT' ? 'Salida' : 'Ajuste'}
+                                                                variant={kardexData.movementType === 'purchase' ? 'success' : kardexData.movementType === 'sale' ? 'destructive' : 'warning'}
+                                                                text={kardexData.movementType}
                                                             />
                                                         </div>
                                                         <div className='flex items-center justify-between'>
@@ -73,27 +72,17 @@ export const ListView = ({ table, onViewDetails }: ListViewProps) => (
                                                             <span>{kardexData.quantity}</span>
                                                         </div>
                                                         <div className='flex items-center justify-between'>
-                                                            <span className='text-muted-foreground'>Precio U:</span>
-                                                            <span>{formatPrice(kardexData.unitPrice)}</span>
-                                                        </div>
-                                                        <div className='flex items-center justify-between'>
                                                             <span className='text-muted-foreground'>Total:</span>
-                                                            <span className='font-semibold'>{formatPrice(kardexData.totalPrice)}</span>
+                                                            <span className='font-semibold'>{formatPrice(kardexData.total)}</span>
                                                         </div>
 													</div>
 
 													<Separator />
 
 													<div className='flex items-center justify-between gap-2'>
-														<Badge
-															decord={false}
-															variant={kardexData.status === 'active' ? 'success' : 'warning'}
-															text={kardexData.status === 'active' ? 'Activo' : 'Inactivo'}
-														/>
-
-														<div className='text-muted-foreground text-right text-xs'>
-															<TableInfoDate kardexData={kardexData} />
-														</div>
+                                                        <Typography variant='span' className='text-muted-foreground text-xs'>
+                                                            {formatDate(kardexData.createdAt, 'es-ES', { dateStyle: 'medium' })}
+                                                        </Typography>
 													</div>
 												</div>
 											</div>
