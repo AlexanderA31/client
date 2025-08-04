@@ -3,7 +3,7 @@ import { Pagination } from '@/modules/kardex/types/pagination'
 import { INITIAL_PAGINATION } from '@/modules/kardex/constants/filters.constants'
 import { SortingState } from '@tanstack/react-table'
 
-const CLIENT_SIDE_SORT_KEYS = ['product.name', 'user.id']
+const CLIENT_SIDE_SORT_KEYS = ['product.name', 'user.id', 'warehouse.name']
 
 export function usePagination() {
 	const [pagination, setPagination] = useState<Pagination>(INITIAL_PAGINATION)
