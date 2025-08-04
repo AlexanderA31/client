@@ -29,13 +29,13 @@ export const TableActions = ({ kardexData, onViewDetails }: Props) => {
 					className='flex h-8 w-8 p-0 data-[state=open]:bg-muted'
 					onClick={(e) => e.stopPropagation()}
 				>
-					<Icons.moreHorizontal className='h-4 w-4' />
+					<Icons.ellipsis className='h-4 w-4' />
 					<span className='sr-only'>Abrir menu</span>
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end' className='w-[160px]' onClick={(e) => e.stopPropagation()}>
 				<DropdownMenuItem onClick={() => onViewDetails(kardexData)}>
-					<Icons.view className='mr-2 h-3.5 w-3.5 text-muted-foreground/70' />
+					<Icons.eye className='mr-2 h-3.5 w-3.5 text-muted-foreground/70' />
 					Detalles
 				</DropdownMenuItem>
 				<DropdownMenuItem onClick={handleReportsClick}>
