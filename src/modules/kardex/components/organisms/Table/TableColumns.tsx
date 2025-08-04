@@ -25,10 +25,12 @@ export const createTableColumns = ({ onViewDetails }: TableColumnsProps): Column
 	{
 		accessorKey: 'product.code',
 		header: 'Cód. Producto',
+		id: 'product.code',
 	},
 	{
 		accessorKey: 'product.name',
 		header: 'Producto',
+		id: 'product.name',
 	},
 	{
 		accessorKey: 'movementType',
@@ -82,7 +84,8 @@ export const createTableColumns = ({ onViewDetails }: TableColumnsProps): Column
 	{
 		accessorKey: 'user.id',
 		header: 'Responsable',
-        cell: ({ row }) => <UserNameCell userId={row.original.user.id} />
+        cell: ({ row }) => <UserNameCell userId={row.original.user.id} />,
+		id: 'user.id',
 	},
    
 	{
