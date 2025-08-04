@@ -4,6 +4,7 @@ import { Typography } from '@/components/ui/typography'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Badge } from '@/components/layout/atoms/Badge'
 import { Table as ReactTable } from '@tanstack/react-table'
+import { translateMovementType } from '@/modules/kardex/utils/movement-type-translator'
 import { I_Kardex } from '@/modules/kardex/types/kardex'
 import { animations } from '@/modules/kardex/components/atoms/animations'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
@@ -57,8 +58,14 @@ export const CardView = ({ table, onViewDetails }: CardViewProps) => (
                                     <div className='flex justify-between'>
                                         <Typography variant='span' className='text-muted-foreground text-sm'>Tipo:</Typography>
                                         <Badge
-                                            variant={kardexData.movementType === 'purchase' ? 'success' : kardexData.movementType === 'sale' ? 'destructive' : 'warning'}
-                                            text={kardexData.movementType}
+                                            variant={
+                                                kardexData.movementType.includes('in') || kardexData.movementType.includes('purchase')
+                                                    ? 'success'
+                                                    : kardexData.movementType.includes('out') || kardexData.movementType.includes('sale')
+                                                    ? 'destructive'
+                                                    : 'warning'
+                                            }
+                                            text={translateMovementType(kardexData.movementType)}
                                         />
                                     </div>
                                     <div className='flex justify-between'>

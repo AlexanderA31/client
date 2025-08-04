@@ -5,6 +5,7 @@ import { Typography } from '@/components/ui/typography'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Badge } from '@/components/layout/atoms/Badge'
 import { Card, CardContent } from '@/components/ui/card'
+import { translateMovementType } from '@/modules/kardex/utils/movement-type-translator'
 import { Table as ReactTable } from '@tanstack/react-table'
 import { I_Kardex } from '@/modules/kardex/types/kardex'
 import { animations } from '@/modules/kardex/components/atoms/animations'
@@ -63,8 +64,14 @@ export const ListView = ({ table, onViewDetails }: ListViewProps) => (
                                                         <div className='flex items-center justify-between col-span-3'>
                                                             <span className='text-muted-foreground'>Tipo:</span>
                                                             <Badge
-                                                                variant={kardexData.movementType === 'purchase' ? 'success' : kardexData.movementType === 'sale' ? 'destructive' : 'warning'}
-                                                                text={kardexData.movementType}
+                                                                variant={
+                                                                    kardexData.movementType.includes('in') || kardexData.movementType.includes('purchase')
+                                                                        ? 'success'
+                                                                        : kardexData.movementType.includes('out') || kardexData.movementType.includes('sale')
+                                                                        ? 'destructive'
+                                                                        : 'warning'
+                                                                }
+                                                                text={translateMovementType(kardexData.movementType)}
                                                             />
                                                         </div>
                                                         <div className='flex items-center justify-between'>
