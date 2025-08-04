@@ -26,10 +26,6 @@ export const createTableColumns = ({ onViewDetails }: TableColumnsProps): Column
 		header: 'Cód. Producto',
 	},
 	{
-		accessorKey: 'product.name',
-		header: 'Producto',
-	},
-	{
 		accessorKey: 'movementType',
 		header: 'Tipo Movimiento',
 		cell: ({ row }) => (

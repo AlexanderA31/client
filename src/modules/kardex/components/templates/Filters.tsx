@@ -82,9 +82,9 @@ export function KardexFilters({
 	}
 
 	const getCurrentTypeLabel = () => {
-		if (!currentType) return 'Filtrar por tipo'
+		if (!currentType) return 'Filtrar'
 		const typeOption = KARDEX_TYPE_OPTIONS.find(option => option.value === currentType)
-        return typeOption?.label || 'Filtrar por tipo'
+        return typeOption?.label || 'Filtrar'
 	}
 
 	const clearSearch = () => onSearchChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>)
