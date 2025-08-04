@@ -77,11 +77,6 @@ export const createTableColumns = ({ onViewDetails }: TableColumnsProps): Column
 		header: 'Responsable',
         cell: ({ row }) => <UserNameCell userId={row.original.user.id} />
 	},
-	{
-		accessorKey: 'createdAt',
-		header: 'Fecha Creación',
-		cell: ({ row }) => formatDate(row.original.createdAt, 'es-ES', { dateStyle: 'short', timeStyle: 'short' }),
-	},
     {
         accessorKey: 'updatedAt',
         header: 'Fecha Act.',
