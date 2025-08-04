@@ -3,6 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@/components/layout/atoms/Badge'
 import { I_Kardex } from '@/modules/kardex/types/kardex'
+import { translateMovementType } from '@/modules/kardex/utils/movement-type-translator'
 import { TableActions } from '@/modules/kardex/components/organisms/Table/TableActions'
 import { formatDate } from '@/common/utils/dateFormater-util'
 import { formatPrice } from '@/common/utils/formatPrice-util'
@@ -26,14 +27,24 @@ export const createTableColumns = ({ onViewDetails }: TableColumnsProps): Column
 		header: 'Cód. Producto',
 	},
 	{
+		accessorKey: 'product.name',
+		header: 'Producto',
+	},
+	{
 		accessorKey: 'movementType',
 		header: 'Tipo Movimiento',
-        cell: ({ row }) => (
-            <Badge
-                variant={row.original.movementType === 'purchase' ? 'success' : row.original.movementType === 'sale' ? 'destructive' : 'warning'}
-                text={row.original.movementType}
-            />
-        )
+		cell: ({ row }) => (
+			<Badge
+				variant={
+					row.original.movementType.includes('IN') || row.original.movementType.includes('PURCHASE')
+						? 'success'
+						: row.original.movementType.includes('OUT') || row.original.movementType.includes('SALE')
+						? 'destructive'
+						: 'warning'
+				}
+				text={translateMovementType(row.original.movementType)}
+			/>
+		),
 	},
 	{
 		accessorKey: 'quantity',

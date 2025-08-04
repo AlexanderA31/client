@@ -6,7 +6,19 @@ export function usePagination() {
 	const [pagination, setPagination] = useState<Pagination>(INITIAL_PAGINATION)
 	const [searchTerm, setSearchTerm] = useState<string>('')
 	const [currentSort, setCurrentSort] = useState<string>('')
-	const [currentType, setCurrentType] = useState<'IN' | 'OUT' | 'ADJUSTMENT' | ''>('')
+	const [currentType, setCurrentType] = useState<
+		| 'PURCHASE'
+		| 'RETURN_IN'
+		| 'TRANSFER_IN'
+		| 'SALE'
+		| 'RETURN_OUT'
+		| 'TRANSFER_OUT'
+		| 'ADJUSTMENT_IN'
+		| 'ADJUSTMENT_OUT'
+		| 'DAMAGED'
+		| 'EXPIRED'
+		| ''
+	>('')
 	const debounceTimer = useRef<NodeJS.Timeout | null>(null)
 
 	const handleNextPage = useCallback((hasNextPage: boolean) => {
@@ -73,14 +85,30 @@ export function usePagination() {
 		}))
 	}, [])
 
-	const handleTypeChange = useCallback((type: 'IN' | 'OUT' | 'ADJUSTMENT' | '') => {
-		setCurrentType(type)
-		setPagination(prev => ({
-			...prev,
-			filters: type ? { type } : {},
-			page: 1,
-		}))
-	}, [])
+	const handleTypeChange = useCallback(
+		(
+			type:
+				| 'PURCHASE'
+				| 'RETURN_IN'
+				| 'TRANSFER_IN'
+				| 'SALE'
+				| 'RETURN_OUT'
+				| 'TRANSFER_OUT'
+				| 'ADJUSTMENT_IN'
+				| 'ADJUSTMENT_OUT'
+				| 'DAMAGED'
+				| 'EXPIRED'
+				| ''
+		) => {
+			setCurrentType(type)
+			setPagination(prev => ({
+				...prev,
+				filters: type ? { movementType: type } : {},
+				page: 1,
+			}))
+		},
+		[]
+	)
 
 	const handleResetAll = useCallback(() => {
 		setSearchTerm('')

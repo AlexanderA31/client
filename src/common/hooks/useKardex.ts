@@ -9,7 +9,7 @@ interface UseKardexParams {
 	limit?: number
 	search?: string
 	filters?: Record<string, string>
-	sort?: Array<{ orderBy: keyof I_Kardex; order: 'asc' | 'desc' }>
+	sort?: Array<{ orderBy: string; order: 'asc' | 'desc' }>
 }
 
 export const useKardex = (paginationParams: UseKardexParams = {}) => {

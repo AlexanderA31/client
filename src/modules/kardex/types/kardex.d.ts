@@ -22,7 +22,7 @@ interface I_UserReference {
 export interface I_Kardex {
     id: string;
     product: I_ProductReference;
-    movementType: 'purchase' | 'sale' | 'adjustment';
+    movementType: 'PURCHASE' | 'RETURN_IN' | 'TRANSFER_IN' | 'SALE' | 'RETURN_OUT' | 'TRANSFER_OUT' | 'ADJUSTMENT_IN' | 'ADJUSTMENT_OUT' | 'DAMAGED' | 'EXPIRED';
     quantity: number;
     unitCost: number;
     subtotal: number;

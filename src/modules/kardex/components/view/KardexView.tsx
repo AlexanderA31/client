@@ -43,8 +43,8 @@ export function KardexView() {
 			search: searchTerm,
 			page: pagination.page,
 			limit: pagination.limit,
-			sort: currentSort ? [currentSort] : undefined,
-			filters: currentType ? { type: currentType } : undefined,
+			sort: pagination.sort,
+			filters: currentType ? { movementType: currentType } : undefined,
 		}),
 		[pagination.page, pagination.limit, searchTerm, currentType, currentSort]
 	)

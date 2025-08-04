@@ -22,10 +22,34 @@ interface Props {
 	searchValue: string
 	isRefreshing: boolean
 	currentSort?: string
-	currentType?: 'IN' | 'OUT' | 'ADJUSTMENT' | ''
+	currentType?:
+		| 'PURCHASE'
+		| 'RETURN_IN'
+		| 'TRANSFER_IN'
+		| 'SALE'
+		| 'RETURN_OUT'
+		| 'TRANSFER_OUT'
+		| 'ADJUSTMENT_IN'
+		| 'ADJUSTMENT_OUT'
+		| 'DAMAGED'
+		| 'EXPIRED'
+		| ''
 	onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 	onSort: (sortKey: string) => void
-	onTypeChange: (type: 'IN' | 'OUT' | 'ADJUSTMENT' | '') => void
+	onTypeChange: (
+		type:
+			| 'PURCHASE'
+			| 'RETURN_IN'
+			| 'TRANSFER_IN'
+			| 'SALE'
+			| 'RETURN_OUT'
+			| 'TRANSFER_OUT'
+			| 'ADJUSTMENT_IN'
+			| 'ADJUSTMENT_OUT'
+			| 'DAMAGED'
+			| 'EXPIRED'
+			| ''
+	) => void
 	onRefresh: () => void
 	onResetAll: () => void
 	viewType: ViewType
@@ -181,7 +205,22 @@ export function KardexFilters({
 								{KARDEX_TYPE_OPTIONS.map((type, index) => (
 									<DropdownMenuItem
 										key={type.value}
-										onClick={() => onTypeChange(type.value as 'IN' | 'OUT' | 'ADJUSTMENT' | '')}
+										onClick={() =>
+											onTypeChange(
+												type.value as
+													| 'PURCHASE'
+													| 'RETURN_IN'
+													| 'TRANSFER_IN'
+													| 'SALE'
+													| 'RETURN_OUT'
+													| 'TRANSFER_OUT'
+													| 'ADJUSTMENT_IN'
+													| 'ADJUSTMENT_OUT'
+													| 'DAMAGED'
+													| 'EXPIRED'
+													| ''
+											)
+										}
 										className='hover:bg-accent/80 text-accent-foreground/75 cursor-pointer rounded-lg transition-all duration-200'>
 										<motion.div
 											className='flex w-full items-center justify-between'
