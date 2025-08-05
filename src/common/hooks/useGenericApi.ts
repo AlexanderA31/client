@@ -56,29 +56,12 @@ export const useGenericApi = <T, CreateT, UpdateT>(config: ApiConfig) => {
 	const buildQuery = useCallback(
 		(params: PaginationParams = {}) => {
 			const listEndpoint = config.endpoints?.list || { path: '', method: 'GET' as const }
-			const queryParams = { ...params }
-
-			if (queryParams.filters && typeof queryParams.filters === 'object') {
-				queryParams.filters = JSON.stringify(queryParams.filters)
-			}
-
-			if (queryParams.sort && Array.isArray(queryParams.sort)) {
-				queryParams.sort = JSON.stringify(
-					queryParams.sort.map(item => {
-						if (typeof item === 'string') {
-							const [field, order] = item.split(':')
-							return { orderBy: field, order: order || 'asc' }
-						}
-						return item
-					})
-				)
-			}
 
 			return useQuery({
 				queryKey: buildQueryKey(params),
 				queryFn: async () => {
 					return await apiService.executeRequest<T>(listEndpoint, {
-						queryParams: queryParams,
+						queryParams: params,
 					})
 				},
 				retry: 2,
