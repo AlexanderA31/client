@@ -114,54 +114,46 @@ export function UserFormModal({ isOpen, currentRecord, onClose, onSubmit }: User
 
 				{/* Content */}
 				<div className='flex-1 space-y-4 overflow-auto p-4'>
-					{loadingUser || loadingRoles || loadingStatuses ? (
-						<div className='flex h-screen flex-1 flex-col items-center justify-center'>
-							<SpinnerLoader text='Cargando... Por favor espera' />
-						</div>
-					) : (
-						<>
-							<AlertMessage
-								message={
-									currentRecord
-										? 'Modifica los campos necesarios y guarda los cambios para actualizar el usuario en el sistema.'
-										: 'Completa la información requerida para crear un nuevo usuario.'
-								}
-								variant='info'
-							/>
+					<AlertMessage
+						message={
+							currentRecord
+								? 'Modifica los campos necesarios y guarda los cambios para actualizar el usuario en el sistema.'
+								: 'Completa la información requerida para crear un nuevo usuario.'
+						}
+						variant='info'
+					/>
 
-							<Form {...form}>
-								<form onSubmit={form.handleSubmit(handleFormSubmit)}>
-									<div className='space-y-12'>
-										<BasicInfoSection
-											control={form.control}
-											roles={rolesData?.data.items || []}
-											statuses={statusesData?.data.items || []}
-										/>
+					<Form {...form}>
+						<form onSubmit={form.handleSubmit(handleFormSubmit)}>
+							<div className='space-y-12'>
+								<BasicInfoSection
+									control={form.control}
+									roles={rolesData?.data.items || []}
+									statuses={statusesData?.data.items || []}
+									isLoadingRoles={loadingRoles}
+									isLoadingStatuses={loadingStatuses}
+								/>
 
-										<MediaSection
-											control={form.control}
-											setValue={form.setValue}
-											watch={form.watch}
-											userData={userData}
-											currentRecord={currentRecord}
-										/>
-									</div>
-								</form>
-							</Form>
-						</>
-					)}
+								<MediaSection
+									control={form.control}
+									setValue={form.setValue}
+									watch={form.watch}
+									userData={userData}
+									currentRecord={currentRecord}
+								/>
+							</div>
+						</form>
+					</Form>
 				</div>
 
 				{/* Footer */}
-				{!(loadingUser || loadingRoles || loadingStatuses) && (
-					<FormFooter
-						formState={form.formState}
-						isFormValid={isFormValid}
-						currentRecord={userData || currentRecord}
-						onClose={handleClose}
-						onSubmit={form.handleSubmit(handleFormSubmit)}
-					/>
-				)}
+				<FormFooter
+					formState={form.formState}
+					isFormValid={isFormValid}
+					currentRecord={userData || currentRecord}
+					onClose={handleClose}
+					onSubmit={form.handleSubmit(handleFormSubmit)}
+				/>
 			</SheetContent>
 		</Sheet>
 	)

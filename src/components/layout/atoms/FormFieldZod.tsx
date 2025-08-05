@@ -70,6 +70,7 @@ export function UniversalFormField<T extends FieldValues>({
 	groupByCategory = false,
 }: UniversalFormFieldProps<T>) {
 	const [commandOpen, setCommandOpen] = React.useState(false)
+	const [showPassword, setShowPassword] = React.useState(false)
 
 	// Para campos hidden, no mostrar ningún UI
 	if (type === 'hidden') {
@@ -410,7 +411,7 @@ export function UniversalFormField<T extends FieldValues>({
 										<Input
 											placeholder={placeholder}
 											{...field}
-											type={type}
+											type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
 											className={inputClasses}
 											min={min}
 											max={max}
@@ -428,6 +429,21 @@ export function UniversalFormField<T extends FieldValues>({
 											value={field.value ?? ''}
 										/>
 										{renderValidationIcon()}
+										{type === 'password' && (
+											<Button
+												type='button'
+												variant='link'
+												size='sm'
+												className='absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent'
+												onClick={() => setShowPassword(!showPassword)}>
+												{showPassword ? (
+													<Icons.eye className='text-muted-foreground h-4 w-4' />
+												) : (
+													<Icons.eyeClosed className='text-muted-foreground h-4 w-4' />
+												)}
+												<span className='sr-only'>{showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}</span>
+											</Button>
+										)}
 									</>
 								)}
 							</div>

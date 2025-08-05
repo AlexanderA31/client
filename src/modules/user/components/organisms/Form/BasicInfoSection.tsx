@@ -12,9 +12,11 @@ interface Props {
 	control: Control<UserFormData>
 	roles: I_Role[]
 	statuses: I_Status[]
+	isLoadingRoles: boolean
+	isLoadingStatuses: boolean
 }
 
-export function BasicInfoSection({ control, roles, statuses }: Props) {
+export function BasicInfoSection({ control, roles, statuses, isLoadingRoles, isLoadingStatuses }: Props) {
 	const roleOptions = roles.map(role => ({ value: role.id, label: role.name }))
 	const statusOptions = statuses.map(status => ({ value: status.id, label: status.name }))
 
@@ -28,7 +30,7 @@ export function BasicInfoSection({ control, roles, statuses }: Props) {
 				<CardDescription>Datos básicos del usuario</CardDescription>
 			</CardHeader>
 
-			<CardContent className='grid grid-cols-1 gap-4 p-0 md:grid-cols-2'>
+			<CardContent className='grid grid-cols-1 items-start gap-4 p-0 md:grid-cols-2'>
 				<UniversalFormField
 					required
 					control={control}
@@ -75,6 +77,7 @@ export function BasicInfoSection({ control, roles, statuses }: Props) {
 					label='Rol'
 					placeholder='Selecciona un rol'
 					options={roleOptions}
+					disabled={isLoadingRoles}
 				/>
 				<UniversalFormField
 					required
@@ -84,6 +87,7 @@ export function BasicInfoSection({ control, roles, statuses }: Props) {
 					label='Estado'
 					placeholder='Selecciona un estado'
 					options={statusOptions}
+					disabled={isLoadingStatuses}
 				/>
 			</CardContent>
 		</Card>
