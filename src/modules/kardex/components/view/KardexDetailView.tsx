@@ -9,6 +9,7 @@ import { NotFoundState } from '@/components/layout/organims/NotFoundState'
 import { EmptyState } from '@/components/layout/organims/EmptyState'
 import { formatDate } from '@/common/utils/dateFormater-util'
 import { TableKardex } from '../organisms/Table/TableKardex'
+import { LoadingStates } from '../organisms/Table/StateLoading'
 import { KardexHeader } from '../templates/Header'
 import { KardexFilters } from '../templates/Filters'
 import { usePagination } from '../../hooks/usePagination'
@@ -69,14 +70,6 @@ export function KardexDetailView({ id }: Props) {
 		)
 	}
 
-	if (!movementsKardex?.data?.items) {
-		return (
-			<div className='flex h-screen flex-1 flex-col items-center justify-center'>
-				<NotFoundState />
-			</div>
-		)
-	}
-
 	const product = movementsKardex?.data?.items?.[0]?.product
 
 	return (
@@ -98,12 +91,22 @@ export function KardexDetailView({ id }: Props) {
 				onResetAll={handleResetAll}
 			/>
 			{/* Table */}
-			<TableKardex
-				recordData={movementsKardex.data.items}
-				loading={movementsLoading}
-				viewType={'table'}
-				showActions={false}
-			/>
+			{movementsLoading ? (
+				<LoadingStates viewType='table' />
+			) : !movementsKardex?.data?.items || movementsKardex.data.items.length === 0 ? (
+				searchTerm ? (
+					<EmptyState />
+				) : (
+					<NotFoundState />
+				)
+			) : (
+				<TableKardex
+					recordData={movementsKardex.data.items}
+					loading={movementsLoading}
+					viewType={'table'}
+					showActions={false}
+				/>
+			)}
 		</div>
 	)
 }
