@@ -20,8 +20,6 @@ type Props = {
 }
 
 export function KardexDetailView({ id }: Props) {
-	const [viewType, setViewType] = useState<ViewType>('table')
-
 	const {
 		pagination,
 		searchTerm,
@@ -83,11 +81,14 @@ export function KardexDetailView({ id }: Props) {
 		)
 	}
 
+	const product = movementsKardex?.data?.items?.[0]?.product
+
 	return (
 		<div className='flex flex-1 flex-col space-y-6'>
 			<KardexHeader
 				title={`${movementsKardex.data.items[0].product.name}`}
 				subtitle='Detalle de movimientos de Kardex'
+				product={product}
 			/>
 			<KardexFilters
 				searchValue={searchTerm}
@@ -99,14 +100,12 @@ export function KardexDetailView({ id }: Props) {
 				onSort={handleSort}
 				onRefresh={handleRefresh}
 				onResetAll={handleResetAll}
-				viewType={viewType}
-				onViewChange={setViewType}
 			/>
 			{/* Table */}
 			<TableKardex
 				recordData={movementsKardex.data.items}
 				loading={movementsLoading}
-				viewType={viewType}
+				viewType={'table'}
 				showActions={false}
 			/>
 		</div>

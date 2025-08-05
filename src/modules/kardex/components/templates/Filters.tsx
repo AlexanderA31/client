@@ -52,8 +52,6 @@ interface KardexFiltersProps {
 	) => void
 	onRefresh: () => void
 	onResetAll: () => void
-	viewType: ViewType
-	onViewChange: (type: ViewType) => void
 }
 
 export function KardexFilters({
@@ -66,8 +64,6 @@ export function KardexFilters({
 	onMovementTypeChange,
 	onRefresh,
 	onResetAll,
-	viewType,
-	onViewChange,
 }: KardexFiltersProps) {
 	const [isMounted, setIsMounted] = useState(false)
 	const [isSearchFocused, setIsSearchFocused] = useState(false)
@@ -328,8 +324,6 @@ export function KardexFilters({
 							</DropdownMenuContent>
 						</DropdownMenu>
 					</motion.div>
-
-					<ViewSelector currentView={viewType} onViewChange={onViewChange} />
 				</div>
 
 				<motion.div

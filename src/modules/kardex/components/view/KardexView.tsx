@@ -17,7 +17,6 @@ import { ViewType } from '@/modules/kardex/components/molecules/ViewSelector'
 
 export function KardexView() {
 	const [retryCount, setRetryCount] = useState(0)
-	const [viewType, setViewType] = useState<ViewType>('table')
 
 	// ✅ URL-synced pagination hooks
 	const {
@@ -111,12 +110,10 @@ export function KardexView() {
 						onSort={handleSort}
 						onRefresh={handleRefresh}
 						onResetAll={handleResetAll}
-						viewType={viewType}
-						onViewChange={setViewType}
 					/>
 
 					{/* Table */}
-					<TableKardex recordData={kardexData.items} loading={loading} viewType={viewType} showActions={true} />
+					<TableKardex recordData={kardexData.items} loading={loading} viewType={'table'} showActions={true} />
 
 					{/* Pagination controls */}
 					<PaginationControls

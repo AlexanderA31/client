@@ -5,13 +5,16 @@ import { Icons } from '@/components/icons'
 import { Typography } from '@/components/ui/typography'
 import { ActionButton } from '@/components/layout/atoms/ActionButton'
 import { useRouter } from 'next/navigation'
+import { I_Product } from '@/modules/product/types/product'
+import { ImageControl } from '@/components/layout/organims/ImageControl'
 
 interface KardexHeaderProps {
 	title: string
 	subtitle: string
+	product?: I_Product
 }
 
-export function KardexHeader({ title, subtitle }: KardexHeaderProps) {
+export function KardexHeader({ title, subtitle, product }: KardexHeaderProps) {
 	const router = useRouter()
 
 	const isDetailView = title !== 'Kardex'
@@ -29,6 +32,16 @@ export function KardexHeader({ title, subtitle }: KardexHeaderProps) {
 						size='icon'
 						icon={<Icons.iconArrowLeft className='h-5 w-5' />}
 						onClick={() => router.back()}
+					/>
+				)}
+				{product && (
+					<ImageControl
+						recordData={product}
+						imageHeight={40}
+						imageWidth={40}
+						showDetails={true}
+						enableHover={true}
+						enableClick={true}
 					/>
 				)}
 				<div className='flex flex-col gap-2'>
