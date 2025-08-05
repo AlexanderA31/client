@@ -35,27 +35,7 @@ export class ApiService {
 		} = {}
 	): Promise<T> {
 		const url = this.buildUrl(endpoint, options.urlParams ?? {})
-		const queryParams = { ...options.queryParams }
-
-		if (queryParams.filters && typeof queryParams.filters === 'object') {
-			queryParams.filters = JSON.stringify(queryParams.filters)
-		}
-
-		if (queryParams.sort && Array.isArray(queryParams.sort)) {
-			queryParams.sort = JSON.stringify(
-				queryParams.sort.map(item => {
-					if (typeof item === 'string') {
-						const [field, order] = item.split(':')
-						return { orderBy: field, order: order || 'asc' }
-					}
-					return item
-				})
-			)
-		}
-
-		const config = { params: queryParams }
-		console.log('Request URL:', url)
-		console.log('Request config:', config)
+		const config = { params: options.queryParams }
 
 		// Elegimos método dinámicamente: get/delete sin body, resto incluyen body
 		const method = endpoint.method.toLowerCase() as 'get' | 'post' | 'put' | 'patch' | 'delete'
