@@ -43,16 +43,25 @@ export function UserView() {
 	} = usePagination()
 
 	// ✅ Memoizar parámetros de paginación para evitar recreaciones
-	const paginationParams = useMemo(
-		() => ({
+	const paginationParams = useMemo(() => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const filters: Record<string, any> = {}
+
+		if (currentStatus) {
+			filters.status = currentStatus
+		}
+
+		if (searchTerm) {
+			filters.name = searchTerm
+		}
+
+		return {
 			page: pagination.page,
 			limit: pagination.limit,
-			search: searchTerm,
-			filters: currentStatus ? { status: currentStatus } : undefined,
+			filters: Object.keys(filters).length > 0 ? filters : undefined,
 			sort: currentSort ? [currentSort] : undefined,
-		}),
-		[pagination.page, pagination.limit, searchTerm, currentStatus, currentSort]
-	)
+		}
+	}, [pagination.page, pagination.limit, searchTerm, currentStatus, currentSort])
 
 	// ✅ Main user hook con parámetros memoizados
 	const {
