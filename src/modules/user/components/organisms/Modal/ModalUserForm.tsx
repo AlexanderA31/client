@@ -28,7 +28,8 @@ export function UserFormModal({ isOpen, currentRecord, onClose, onSubmit }: User
 	const [userData, setUserData] = useState<I_User | null>(null)
 	const [loadingUser, setLoadingUser] = useState(false)
 
-	const { form, resetForm } = useUserForm()
+	const isEditing = !!currentRecord?.id
+	const { form, resetForm } = useUserForm({ isEditing })
 
 	// Fetch complete user data when modal opens with an existing user
 	useEffect(() => {
@@ -132,6 +133,7 @@ export function UserFormModal({ isOpen, currentRecord, onClose, onSubmit }: User
 									statuses={statusesData?.data.items || []}
 									isLoadingRoles={loadingRoles}
 									isLoadingStatuses={loadingStatuses}
+									isEditing={isEditing}
 								/>
 
 								<MediaSection

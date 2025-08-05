@@ -126,7 +126,7 @@ export function UniversalFormField<T extends FieldValues>({
 
 				// Función para renderizar el icono de validación
 				const renderValidationIcon = () => {
-					if (!showValidationIcons || type === 'switch' || type === 'checkbox') return null
+					if (!showValidationIcons || type === 'switch' || type === 'checkbox' || type === 'password') return null
 
 					if (hasError) {
 						return (

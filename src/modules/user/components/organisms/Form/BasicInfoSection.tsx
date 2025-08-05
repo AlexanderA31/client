@@ -14,9 +14,17 @@ interface Props {
 	statuses: I_Status[]
 	isLoadingRoles: boolean
 	isLoadingStatuses: boolean
+	isEditing: boolean
 }
 
-export function BasicInfoSection({ control, roles, statuses, isLoadingRoles, isLoadingStatuses }: Props) {
+export function BasicInfoSection({
+	control,
+	roles,
+	statuses,
+	isLoadingRoles,
+	isLoadingStatuses,
+	isEditing,
+}: Props) {
 	const roleOptions = roles.map(role => ({ value: role.id, label: role.name }))
 	const statusOptions = statuses.map(status => ({ value: status.id, label: status.name }))
 
@@ -68,6 +76,7 @@ export function BasicInfoSection({ control, roles, statuses, isLoadingRoles, isL
 					label='Contraseña'
 					placeholder='********'
 					max={255}
+					required={!isEditing}
 				/>
 				<UniversalFormField
 					required
