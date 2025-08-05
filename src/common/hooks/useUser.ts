@@ -5,21 +5,21 @@ import { I_PaginatedResponse } from '@/common/types/api'
 import { I_PaginationParams } from '@/common/types/pagination'
 
 export const useUser = (paginationParams?: I_PaginationParams) => {
-	const api = useGenericApi<I_User, I_PaginatedResponse<I_User>, I_CreateUser, I_UpdateUser>(USER_ENDPOINTS_CONFIG)
+	const api = useGenericApi<I_PaginatedResponse<I_User>, I_CreateUser, I_UpdateUser>(USER_ENDPOINTS_CONFIG)
 
 	const {
 		data: recordsData,
 		isLoading: loading,
 		error,
 		refetch: refetchRecords,
-	} = api.useGetRecords(paginationParams, 'list')
+	} = api.buildQuery(paginationParams)
 
-	const { mutateAsync: createRecord } = api.useCreateRecord()
-	const { mutateAsync: updateRecord } = api.useUpdateRecord()
-	const { mutateAsync: hardDeleteRecord } = api.useHardDeleteRecord()
+	const createRecord = api.mutations.create.mutateAsync
+	const updateRecord = api.mutations.update.mutateAsync
+	const hardDeleteRecord = api.mutations.delete.mutateAsync
 
 	const getUserById = async (id: string) => {
-		const response = await api.getRecordById(id)
+		const response = await api.apiService.getById(id)
 		return response.data
 	}
 
