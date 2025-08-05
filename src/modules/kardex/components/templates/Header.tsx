@@ -27,7 +27,7 @@ export function KardexHeader({ title, subtitle }: KardexHeaderProps) {
 					<ActionButton
 						variant='ghost'
 						size='icon'
-						icon={<Icons.arrowLeft className='h-5 w-5' />}
+						icon={<Icons.iconArrowLeft className='h-5 w-5' />}
 						onClick={() => router.back()}
 					/>
 				)}
