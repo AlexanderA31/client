@@ -2,23 +2,23 @@
 
 import { Icons } from '@/components/icons'
 import { SheetFooter } from '@/components/ui/sheet'
-import { I_CategoryId } from '@/modules/category/types/category'
+import { I_IdUser } from '@/modules/user/types/user'
 import { ActionButton } from '@/components/layout/atoms/ActionButton'
 
 interface FormFooterProps {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	formState: any
 	isFormValid: boolean
-	currentTemplate?: I_CategoryId
+	currentRecord?: I_IdUser
 	onClose: () => void
 	onSubmit: () => void
 }
 
-export function FormFooter({ formState, isFormValid, currentTemplate, onClose, onSubmit }: FormFooterProps) {
+export function FormFooter({ formState, isFormValid, currentRecord, onClose, onSubmit }: FormFooterProps) {
 	const getStatusMessage = () => {
 		if (formState.errors && Object.keys(formState.errors).length > 0)
 			return `${Object.keys(formState.errors).length} error${Object.keys(formState.errors).length > 1 ? 'es' : ''} por corregir`
-		if (isFormValid) return 'Formulario válido y listo para guardar'
+		if (isFormValid) return 'Formulario válido'
 		return 'Completa todos los campos requeridos'
 	}
 
@@ -50,7 +50,7 @@ export function FormFooter({ formState, isFormValid, currentTemplate, onClose, o
 						type='submit'
 						onClick={onSubmit}
 						disabled={!isFormValid}
-						text={formState.isSubmitting ? 'Guardando...' : currentTemplate?.id ? 'Actualizar' : 'Crear Plantilla'}
+						text={formState.isSubmitting ? 'Guardando...' : currentRecord?.id ? 'Actualizar' : 'Crear usuario'}
 						icon={
 							formState.isSubmitting ? (
 								<Icons.spinnerSimple className='h-4 w-4 animate-spin' />

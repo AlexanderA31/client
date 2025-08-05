@@ -1,26 +1,23 @@
 'use client'
-
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Table as ReactTable } from '@tanstack/react-table'
-
-import { I_Template } from '@/modules/template/types/template'
-
+import { I_User } from '@/modules/user/types/user'
 import { Icons } from '@/components/icons'
 import { Typography } from '@/components/ui/typography'
-import { Badge } from '@/components/layout/atoms/Badge'
-import { animations } from '@/modules/template/components/atoms/animations'
+import { animations } from '@/modules/user/components/atoms/animations'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { TableActions } from '@/modules/template/components/organisms/Table/TableActions'
-import { TableInfoDate } from '@/modules/template/components/organisms/Table/TableInfoDate'
+import { TableActions } from '@/modules/user/components/organisms/Table/TableActions'
+import { TableInfoDate } from '@/modules/user/components/organisms/Table/TableInfoDate'
+import { UserStatusBadge } from '@/modules/user/components/atoms/UserStatusBadge'
 
 interface Props {
-	table: ReactTable<I_Template>
-	onEdit: (recordData: I_Template) => void
-	onHardDelete: (recordData: I_Template) => void
+	recordsData: ReactTable<I_User>
+	onEdit: (recordData: I_User) => void
+	onHardDelete: (recordData: I_User) => void
 }
 
-export const CardView = ({ table, onEdit, onHardDelete }: Props) => (
+export const CardView = ({ recordsData, onEdit, onHardDelete }: Props) => (
 	<div className='space-y-4'>
 		<motion.div
 			initial='hidden'
@@ -29,7 +26,7 @@ export const CardView = ({ table, onEdit, onHardDelete }: Props) => (
 			className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
 			layout>
 			<AnimatePresence mode='sync'>
-				{table.getRowModel().rows.map(row => {
+				{recordsData.getRowModel().rows.map(row => {
 					const recordData = row.original
 					return (
 						<motion.div
@@ -47,14 +44,13 @@ export const CardView = ({ table, onEdit, onHardDelete }: Props) => (
 										<div className='bg-card/50 shadow- absolute top-2 right-2 z-10 rounded-full backdrop-blur-sm'>
 											<TableActions recordData={recordData} onEdit={onEdit} onHardDelete={onHardDelete} />
 										</div>
-
-										{recordData?.category?.photo ? (
+										{recordData?.photo ? (
 											<Image
-												src={recordData.category?.photo?.path}
-												alt={recordData.name}
+												src={recordData.photo?.path}
+												alt={recordData.firstName}
 												fill
 												unoptimized
-												className='bg-muted rounded-t-xl object-cover'
+												className='bg-muted rounded-t-xl object-contain'
 											/>
 										) : (
 											<div className='bg-muted/50 flex h-full items-center justify-center'>
@@ -66,25 +62,26 @@ export const CardView = ({ table, onEdit, onHardDelete }: Props) => (
 									</div>
 								</CardHeader>
 
-								<CardContent className='flex-grow px-4'>
-									<div className='flex h-full flex-col space-y-2'>
-										<Typography variant='h5' className='line-clamp-1'>
-											{recordData.name}
-										</Typography>
+								<CardContent className='flex-grow px-4 py-0'>
+									<div className='flex h-full flex-col space-y-3'>
+										{/* Título y código */}
+										<div className='space-y-1'>
+											<Typography variant='h5' className='line-clamp-1 break-words'>
+												{recordData.firstName} {recordData.lastName}
+											</Typography>
+										</div>
 
-										<Typography variant='span' className='text-muted-foreground line-clamp-2 flex-grow text-sm'>
-											{recordData.description || 'Sin descripción'}
-										</Typography>
-
-										<Typography variant='span' className='text-muted-foreground line-clamp-2 flex-grow text-sm'>
-											Categoría: {recordData.category?.name || '---'}
-										</Typography>
+										{/* Email */}
+										<div className='flex items-center justify-between'>
+											<Typography variant='span' className='text-muted-foreground text-xs'>
+												{recordData.email}
+											</Typography>
+										</div>
 									</div>
 								</CardContent>
 
 								<CardFooter className='flex flex-none items-center justify-between p-4 pt-0'>
-									<Badge variant='info' text={`${recordData.atributes?.length} Atrib` || '0'} decord={false} />
-
+									<UserStatusBadge status={recordData.status.name} />
 									<div className='text-muted-foreground text-xs'>
 										<TableInfoDate recordData={recordData} />
 									</div>

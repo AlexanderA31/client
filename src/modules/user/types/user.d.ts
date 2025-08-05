@@ -39,7 +39,7 @@ export interface I_User extends I_BaseUser {
 }
 
 /** DTO para crear un nuevo usuario */
-export interface I_CreateUser extends I_BaseUser {}
+export type I_CreateUser = I_BaseUser
 
 /** DTO para actualizar un usuario existente */
 export interface I_UpdateUser extends Partial<I_BaseUser> {

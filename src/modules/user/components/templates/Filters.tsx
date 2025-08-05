@@ -188,7 +188,7 @@ export function UserFilters({
 								].map((status, index) => (
 									<DropdownMenuItem
 										key={status.key}
-										onClick={() => onStatusChange(status.key as any)}
+										onClick={() => onStatusChange(status.key as 'active' | 'inactive' | '')}
 										className='hover:bg-accent/80 text-accent-foreground/75 cursor-pointer rounded-lg transition-all duration-200'>
 										<motion.div
 											className='flex w-full items-center justify-between'

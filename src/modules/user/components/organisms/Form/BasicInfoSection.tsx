@@ -2,12 +2,12 @@
 
 import { Icons } from '@/components/icons'
 import { Control } from 'react-hook-form'
-import { TemplateFormData } from '@/modules/template/types/template-form'
+import { UserFormData } from '@/modules/user/types/user-form'
 import { UniversalFormField } from '@/components/layout/atoms/FormFieldZod'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface Props {
-	control: Control<TemplateFormData>
+	control: Control<UserFormData>
 }
 
 export function BasicInfoSection({ control }: Props) {
@@ -18,27 +18,47 @@ export function BasicInfoSection({ control }: Props) {
 					<Icons.infoCircle className='h-4 w-4' />
 					Información básica
 				</CardTitle>
-				<CardDescription>Datos básicos de la plantilla</CardDescription>
+				<CardDescription>Datos básicos del usuario</CardDescription>
 			</CardHeader>
 
-			<CardContent className='space-y-4 p-0'>
+			<CardContent className='grid grid-cols-1 gap-4 p-0 md:grid-cols-2'>
 				<UniversalFormField
 					required
 					control={control}
-					name='name'
+					name='firstName'
 					type='text'
 					label='Nombre'
-					placeholder='Ej: Plantilla de Producto Básico'
-					max={100}
+					placeholder='Ej: John'
+					max={255}
+				/>
+
+				<UniversalFormField
+					required
+					control={control}
+					name='lastName'
+					type='text'
+					label='Apellido'
+					placeholder='Ej: Doe'
+					max={255}
+				/>
+
+				<UniversalFormField
+					required
+					control={control}
+					name='email'
+					type='email'
+					label='Email'
+					placeholder='jhon.doe@example.com'
+					max={255}
 				/>
 
 				<UniversalFormField
 					control={control}
-					name='description'
-					type='textarea'
-					label='Descripción'
-					placeholder='Describe el propósito y uso de esta plantilla...'
-					max={500}
+					name='password'
+					type='password'
+					label='Contraseña'
+					placeholder='********'
+					max={255}
 				/>
 			</CardContent>
 		</Card>
