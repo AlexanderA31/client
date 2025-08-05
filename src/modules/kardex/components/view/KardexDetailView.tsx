@@ -14,6 +14,7 @@ import { usePagination } from '../../hooks/usePagination'
 import { useGenericRefresh } from '@/common/hooks/shared/useGenericRefresh'
 import { ViewType } from '../molecules/ViewSelector'
 import { useMemo, useState } from 'react'
+import { useDebounce } from '@/common/hooks/useDebounce'
 
 type Props = {
 	id: string
@@ -35,18 +36,20 @@ export function KardexDetailView({ id }: Props) {
 		handlePageChange,
 	} = usePagination()
 
+	const debouncedSearchTerm = useDebounce(searchTerm, 500)
+
 	const paginationParams = useMemo(
 		() => ({
 			page: pagination.page,
 			limit: pagination.limit,
-			search: searchTerm,
+			search: debouncedSearchTerm,
 			filters: {
 				...(currentMovementType ? { movementType: currentMovementType } : {}),
 				productId: id,
 			},
 			sort: currentSort ? [currentSort] : undefined,
 		}),
-		[pagination.page, pagination.limit, searchTerm, currentMovementType, currentSort, id]
+		[pagination.page, pagination.limit, debouncedSearchTerm, currentMovementType, currentSort, id]
 	)
 	const {
 		records: movementsKardex,
