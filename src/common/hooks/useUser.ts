@@ -5,7 +5,7 @@ import { I_PaginatedResponse } from '@/common/types/api'
 import { I_PaginationParams } from '@/common/types/pagination'
 
 export const useUser = (paginationParams?: I_PaginationParams) => {
-	console.log('paginationParams', paginationParams)
+
 	const api = useGenericApi<I_PaginatedResponse<I_User>, I_CreateUser, I_UpdateUser>(USER_ENDPOINTS_CONFIG)
 
 	const {
