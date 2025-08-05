@@ -9,21 +9,55 @@ import { NotFoundState } from '@/components/layout/organims/NotFoundState'
 import { formatDate } from '@/common/utils/dateFormater-util'
 import { TableKardex } from '../organisms/Table/TableKardex'
 import { KardexHeader } from '../templates/Header'
+import { KardexFilters } from '../templates/Filters'
+import { usePagination } from '../../hooks/usePagination'
+import { useGenericRefresh } from '@/common/hooks/shared/useGenericRefresh'
+import { ViewType } from '../molecules/ViewSelector'
+import { useMemo, useState } from 'react'
 
 type Props = {
 	id: string
 }
 
 export function KardexDetailView({ id }: Props) {
+	const [viewType, setViewType] = useState<ViewType>('table')
+
+	const {
+		pagination,
+		searchTerm,
+		currentSort,
+		currentMovementType,
+		handleMovementTypeChange,
+		handleNextPage,
+		handlePrevPage,
+		handleLimitChange,
+		handleSearchChange,
+		handleSort,
+		handleResetAll,
+		handlePageChange,
+	} = usePagination()
+
+	const paginationParams = useMemo(
+		() => ({
+			page: pagination.page,
+			limit: pagination.limit,
+			search: searchTerm,
+			filters: {
+				...(currentMovementType ? { movementType: currentMovementType } : {}),
+				productId: id,
+			},
+			sort: currentSort ? [currentSort] : undefined,
+		}),
+		[pagination.page, pagination.limit, searchTerm, currentMovementType, currentSort, id]
+	)
 	const {
 		records: movementsKardex,
 		loading: movementsLoading,
 		error: movementsError,
-	} = useKardex({
-		filters: {
-			productId: id,
-		},
-	})
+		refetchRecords,
+	} = useKardex(paginationParams)
+
+	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchRecords)
 
 	if (movementsLoading) {
 		return (
@@ -55,12 +89,24 @@ export function KardexDetailView({ id }: Props) {
 				title={`${movementsKardex.data.items[0].product.name}`}
 				subtitle='Detalle de movimientos de Kardex'
 			/>
-
+			<KardexFilters
+				searchValue={searchTerm}
+				currentSort={currentSort}
+				currentMovementType={currentMovementType}
+				onMovementTypeChange={handleMovementTypeChange}
+				isRefreshing={isRefreshing}
+				onSearchChange={handleSearchChange}
+				onSort={handleSort}
+				onRefresh={handleRefresh}
+				onResetAll={handleResetAll}
+				viewType={viewType}
+				onViewChange={setViewType}
+			/>
 			{/* Table */}
 			<TableKardex
 				recordData={movementsKardex.data.items}
 				loading={movementsLoading}
-				viewType='table'
+				viewType={viewType}
 				showActions={false}
 			/>
 		</div>
