@@ -2,19 +2,47 @@
 
 import { Icons } from '@/components/icons'
 import { ColumnDef } from '@tanstack/react-table'
-import { I_Template } from '@/modules/template/types/template'
+import { I_User } from '@/modules/user/types/user'
 import { ActionButton } from '@/components/layout/atoms/ActionButton'
-import { TableActions } from '@/modules/template/components/organisms/Table/TableActions'
-import { TableInfoDate } from '@/modules/template/components/organisms/Table/TableInfoDate'
+import { ImageControl } from '@/components/layout/organims/ImageControl'
+import { TableActions } from '@/modules/user/components/organisms/Table/TableActions'
+import { UserStatusBadge } from '@/modules/user/components/atoms/UserStatusBadge'
+import { TableInfoDate } from '@/modules/user/components/organisms/Table/TableInfoDate'
 
 interface Props {
-	onEdit: (recordData: I_Template) => void
-	onHardDelete: (recordData: I_Template) => void
+	onEdit: (recordData: I_User) => void
+	onHardDelete: (recordData: I_User) => void
 }
 
-export const tableColumns = ({ onEdit, onHardDelete }: Props): ColumnDef<I_Template>[] => [
+export const createTableColumns = ({ onEdit, onHardDelete }: Props): ColumnDef<I_User>[] => [
 	{
-		accessorKey: 'name',
+		accessorKey: 'photo',
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Imagen
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => (
+			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
+				<ImageControl recordData={row.original} enableHover={false} enableClick={false} />
+			</div>
+		),
+	},
+	{
+		accessorKey: 'firstName',
 		header: ({ column }) => (
 			<ActionButton
 				variant='link'
@@ -33,14 +61,10 @@ export const tableColumns = ({ onEdit, onHardDelete }: Props): ColumnDef<I_Templ
 				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
 			/>
 		),
-		cell: ({ row }) => (
-			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
-				{row.original.name}
-			</div>
-		),
+		cell: ({ row }) => <div className='max-w-96 truncate'>{row.original.firstName} {row.original.lastName}</div>,
 	},
 	{
-		accessorKey: 'description',
+		accessorKey: 'email',
 		header: ({ column }) => (
 			<ActionButton
 				variant='link'
@@ -48,7 +72,51 @@ export const tableColumns = ({ onEdit, onHardDelete }: Props): ColumnDef<I_Templ
 				className='p-0'
 				text={
 					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
-						Descripción
+						Email
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => <div className='max-w-96 truncate'>{row.original.email}</div>,
+	},
+	{
+		accessorKey: 'role',
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Rol
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => <div className='max-w-96 truncate'>{row.original.role.name}</div>,
+	},
+	{
+		accessorKey: 'status',
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Estado
 						{column.getIsSorted() === 'asc' ? (
 							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
 						) : column.getIsSorted() === 'desc' ? (
@@ -60,60 +128,8 @@ export const tableColumns = ({ onEdit, onHardDelete }: Props): ColumnDef<I_Templ
 			/>
 		),
 		cell: ({ row }) => (
-			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
-				{row.original.description || 'Sin descripción'}
-			</div>
-		),
-	},
-	{
-		accessorKey: 'category',
-		header: ({ column }) => (
-			<ActionButton
-				variant='link'
-				size='xs'
-				className='p-0'
-				text={
-					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
-						Categoría
-						{column.getIsSorted() === 'asc' ? (
-							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
-						) : column.getIsSorted() === 'desc' ? (
-							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
-						) : null}
-					</div>
-				}
-				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-			/>
-		),
-		cell: ({ row }) => (
-			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
-				{row.original.category?.name || '---'}
-			</div>
-		),
-	},
-	{
-		accessorKey: 'atributes',
-		header: ({ column }) => (
-			<ActionButton
-				variant='link'
-				size='xs'
-				className='p-0'
-				text={
-					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
-						Atibutos
-						{column.getIsSorted() === 'asc' ? (
-							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
-						) : column.getIsSorted() === 'desc' ? (
-							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
-						) : null}
-					</div>
-				}
-				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-			/>
-		),
-		cell: ({ row }) => (
-			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
-				{row.original.atributes?.length || '0'}
+			<div className='max-w-56 truncate'>
+				<UserStatusBadge status={row.original.status.name} />
 			</div>
 		),
 	},

@@ -6,6 +6,9 @@ export const USER_ENDPOINTS_CONFIG: ApiConfig = {
 	baseEndpoint: `/${ENDPOINT_API.USER}`,
 	endpoints: {
 		list: { path: '', method: 'GET' },
-        getById: { path: '/:id', method: 'GET', params: ['id'] },
+		getById: { path: '/:id', method: 'GET', params: ['id'] },
+		create: { path: '', method: 'POST' },
+		update: { path: '/:id', method: 'PATCH', params: ['id'] },
+		delete: { path: '/:id', method: 'DELETE', params: ['id'] },
 	},
 }
