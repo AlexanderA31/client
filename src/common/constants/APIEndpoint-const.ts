@@ -10,4 +10,6 @@ export const ENDPOINT_API = {
 	PRODUCT: 'product',
 	KARDEX: 'kardex',
 	USER: 'users',
+	ROLES: 'roles',
+	STATUSES: 'statuses',
 }

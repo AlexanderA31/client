@@ -5,12 +5,19 @@ import { Control } from 'react-hook-form'
 import { UserFormData } from '@/modules/user/types/user-form'
 import { UniversalFormField } from '@/components/layout/atoms/FormFieldZod'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { I_Role } from '@/common/hooks/useRole'
+import { I_Status } from '@/common/hooks/useStatus'
 
 interface Props {
 	control: Control<UserFormData>
+	roles: I_Role[]
+	statuses: I_Status[]
 }
 
-export function BasicInfoSection({ control }: Props) {
+export function BasicInfoSection({ control, roles, statuses }: Props) {
+	const roleOptions = roles.map(role => ({ value: role.id, label: role.name }))
+	const statusOptions = statuses.map(status => ({ value: status.id, label: status.name }))
+
 	return (
 		<Card className='border-none bg-transparent p-0 shadow-none'>
 			<CardHeader className='p-0'>
@@ -59,6 +66,24 @@ export function BasicInfoSection({ control }: Props) {
 					label='Contraseña'
 					placeholder='********'
 					max={255}
+				/>
+				<UniversalFormField
+					required
+					control={control}
+					name='roleId'
+					type='select'
+					label='Rol'
+					placeholder='Selecciona un rol'
+					options={roleOptions}
+				/>
+				<UniversalFormField
+					required
+					control={control}
+					name='statusId'
+					type='select'
+					label='Estado'
+					placeholder='Selecciona un estado'
+					options={statusOptions}
 				/>
 			</CardContent>
 		</Card>

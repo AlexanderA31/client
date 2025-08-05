@@ -5,6 +5,9 @@ import { Form } from '@/components/ui/form'
 
 import { useUser } from '@/common/hooks/useUser'
 import { useUserForm } from '@/modules/user/hooks/useUserForm'
+import { useRole } from '@/common/hooks/useRole'
+import { useStatus } from '@/common/hooks/useStatus'
+import { I_User } from '@/modules/user/types/user'
 
 import { UserFormProps, UserFormData } from '@/modules/user/types/user-form'
 
@@ -20,13 +23,12 @@ import { SpinnerLoader } from '@/components/layout/SpinnerLoader'
 
 export function UserFormModal({ isOpen, currentRecord, onClose, onSubmit }: UserFormProps) {
 	const { getUserById } = useUser()
-	const [userData, setUserData] = useState(null)
+	const { recordsData: rolesData, loading: loadingRoles } = useRole()
+	const { recordsData: statusesData, loading: loadingStatuses } = useStatus()
+	const [userData, setUserData] = useState<I_User | null>(null)
 	const [loadingUser, setLoadingUser] = useState(false)
 
-	const {
-		form,
-		resetForm,
-	} = useUserForm(userData || currentRecord)
+	const { form, resetForm } = useUserForm()
 
 	// Fetch complete user data when modal opens with an existing user
 	useEffect(() => {
@@ -112,7 +114,7 @@ export function UserFormModal({ isOpen, currentRecord, onClose, onSubmit }: User
 
 				{/* Content */}
 				<div className='flex-1 space-y-4 overflow-auto p-4'>
-					{loadingUser ? (
+					{loadingUser || loadingRoles || loadingStatuses ? (
 						<div className='flex h-screen flex-1 flex-col items-center justify-center'>
 							<SpinnerLoader text='Cargando... Por favor espera' />
 						</div>
@@ -130,9 +132,19 @@ export function UserFormModal({ isOpen, currentRecord, onClose, onSubmit }: User
 							<Form {...form}>
 								<form onSubmit={form.handleSubmit(handleFormSubmit)}>
 									<div className='space-y-12'>
-										<BasicInfoSection control={form.control} />
+										<BasicInfoSection
+											control={form.control}
+											roles={rolesData?.data.items || []}
+											statuses={statusesData?.data.items || []}
+										/>
 
-										<MediaSection control={form.control} setValue={form.setValue} watch={form.watch} />
+										<MediaSection
+											control={form.control}
+											setValue={form.setValue}
+											watch={form.watch}
+											userData={userData}
+											currentRecord={currentRecord}
+										/>
 									</div>
 								</form>
 							</Form>
@@ -141,7 +153,7 @@ export function UserFormModal({ isOpen, currentRecord, onClose, onSubmit }: User
 				</div>
 
 				{/* Footer */}
-				{!loadingUser && (
+				{!(loadingUser || loadingRoles || loadingStatuses) && (
 					<FormFooter
 						formState={form.formState}
 						isFormValid={isFormValid}
