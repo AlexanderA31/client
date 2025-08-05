@@ -353,4 +353,5 @@ export const Icons = {
 	userBitcoin: IconUserBitcoin,
 	userHexagon: IconUserHexagon,
 	userExclamation: IconUserExclamation,
+	users: IconUsers,
 }
