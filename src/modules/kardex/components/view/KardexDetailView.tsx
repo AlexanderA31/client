@@ -82,7 +82,7 @@ export function KardexDetailView({ id }: Props) {
 	return (
 		<div className='flex flex-1 flex-col space-y-6'>
 			<KardexHeader
-				title={`${movementsKardex.data.items[0].product.name}`}
+				title={product ? `${product.name}` : 'Detalle de Kardex'}
 				subtitle='Detalle de movimientos de Kardex'
 				product={product}
 			/>
