@@ -9,10 +9,15 @@ import { MovementTypeBadge } from '@/modules/kardex/components/atoms/StatusBadge
 import { TableActions } from '@/modules/kardex/components/organisms/Table/TableActions'
 import { TableInfoDate } from '@/modules/kardex/components/organisms/Table/TableInfoDate'
 
-export const tableColumns = (): ColumnDef<I_Kardex>[] => [
-	{
-		accessorKey: 'product.code',
-		header: ({ column }) => (
+interface TableColumnsProps {
+	showActions?: boolean
+}
+
+export const tableColumns = ({ showActions = true }: TableColumnsProps): ColumnDef<I_Kardex>[] => {
+	const columns: ColumnDef<I_Kardex>[] = [
+		{
+			accessorKey: 'product.code',
+			header: ({ column }) => (
 			<ActionButton
 				variant='link'
 				size='xs'
@@ -275,12 +280,18 @@ export const tableColumns = (): ColumnDef<I_Kardex>[] => [
 		header: 'Información',
 		cell: ({ row }) => <TableInfoDate recordData={row.original} />,
 	},
-	{
+]
+
+if (showActions) {
+	columns.push({
 		id: 'actions',
 		cell: ({ row }) => (
 			<div className='flex justify-end'>
 				<TableActions recordData={row.original} />
 			</div>
 		),
-	},
-]
+	})
+}
+
+	return columns
+}

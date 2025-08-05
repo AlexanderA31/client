@@ -24,14 +24,15 @@ interface TableKardexProps {
 	loading: boolean
 	recordData: I_Kardex[]
 	viewType: ViewType
+	showActions?: boolean
 }
 
-export function TableKardex({ recordData, loading, viewType }: TableKardexProps) {
+export function TableKardex({ recordData, loading, viewType, showActions }: TableKardexProps) {
 	const [globalFilter, setGlobalFilter] = useState('')
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
-	const columns = tableColumns({})
+	const columns = tableColumns({ showActions })
 
 	const table = useReactTable({
 		data: recordData,

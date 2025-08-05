@@ -116,7 +116,7 @@ export function KardexView() {
 					/>
 
 					{/* Table */}
-					<TableKardex recordData={kardexData.items} loading={loading} viewType={viewType} />
+					<TableKardex recordData={kardexData.items} loading={loading} viewType={viewType} showActions={true} />
 
 					{/* Pagination controls */}
 					<PaginationControls

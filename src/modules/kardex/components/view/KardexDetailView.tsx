@@ -57,7 +57,12 @@ export function KardexDetailView({ id }: Props) {
 			/>
 
 			{/* Table */}
-			<TableKardex recordData={movementsKardex.data.items} loading={movementsLoading} viewType='table' />
+			<TableKardex
+				recordData={movementsKardex.data.items}
+				loading={movementsLoading}
+				viewType='table'
+				showActions={false}
+			/>
 		</div>
 	)
 }
