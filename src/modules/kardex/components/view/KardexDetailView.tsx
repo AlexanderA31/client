@@ -69,14 +69,7 @@ export function KardexDetailView({ id }: Props) {
 		)
 	}
 
-	if (!movementsKardex?.data?.items || movementsKardex?.data?.items.length === 0) {
-		if (searchTerm) {
-			return (
-				<div className='flex h-screen flex-1 flex-col items-center justify-center'>
-					<EmptyState />
-				</div>
-			)
-		}
+	if (!movementsKardex?.data?.items) {
 		return (
 			<div className='flex h-screen flex-1 flex-col items-center justify-center'>
 				<NotFoundState />
