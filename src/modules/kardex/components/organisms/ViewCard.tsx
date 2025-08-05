@@ -1,23 +1,23 @@
 'use client'
 
-import { Typography } from '@/components/ui/typography'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Badge } from '@/components/layout/atoms/Badge'
 import { Table as ReactTable } from '@tanstack/react-table'
-import { translateMovementType } from '@/modules/kardex/utils/movement-type-translator'
+
 import { I_Kardex } from '@/modules/kardex/types/kardex'
+
+import { Icons } from '@/components/icons'
+import { Typography } from '@/components/ui/typography'
 import { animations } from '@/modules/kardex/components/atoms/animations'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { TableActions } from '@/modules/kardex/components/organisms/Table/TableActions'
-import { formatPrice } from '@/common/utils/formatPrice-util'
-import { formatDate } from '@/common/utils/dateFormater-util'
+import { TableInfoDate } from '@/modules/kardex/components/organisms/Table/TableInfoDate'
 
-interface CardViewProps {
+interface Props {
 	table: ReactTable<I_Kardex>
-	onViewDetails: (kardexData: I_Kardex) => void
 }
 
-export const CardView = ({ table, onViewDetails }: CardViewProps) => (
+export const CardView = ({ table }: Props) => (
 	<div className='space-y-4'>
 		<motion.div
 			initial='hidden'
@@ -27,61 +27,54 @@ export const CardView = ({ table, onViewDetails }: CardViewProps) => (
 			layout>
 			<AnimatePresence mode='sync'>
 				{table.getRowModel().rows.map(row => {
-					const kardexData = row.original
+					const recordData = row.original
 					return (
 						<motion.div
 							key={row.id}
-							variants={animations.rowItem}
+							variants={animations.cardItem}
 							initial='hidden'
 							animate='visible'
 							exit='exit'
+							whileHover='hover'
 							layout
 							className='group relative'>
 							<Card className='border-border/50 flex h-full flex-col overflow-hidden border p-0 transition-all duration-300'>
-								<CardHeader className='flex-none p-4'>
-                                    <div className='flex justify-between items-start'>
-                                        <div>
-                                            <Typography variant='h6' className='line-clamp-1'>
-                                                {kardexData.product.name}
-                                            </Typography>
-                                            <Typography variant='span' className='text-muted-foreground text-sm'>
-                                                {kardexData.product.code}
-                                            </Typography>
-                                        </div>
-                                        <div className='bg-card/50 shadow- rounded-full backdrop-blur-sm'>
-										    <TableActions kardexData={kardexData} onViewDetails={onViewDetails} />
-									    </div>
-                                    </div>
+								<CardHeader className='flex-none p-0'>
+									<div className='relative h-48 w-full'>
+										<div className='bg-card/50 shadow- absolute top-2 right-2 z-10 rounded-full backdrop-blur-sm'>
+											<TableActions recordData={recordData} />
+										</div>
+
+										{recordData?.product?.photo ? (
+											<Image
+												src={recordData.product?.photo?.path}
+												alt={recordData.product.name}
+												fill
+												unoptimized
+												className='bg-muted rounded-t-xl object-cover'
+											/>
+										) : (
+											<div className='bg-muted/50 flex h-full items-center justify-center'>
+												<div className='text-muted-foreground flex flex-col items-center space-y-2'>
+													<Icons.media className='h-12 w-12' />
+												</div>
+											</div>
+										)}
+									</div>
 								</CardHeader>
 
-								<CardContent className='flex-grow px-4 space-y-2'>
-                                    <div className='flex justify-between'>
-                                        <Typography variant='span' className='text-muted-foreground text-sm'>Tipo:</Typography>
-                                        <Badge
-                                            variant={
-                                                kardexData.movementType.includes('in') || kardexData.movementType.includes('purchase')
-                                                    ? 'success'
-                                                    : kardexData.movementType.includes('out') || kardexData.movementType.includes('sale')
-                                                    ? 'destructive'
-                                                    : 'warning'
-                                            }
-                                            text={translateMovementType(kardexData.movementType)}
-                                        />
-                                    </div>
-                                    <div className='flex justify-between'>
-                                        <Typography variant='span' className='text-muted-foreground text-sm'>Cantidad:</Typography>
-                                        <Typography variant='span' className='text-sm'>{kardexData.quantity}</Typography>
-                                    </div>
-                                    <div className='flex justify-between'>
-                                        <Typography variant='span' className='text-muted-foreground text-sm'>Total:</Typography>
-                                        <Typography variant='span' className='text-sm font-semibold'>{formatPrice(kardexData.total)}</Typography>
-                                    </div>
+								<CardContent className='flex-grow px-4'>
+									<div className='flex h-full flex-col space-y-2'>
+										<Typography variant='h5' className='line-clamp-1'>
+											{recordData.product.code}
+										</Typography>
+									</div>
 								</CardContent>
 
 								<CardFooter className='flex flex-none items-center justify-between p-4 pt-0'>
-                                    <Typography variant='span' className='text-muted-foreground text-xs'>
-                                        {formatDate(kardexData.createdAt, 'es-ES', { dateStyle: 'medium' })}
-                                    </Typography>
+									<div className='text-muted-foreground text-xs'>
+										<TableInfoDate recordData={recordData} />
+									</div>
 								</CardFooter>
 							</Card>
 						</motion.div>

@@ -9,5 +9,4 @@ export const ENDPOINT_API = {
 	BRAND: 'brand',
 	PRODUCT: 'product',
 	KARDEX: 'kardex',
-    USER: 'user',
 }

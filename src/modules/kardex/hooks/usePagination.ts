@@ -1,12 +1,13 @@
+import { Pagination } from '@/common/types/pagination'
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { Pagination } from '@/modules/kardex/types/pagination'
-import { INITIAL_PAGINATION } from '@/modules/kardex/constants/filters.constants'
+import { DEFAULT_PAGINATION } from '@/common/constants/pagination-const'
 
 export function usePagination() {
-	const [pagination, setPagination] = useState<Pagination>(INITIAL_PAGINATION)
+	const [pagination, setPagination] = useState<Pagination>(DEFAULT_PAGINATION)
 	const [searchTerm, setSearchTerm] = useState<string>('')
+	const debounceTimer = useRef<NodeJS.Timeout | null>(null)
 	const [currentSort, setCurrentSort] = useState<string>('')
-	const [currentType, setCurrentType] = useState<
+	const [currentMovementType, setCurrentMovementType] = useState<
 		| 'purchase'
 		| 'return_in'
 		| 'transfer_in'
@@ -19,7 +20,14 @@ export function usePagination() {
 		| 'expired'
 		| ''
 	>('')
-	const debounceTimer = useRef<NodeJS.Timeout | null>(null)
+
+	// 🆕 Nueva función para cambio directo de página
+	const handlePageChange = useCallback((page: number) => {
+		setPagination(prev => ({
+			...prev,
+			page: page,
+		}))
+	}, [])
 
 	const handleNextPage = useCallback((hasNextPage: boolean) => {
 		if (hasNextPage) setPagination(prev => ({ ...prev, page: prev.page + 1 }))
@@ -32,22 +40,17 @@ export function usePagination() {
 		}))
 	}, [])
 
-	const handlePageChange = useCallback((page: number) => {
-		setPagination(prev => ({
-			...prev,
-			page: page,
-		}))
-	}, [])
-
 	const handleLimitChange = useCallback((value: string) => {
 		setPagination(prev => ({ ...prev, limit: Number(value), page: 1 }))
 	}, [])
 
 	const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value
+
 		if (typeof value === 'string') {
 			setSearchTerm(value)
 		} else {
+			console.warn('⚠️ Non-string value received in search:', value)
 			setSearchTerm('')
 		}
 	}, [])
@@ -64,15 +67,21 @@ export function usePagination() {
 	useEffect(() => {
 		if (debounceTimer.current) clearTimeout(debounceTimer.current)
 		debounceTimer.current = setTimeout(() => updatePaginationSearch(searchTerm), 500)
+
 		return () => {
 			if (debounceTimer.current) clearTimeout(debounceTimer.current)
 		}
 	}, [searchTerm, updatePaginationSearch])
 
+	// 🔧 FUNCIÓN COMPLETAMENTE CORREGIDA: handleSort
 	const handleSort = useCallback((sortKey: string) => {
 		if (!sortKey) {
 			setCurrentSort('')
-			setPagination(prev => ({ ...prev, sort: [], page: 1 }))
+			setPagination(prev => ({
+				...prev,
+				sort: [],
+				page: 1,
+			}))
 			return
 		}
 
@@ -85,9 +94,9 @@ export function usePagination() {
 		}))
 	}, [])
 
-	const handleTypeChange = useCallback(
+	const handleMovementTypeChange = useCallback(
 		(
-			type:
+			movementType:
 				| 'purchase'
 				| 'return_in'
 				| 'transfer_in'
@@ -100,10 +109,10 @@ export function usePagination() {
 				| 'expired'
 				| ''
 		) => {
-			setCurrentType(type)
+			setCurrentMovementType(movementType)
 			setPagination(prev => ({
 				...prev,
-				filters: type ? { movementType: type } : {},
+				filters: movementType ? { movementType } : {},
 				page: 1,
 			}))
 		},
@@ -113,22 +122,30 @@ export function usePagination() {
 	const handleResetAll = useCallback(() => {
 		setSearchTerm('')
 		setCurrentSort('')
-		setCurrentType('')
-		setPagination(INITIAL_PAGINATION)
+		setCurrentMovementType('')
+		setPagination(DEFAULT_PAGINATION)
 	}, [])
+
+	const getCurrentSortInfo = useCallback(() => {
+		if (!currentSort) return null
+		const [field, order] = currentSort.split(':')
+		return { field, order }
+	}, [currentSort])
 
 	return {
 		pagination,
 		searchTerm,
 		currentSort,
-		currentType,
+		currentMovementType,
+		setPagination,
 		handleNextPage,
 		handlePrevPage,
-		handlePageChange,
 		handleLimitChange,
+		handleMovementTypeChange,
 		handleSearchChange,
 		handleSort,
-		handleTypeChange,
+		handlePageChange,
 		handleResetAll,
+		getCurrentSortInfo,
 	}
 }

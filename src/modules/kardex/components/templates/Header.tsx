@@ -3,7 +3,12 @@
 import { motion } from 'framer-motion'
 import { Typography } from '@/components/ui/typography'
 
-export function KardexHeader() {
+interface KardexHeaderProps {
+	title: string
+	subtitle: string
+}
+
+export function KardexHeader({ title, subtitle }: KardexHeaderProps) {
 	return (
 		<motion.section
 			initial={{ opacity: 0, y: -12, filter: 'blur(0px)' }}
@@ -13,10 +18,10 @@ export function KardexHeader() {
 			<div className='flex flex-col gap-2'>
 				<div className='flex items-baseline gap-4'>
 					<Typography variant='h3' className='font-bold'>
-						Kardex
+						{title}
 					</Typography>
 				</div>
-				<Typography variant='span'>Visualiza los movimientos de inventario de tus productos.</Typography>
+				<Typography variant='span'>{subtitle}</Typography>
 			</div>
 		</motion.section>
 	)

@@ -6,7 +6,7 @@ export const KARDEX_ENDPOINTS_CONFIG: ApiConfig = {
 	baseEndpoint: `/${ENDPOINT_API.KARDEX}`,
 	endpoints: {
 		list: { path: '', method: 'GET' },
-        getById: { path: '/:id', method: 'GET', params: ['id'] },
 		lasted: { path: '/lasted', method: 'GET' },
+		getById: { path: '/:id', method: 'GET', params: ['id'] },
 	},
 }

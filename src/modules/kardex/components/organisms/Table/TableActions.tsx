@@ -1,25 +1,24 @@
 'use client'
 
+import { useCallback } from 'react'
 import { Icons } from '@/components/icons'
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { useRouter } from 'next/navigation'
 import { I_Kardex } from '@/modules/kardex/types/kardex'
+import { ROUTE_PATH } from '@/common/constants/routes-const'
 import { ActionButton } from '@/components/layout/atoms/ActionButton'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
-interface Props {
-	kardexData: I_Kardex
-	onViewDetails: (kardexData: I_Kardex) => void
+interface TableActionsProps {
+	recordData: I_Kardex
 }
 
-export const TableActions = ({ kardexData, onViewDetails }: Props) => {
-	const handleReportsClick = (e: React.MouseEvent) => {
-		e.stopPropagation()
-		// Lógica para reportes
-	}
+export const TableActions = ({ recordData }: TableActionsProps) => {
+	const router = useRouter()
+
+	// ✅ Memoizar las funciones para evitar re-renders innecesarios
+	const handleViewDetails = useCallback(() => {
+		router.push(`${ROUTE_PATH.ADMIN.KARDEX}/${recordData.product.id}`)
+	}, [router, recordData.product.id])
 
 	return (
 		<DropdownMenu>
@@ -34,17 +33,14 @@ export const TableActions = ({ kardexData, onViewDetails }: Props) => {
 			</DropdownMenuTrigger>
 
 			<DropdownMenuContent align='end' className='border-border/50 rounded-2xl border'>
-				<DropdownMenuItem
-					onClick={() => onViewDetails(kardexData)}
-					className='flex cursor-pointer items-center gap-2 rounded-xl'>
+				<DropdownMenuItem onClick={handleViewDetails} className='flex cursor-pointer items-center gap-2 rounded-xl'>
+					<Icons.download />
+					<span>Reporte</span>
+				</DropdownMenuItem>
+
+				<DropdownMenuItem onClick={handleViewDetails} className='flex cursor-pointer items-center gap-2 rounded-xl'>
 					<Icons.eye />
 					<span>Detalles</span>
-				</DropdownMenuItem>
-				<DropdownMenuItem
-					onClick={handleReportsClick}
-					className='flex cursor-pointer items-center gap-2 rounded-xl'>
-					<Icons.report />
-					<span>Reportes</span>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

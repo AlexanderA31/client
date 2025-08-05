@@ -8,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 interface ActionButtonProps {
 	icon?: React.ReactNode
 	text?: string | React.ReactNode
-	onClick?: (e: React.MouseEvent) => void
+	onClick?: () => void
 	tooltip?: string
 	variant?: 'secondary' | 'destructive' | 'ghost' | 'link' | 'outline' | 'default'
 	size?: 'default' | 'icon' | 'lg' | 'sm' | 'xs' | 'pos'
@@ -55,7 +55,7 @@ export const ActionButton = ({
 			e.preventDefault()
 			return
 		}
-		onClick?.(e)
+		onClick?.()
 	}
 
 	const button = (

@@ -1,16 +1,16 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { I_Kardex } from '@/modules/kardex/types/kardex'
+import { I_Template } from '@/modules/template/types/template'
 import { Table as ReactTable, flexRender } from '@tanstack/react-table'
 import { animations } from '@/modules/kardex/components/atoms/animations'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
-interface Props {
-	table: ReactTable<I_Kardex>
+interface TableViewProps {
+	table: ReactTable<I_Template>
 }
 
-export const TableView = ({ table }: Props) => (
+export const TableView = ({ table }: TableViewProps) => (
 	<div className='space-y-4'>
 		<motion.div initial='hidden' animate='visible' variants={animations.container}>
 			<Table>
@@ -39,7 +39,7 @@ export const TableView = ({ table }: Props) => (
 								layout='position'
 								className='group'>
 								{row.getVisibleCells().map(cell => (
-									<TableCell key={cell.id} className='px-4 py-2'>
+									<TableCell key={cell.id} className='text-primary p-2'>
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</TableCell>
 								))}

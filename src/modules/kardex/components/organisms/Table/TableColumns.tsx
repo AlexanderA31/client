@@ -1,96 +1,285 @@
 'use client'
 
+import { Icons } from '@/components/icons'
 import { ColumnDef } from '@tanstack/react-table'
-import { Badge } from '@/components/layout/atoms/Badge'
 import { I_Kardex } from '@/modules/kardex/types/kardex'
-import { translateMovementType } from '@/modules/kardex/utils/movement-type-translator'
-import { TableActions } from '@/modules/kardex/components/organisms/Table/TableActions'
 import { formatPrice } from '@/common/utils/formatPrice-util'
-import { useUser } from '@/common/hooks/useUser'
-import { I_User } from '@/modules/user/types/user'
+import { ActionButton } from '@/components/layout/atoms/ActionButton'
+import { MovementTypeBadge } from '@/modules/kardex/components/atoms/StatusBadge'
+import { TableActions } from '@/modules/kardex/components/organisms/Table/TableActions'
 import { TableInfoDate } from '@/modules/kardex/components/organisms/Table/TableInfoDate'
 
-interface TableColumnsProps {
-	onViewDetails: (kardexData: I_Kardex) => void
-}
-
-const UserNameCell = ({ userId }: { userId: string }) => {
-    const { users, loading } = useUser()
-    if (loading) return 'Cargando...'
-    const user = users?.data.items.find((user: I_User) => user.id === userId)
-    return user ? user.name : 'Desconocido'
-}
-
-export const createTableColumns = ({ onViewDetails }: TableColumnsProps): ColumnDef<I_Kardex>[] => [
+export const tableColumns = (): ColumnDef<I_Kardex>[] => [
 	{
 		accessorKey: 'product.code',
-		header: 'Cód. Producto',
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Cód. Producto
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => (
+			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
+				{row.original.product.code}
+			</div>
+		),
 	},
 	{
 		accessorKey: 'movementType',
-		header: 'Tipo Movimiento',
-		cell: ({ row }) => (
-			<Badge
-				variant={
-					row.original.movementType.includes('in') || row.original.movementType.includes('purchase')
-						? 'success'
-						: row.original.movementType.includes('out') || row.original.movementType.includes('sale')
-						? 'destructive'
-						: 'warning'
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Tipo movimiento
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
 				}
-				text={translateMovementType(row.original.movementType)}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
 			/>
+		),
+		cell: ({ row }) => (
+			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
+				<MovementTypeBadge movementType={row.original.movementType} />
+			</div>
 		),
 	},
 	{
 		accessorKey: 'quantity',
-		header: 'Cantidad',
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Cnt.
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => (
+			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
+				{row.original.quantity || '0'}
+			</div>
+		),
 	},
 	{
 		accessorKey: 'unitCost',
-		header: 'Costo Unit.',
-        cell: ({ row }) => formatPrice(row.original.unitCost)
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Costo unt.
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => (
+			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
+				${formatPrice(row.original.unitCost)} USD
+			</div>
+		),
 	},
-    {
-        accessorKey: 'subtotal',
-        header: 'Subtotal',
-        cell: ({ row }) => formatPrice(row.original.subtotal)
-    },
-    {
-        accessorKey: 'taxRate',
-        header: 'Tasa Imp.',
-        cell: ({ row }) => `${row.original.taxRate}%`
-    },
-    {
-        accessorKey: 'taxAmount',
-        header: 'Monto Imp.',
-        cell: ({ row }) => formatPrice(row.original.taxAmount)
-    },
-    {
-        accessorKey: 'total',
-        header: 'Total',
-        cell: ({ row }) => formatPrice(row.original.total)
-    },
-    {
-        accessorKey: 'stockAfter',
-        header: 'Stock Actual',
-    },
+	{
+		accessorKey: 'subtotal',
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Subtotal
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => (
+			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
+				${formatPrice(row.original.subtotal)}
+			</div>
+		),
+	},
+	{
+		accessorKey: 'taxRate',
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Tasa Imp.
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => (
+			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
+				{row.original.taxRate}%
+			</div>
+		),
+	},
+	{
+		accessorKey: 'taxAmount',
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Monto Imp.
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => (
+			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
+				${formatPrice(row.original.taxAmount)} USD
+			</div>
+		),
+	},
+	{
+		accessorKey: 'total',
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Total
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => (
+			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
+				${formatPrice(row.original.total)} USD
+			</div>
+		),
+	},
+	{
+		accessorKey: 'stockAfter',
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Stock
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => (
+			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
+				{row.original.stockAfter}
+			</div>
+		),
+	},
 	{
 		accessorKey: 'user.id',
-		header: 'Responsable',
-        cell: ({ row }) => <UserNameCell userId={row.original.user.id} />
+		header: ({ column }) => (
+			<ActionButton
+				variant='link'
+				size='xs'
+				className='p-0'
+				text={
+					<div className='text-muted-foreground hover:text-primary/95 flex items-center'>
+						Reponsable
+						{column.getIsSorted() === 'asc' ? (
+							<Icons.sortAscendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : column.getIsSorted() === 'desc' ? (
+							<Icons.sortDescendingLetters className='ml-1 h-4 w-4 transition-all duration-500' />
+						) : null}
+					</div>
+				}
+				onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+			/>
+		),
+		cell: ({ row }) => (
+			<div className='line-clamp-2 w-auto max-w-fit overflow-hidden text-ellipsis whitespace-normal'>
+				{row.original.user.firstName} {row.original.user.lastName}
+			</div>
+		),
 	},
 	{
-		accessorKey: 'createdAt',
+		accessorKey: 'date',
 		header: 'Información',
-		cell: ({ row }) => <TableInfoDate kardexData={row.original} />,
-		
+		cell: ({ row }) => <TableInfoDate recordData={row.original} />,
 	},
 	{
 		id: 'actions',
 		cell: ({ row }) => (
 			<div className='flex justify-end'>
-				<TableActions kardexData={row.original} onViewDetails={onViewDetails} />
+				<TableActions recordData={row.original} />
 			</div>
 		),
 	},
