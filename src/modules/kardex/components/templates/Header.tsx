@@ -34,23 +34,25 @@ export function KardexHeader({ title, subtitle, product }: KardexHeaderProps) {
 						onClick={() => router.back()}
 					/>
 				)}
-				{product && (
-					<ImageControl
-						recordData={product}
-						imageHeight={40}
-						imageWidth={40}
-						showDetails={true}
-						enableHover={true}
-						enableClick={true}
-					/>
-				)}
-				<div className='flex flex-col gap-2'>
-					<div className='flex items-baseline gap-4'>
-						<Typography variant='h3' className='font-bold'>
-							{title}
-						</Typography>
+				<div className='flex-1'>
+					<div className='flex items-center gap-4'>
+						{product && (
+							<ImageControl
+								recordData={product}
+								imageHeight={80}
+								imageWidth={80}
+								enableHover={false}
+								enableClick={false}
+								quality={10}
+							/>
+						)}
+						<div className='flex-1'>
+							<div className='mb-2 line-clamp-1 break-words'>
+								<Typography variant='h3'>{title}</Typography>
+							</div>
+							<Typography variant='span'>{subtitle}</Typography>
+						</div>
 					</div>
-					<Typography variant='span'>{subtitle}</Typography>
 				</div>
 			</div>
 		</motion.section>
