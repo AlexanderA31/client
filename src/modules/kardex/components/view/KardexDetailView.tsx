@@ -6,6 +6,7 @@ import { SpinnerLoader } from '@/components/layout/SpinnerLoader'
 import { Typography } from '@/components/ui/typography'
 import { FatalErrorState } from '@/components/layout/organims/ErrorStateCard'
 import { NotFoundState } from '@/components/layout/organims/NotFoundState'
+import { EmptyState } from '@/components/layout/organims/EmptyState'
 import { formatDate } from '@/common/utils/dateFormater-util'
 import { TableKardex } from '../organisms/Table/TableKardex'
 import { KardexHeader } from '../templates/Header'
@@ -60,14 +61,6 @@ export function KardexDetailView({ id }: Props) {
 
 	const { isRefreshing, handleRefresh } = useGenericRefresh(refetchRecords)
 
-	if (movementsLoading) {
-		return (
-			<div className='flex h-screen flex-1 flex-col items-center justify-center'>
-				<SpinnerLoader text='Cargando... Por favor espera' />
-			</div>
-		)
-	}
-
 	if (movementsError) {
 		return (
 			<div className='flex flex-1 flex-col items-center justify-center space-y-6'>
@@ -77,6 +70,13 @@ export function KardexDetailView({ id }: Props) {
 	}
 
 	if (!movementsKardex?.data?.items || movementsKardex?.data?.items.length === 0) {
+		if (searchTerm) {
+			return (
+				<div className='flex h-screen flex-1 flex-col items-center justify-center'>
+					<EmptyState />
+				</div>
+			)
+		}
 		return (
 			<div className='flex h-screen flex-1 flex-col items-center justify-center'>
 				<NotFoundState />
