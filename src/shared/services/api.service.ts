@@ -54,6 +54,8 @@ export class ApiService {
 		}
 
 		const config = { params: queryParams }
+		console.log('Request URL:', url)
+		console.log('Request config:', config)
 
 		// Elegimos método dinámicamente: get/delete sin body, resto incluyen body
 		const method = endpoint.method.toLowerCase() as 'get' | 'post' | 'put' | 'patch' | 'delete'
