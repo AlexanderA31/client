@@ -40,8 +40,8 @@ export interface I_User extends I_BaseUser {
 
 /** DTO para crear un nuevo usuario */
 export interface I_CreateUser extends I_BaseUser {
-	roleId?: number
-	statusId?: number
+	role?: { id: string }
+	status?: { id: string }
 }
 
 /** DTO para actualizar un usuario existente */
