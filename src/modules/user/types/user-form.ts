@@ -6,8 +6,8 @@ const BaseUserSchema = z.object({
 	lastName: z.string().nonempty('Campo requerido').min(2, 'Mínimo 2 caracteres').max(255, 'Máximo 255 caracteres'),
 	email: z.string().nonempty('Campo requerido').email('Email inválido'),
 	photo: z.string().optional(),
-	roleId: z.string().uuid('Selecciona un rol válido'),
-	statusId: z.string().uuid('Selecciona un estado válido'),
+	roleId: z.string().nonempty('Selecciona un rol válido'),
+	statusId: z.string().nonempty('Selecciona un estado válido'),
 })
 
 export const createUserSchema = (isEditing: boolean) => {
