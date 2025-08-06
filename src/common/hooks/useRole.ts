@@ -1,26 +1,16 @@
-import { useGenericApi } from '@/common/hooks/useGenericApi'
-import { ROLE_ENDPOINTS_CONFIG } from '@/common/configs/api/role-endpoints.config'
-import { I_PaginatedResponse } from '@/common/types/api'
-
-export interface I_Role {
-    id: string;
-    name: string;
-}
+import { roles } from '@/common/constants/data/roles-data'
+import { I_Role } from '@/common/types/roles'
 
 export const useRole = () => {
-	const api = useGenericApi<I_PaginatedResponse<I_Role>, never, never>(ROLE_ENDPOINTS_CONFIG)
-
-	const {
-		data: recordsData,
-		isLoading: loading,
-		error,
-		refetch: refetchRecords,
-	} = api.buildQuery()
-
+	const refetchRecords = () => {
+		console.log('Refetching records...')
+	}
 	return {
-		recordsData,
-		loading,
-		error: error?.message,
+		recordsData: roles,
+		loading: false,
+		error: null,
 		refetchRecords,
 	}
 }
+
+export type { I_Role }

@@ -1,26 +1,16 @@
-import { useGenericApi } from '@/common/hooks/useGenericApi'
-import { STATUS_ENDPOINTS_CONFIG } from '@/common/configs/api/status-endpoints.config'
-import { I_PaginatedResponse } from '@/common/types/api'
-
-export interface I_Status {
-    id: string;
-    name: string;
-}
+import { statuses } from '@/common/constants/data/statuses-data'
+import { I_Status } from '@/common/types/status'
 
 export const useStatus = () => {
-	const api = useGenericApi<I_PaginatedResponse<I_Status>, never, never>(STATUS_ENDPOINTS_CONFIG)
-
-	const {
-		data: recordsData,
-		isLoading: loading,
-		error,
-		refetch: refetchRecords,
-	} = api.buildQuery()
-
+	const refetchRecords = () => {
+		console.log('Refetching records...')
+	}
 	return {
-		recordsData,
-		loading,
-		error: error?.message,
+		recordsData: statuses,
+		loading: false,
+		error: null,
 		refetchRecords,
 	}
 }
+
+export type { I_Status }
