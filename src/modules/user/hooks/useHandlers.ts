@@ -14,7 +14,7 @@ export function useHandlers({ modalState, createRecord, updateRecord, hardDelete
 	const handleFormSubmit = useCallback(
 		async (data: UserFormData) => {
 			try {
-				const recordData = {
+				const recordData: I_CreateUser = {
 					...data,
 					roleId: parseInt(data.roleId, 10),
 					statusId: parseInt(data.statusId, 10),
