@@ -5,11 +5,11 @@ export const statuses = {
 		items: [
 			{
 				id: '1',
-				name: 'Active',
+				name: 'active',
 			},
 			{
 				id: '2',
-				name: 'Inactive',
+				name: 'inactive',
 			},
 		] as I_Status[],
 		meta: {
