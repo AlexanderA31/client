@@ -16,8 +16,8 @@ export function useHandlers({ modalState, createRecord, updateRecord, hardDelete
 			try {
 				const recordData: I_CreateUser = {
 					...data,
-					roleId: parseInt(data.roleId, 10),
-					status: { id: data.statusId },
+					role: { id: parseInt(data.roleId, 10) },
+					status: { id: parseInt(data.statusId, 10) },
 					photo: data.photo ? { id: data.photo } : null,
 				}
 
