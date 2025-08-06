@@ -42,6 +42,7 @@ export interface I_User extends I_BaseUser {
 export interface I_CreateUser extends I_BaseUser {
 	role?: { id: number }
 	status?: { id: number }
+	photo?: { id: string } | string
 }
 
 /** DTO para actualizar un usuario existente */
