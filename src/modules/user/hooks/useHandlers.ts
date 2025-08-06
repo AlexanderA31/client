@@ -20,7 +20,6 @@ export function useHandlers({ modalState, createRecord, updateRecord, hardDelete
 					status: { id: parseInt(data.statusId, 10) },
 					photo: data.photo ? { id: data.photo } : null,
 				}
-				console.log('recordData', recordData)
 				if (modalState.currentRecord?.id) {
 					await updateRecord(modalState.currentRecord.id, recordData)
 				} else {
