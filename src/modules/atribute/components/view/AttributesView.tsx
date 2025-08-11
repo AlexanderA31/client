@@ -59,16 +59,18 @@ export function AttributesView() {
 		handleResetAll()
 	}, [handleResetAll])
 
-	const paginationParams = useMemo(
-		() => ({
+	const paginationParams = useMemo(() => {
+		const params: any = {
 			search: debouncedSearchTerm,
 			page: pagination.page,
 			limit: pagination.limit,
 			sort: currentSort ? [currentSort] : undefined,
-			filters: currentStatus ? { required: currentStatus } : undefined,
-		}),
-		[pagination.page, pagination.limit, debouncedSearchTerm, currentStatus, currentSort]
-	)
+		}
+		if (currentStatus === 'true' || currentStatus === 'false') {
+			params.filters = { required: currentStatus === 'true' }
+		}
+		return params
+	}, [pagination.page, pagination.limit, debouncedSearchTerm, currentStatus, currentSort])
 
 	const {
 		attributes,
