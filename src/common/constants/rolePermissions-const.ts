@@ -1,0 +1,62 @@
+import { UserRole } from '@/common/types/roles'
+import { ALLOW_ROLES } from '@/common/constants/roles-const'
+
+export const GROUP_PERMISSIONS = {
+	MAIN: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+	INVENTORY: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+	ECONOMIC: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+	CONFIGURATION: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+	STRUCTURE: [ALLOW_ROLES.ADMIN],
+} as const
+
+export const PERMISSIONS = {
+	// Permisos principales
+	DASHBOARD: 'dashboard',
+
+	// Permisos de inventario
+	CATEGORIES: 'categories',
+	PRODUCTS: 'products',
+	SUPPLIERS: 'suppliers',
+	BRANDS: 'brands',
+	KARDEX: 'kardex',
+
+	// Permisos de estructura
+	ATTRIBUTES: 'attributes',
+	TEMPLATES: 'templates',
+
+	// Permisos económicos
+	SALES: 'sales',
+	REPORTS: 'reports',
+
+	// Permisos de configuración
+	USERS: 'users',
+	CUSTOMERS: 'customers',
+	ADMINISTRATION: 'administration',
+} as const
+
+export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS]
+
+export const ROLE_PERMISSIONS: Record<Permission, UserRole[]> = {
+	// Principal
+	[PERMISSIONS.DASHBOARD]: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+
+	// Inventario - permisos granulares
+	[PERMISSIONS.CATEGORIES]: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+	[PERMISSIONS.PRODUCTS]: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+	[PERMISSIONS.SUPPLIERS]: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+	[PERMISSIONS.BRANDS]: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+	[PERMISSIONS.KARDEX]: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+
+	// Estructura - solo admin
+	[PERMISSIONS.ATTRIBUTES]: [ALLOW_ROLES.ADMIN],
+	[PERMISSIONS.TEMPLATES]: [ALLOW_ROLES.ADMIN],
+
+	// Económico
+	[PERMISSIONS.SALES]: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+	[PERMISSIONS.REPORTS]: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+
+	// Configuración
+	[PERMISSIONS.USERS]: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+	[PERMISSIONS.CUSTOMERS]: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+	[PERMISSIONS.ADMINISTRATION]: [ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER],
+}
