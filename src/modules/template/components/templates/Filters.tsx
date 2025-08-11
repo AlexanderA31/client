@@ -98,7 +98,7 @@ export function TemplateFilters({
 									</div>
 								</motion.button>
 							)}
-						</AnPresence>
+						</AnimatePresence>
 					</div>
 
 					<ViewSelector currentView={viewType} onViewChange={onViewChange} />
