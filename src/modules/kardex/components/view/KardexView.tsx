@@ -153,7 +153,6 @@ export function KardexView() {
 						onNextPage={handleNext}
 						onLimitChange={handleLimitChange}
 						metaDataPagination={records?.data?.pagination}
-.
 					/>
 				</>
 			)}
