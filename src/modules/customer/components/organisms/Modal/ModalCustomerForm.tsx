@@ -52,24 +52,12 @@ export function CustomerFormModal({ isOpen, currentCustomer, onClose, onSubmit }
 		if (isOpen && currentCustomer) {
 			reset({
 				firstName: currentCustomer.firstName || '',
-				lastName: currentCustomer.lastName || '',
-				email: currentCustomer.email || '',
-				phone: currentCustomer.phone || '',
-				address: currentCustomer.address || '',
-                identificationType: currentCustomer.identificationType,
-                identificationNumber: currentCustomer.identificationNumber,
-                customerType: currentCustomer.customerType,
+				// ... other fields
 			})
 		} else if (isOpen && !currentCustomer) {
 			reset({
                 firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                address: '',
-                identificationType: '05', // Default to Cédula
-                identificationNumber: '',
-                customerType: 'regular',
+                // ... other fields
             })
 		}
 	}, [isOpen, currentCustomer, reset])
@@ -106,7 +94,7 @@ export function CustomerFormModal({ isOpen, currentCustomer, onClose, onSubmit }
 					<SheetDescription>
 						{currentCustomer
 							? 'Modifica los detalles del cliente existente'
-							: 'Completa los campos para crear un nuevo cliente'}
+							: 'Completa los campos para crear una nueva cliente'}
 					</SheetDescription>
 				</SheetHeader>
 
@@ -121,49 +109,7 @@ export function CustomerFormModal({ isOpen, currentCustomer, onClose, onSubmit }
 							</CardHeader>
 
 							<UniversalFormField control={control} name='firstName' label='Nombres' placeholder='Ingresa los nombres' type='text' required />
-							<UniversalFormField control={control} name='lastName' label='Apellidos' placeholder='Ingresa los apellidos' type='text' required />
-                            <UniversalFormField control={control} name='email' label='Email' placeholder='correo@ejemplo.com' type='email' />
-                            <UniversalFormField control={control} name='phone' label='Teléfono' placeholder='0991234567' type='text' />
-                            <UniversalFormField control={control} name='address' label='Dirección' placeholder='Dirección de domicilio' type='textarea' />
-
-                            <CardHeader className='p-0 mt-4'>
-								<CardTitle className='flex items-center gap-2 text-lg'>
-									<Icons.user className='h-4 w-4' />
-									Identificación
-								</CardTitle>
-							</CardHeader>
-                            <UniversalFormField
-                                control={control}
-                                name='identificationType'
-                                label='Tipo de Identificación'
-                                type='select'
-                                required
-                                options={[
-                                    { value: '04', label: 'RUC' },
-                                    { value: '05', label: 'Cédula' },
-                                    { value: '06', label: 'Pasaporte' },
-                                    { value: '07', label: 'Consumidor Final' },
-                                ]}
-                            />
-                            <UniversalFormField control={control} name='identificationNumber' label='Número de Identificación' placeholder='1234567890' type='text' required />
-
-                            <CardHeader className='p-0 mt-4'>
-								<CardTitle className='flex items-center gap-2 text-lg'>
-									<Icons.fileText className='h-4 w-4' />
-									Tipo de Cliente
-								</CardTitle>
-							</CardHeader>
-                            <UniversalFormField
-                                control={control}
-                                name='customerType'
-                                label='Tipo de Cliente'
-                                type='select'
-                                required
-                                options={[
-                                    { value: 'regular', label: 'Regular' },
-                                    { value: 'final_consumer', label: 'Consumidor Final' },
-                                ]}
-                            />
+							
 						</Card>
 					</form>
 				</FormProvider>
