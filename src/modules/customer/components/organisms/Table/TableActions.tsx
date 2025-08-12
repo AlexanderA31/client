@@ -33,13 +33,6 @@ export const TableActions = ({ recordData, onEdit, onHardDelete, onViewDetails }
 			</DropdownMenuItem>
 
 			<DropdownMenuItem
-				onClick={onViewDetails}
-				className='text-muted-foreground flex cursor-pointer items-center gap-2 rounded-xl'>
-				<Icons.eye />
-				<span>Detalles</span>
-			</DropdownMenuItem>
-
-			<DropdownMenuItem
 				variant='destructive'
 				onClick={() => onHardDelete(recordData)}
 				className='flex cursor-pointer items-center rounded-xl'>
