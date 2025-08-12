@@ -25,12 +25,21 @@ interface TableCustomerProps {
 	loading: boolean
 	customerData: I_Customer[]
 	viewType: ViewType
+	sorting: SortingState
 	onEdit: (customerData: I_Customer) => void
 	onHardDelete: (customerData: I_Customer) => void
+	onSortingChange: (sorting: SortingState) => void
 }
 
-export function TableCustomer({ customerData, loading, viewType, onEdit, onHardDelete }: TableCustomerProps) {
-	const [sorting, setSorting] = useState<SortingState>([])
+export function TableCustomer({
+	customerData,
+	loading,
+	viewType,
+	sorting,
+	onEdit,
+	onHardDelete,
+	onSortingChange,
+}: TableCustomerProps) {
 	const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 	const [globalFilter, setGlobalFilter] = useState('')
 
@@ -45,11 +54,12 @@ export function TableCustomer({ customerData, loading, viewType, onEdit, onHardD
 			globalFilter,
 		},
 		getRowId: row => row.id,
-		onSortingChange: setSorting,
+		onSortingChange: onSortingChange,
 		onRowSelectionChange: setRowSelection,
 		onGlobalFilterChange: setGlobalFilter,
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
+		manualSorting: true,
 	})
 
 	if (loading) return <LoadingStates viewType={viewType} />
