@@ -56,7 +56,7 @@ export const CardView = ({ table, onEdit, onHardDelete }: CardViewProps) => {
                                                 </div>
                                             </div>
                                             <div className='bg-card/50 shadow- absolute top-2 right-2 z-10 rounded-full backdrop-blur-sm'>
-										        <TableActions customerData={customerData} onEdit={onEdit} onHardDelete={onHardDelete} />
+										        <TableActions recordData={customerData} onEdit={onEdit} onHardDelete={onHardDelete} />
 									        </div>
                                         </div>
 									</CardHeader>
@@ -69,7 +69,7 @@ export const CardView = ({ table, onEdit, onHardDelete }: CardViewProps) => {
                                             </Typography>
                                         </div>
                                         <div className='flex items-center gap-2'>
-                                            <Icons.phone className='h-4 w-4 text-muted-foreground' />
+                                            <Icons.infoCircle className='h-4 w-4 text-muted-foreground' />
                                             <Typography variant='span' className='text-muted-foreground text-sm'>
                                                 {customerData.phone || 'No registrado'}
                                             </Typography>
