@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useMemo, useState, useEffect } from 'react'
-import { SortingState } from '@tanstack/react-table'
 
 import { useCustomer } from '@/common/hooks/useCustomer'
 import { useModalState } from '@/modules/customer/hooks/useModalState'
@@ -39,32 +38,7 @@ export function CustomerView() {
 		handleResetAll,
 		handlePageChange,
 		setPagination,
-		getCurrentSortInfo,
 	} = usePagination()
-
-	const [sorting, setSorting] = useState<SortingState>([])
-
-	useEffect(() => {
-		const sortInfo = getCurrentSortInfo()
-		if (sortInfo) {
-			setSorting([{ id: sortInfo.field, desc: sortInfo.order === 'desc' }])
-		} else {
-			setSorting([])
-		}
-	}, [currentSort, getCurrentSortInfo])
-
-	const handleSortingChange = (updater: any) => {
-		const newSortingState = typeof updater === 'function' ? updater(sorting) : updater
-		setSorting(newSortingState)
-
-		if (newSortingState.length === 0) {
-			handleSort('')
-			return
-		}
-
-		const sortKey = `${newSortingState[0].id}:${newSortingState[0].desc ? 'desc' : 'asc'}`
-		handleSort(sortKey)
-	}
 
 	useEffect(() => {
 		setPagination(prev => ({
@@ -189,11 +163,9 @@ export function CustomerView() {
 					<TableCustomer
 						customerData={customerData.items}
 						loading={loading}
-						sorting={sorting}
 						onEdit={customerHandlers.handleEdit}
 						onHardDelete={modalState.openHardDeleteModal}
 						viewType={viewType}
-						onSortingChange={handleSortingChange}
 					/>
 
 					{/* Controles de paginación */}

@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ActionButton } from '@/components/layout/atoms/ActionButton'
-import { SORT_OPTIONS } from '@/modules/atribute/constants/filters.constants'
+import { SORT_OPTIONS } from '@/modules/customer/constants/category.constants'
 import { ViewSelector, ViewType } from '@/components/layout/organims/ViewSelector'
 
 interface CustomerFiltersProps {
