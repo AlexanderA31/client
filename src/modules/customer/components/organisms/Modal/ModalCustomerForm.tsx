@@ -34,6 +34,19 @@ interface Props {
 	onSubmit: (data: CustomerFormData) => Promise<void>
 }
 
+const identificationTypeOptions = [
+    { value: '04', label: 'RUC' },
+    { value: '05', label: 'Cédula' },
+    { value: '06', label: 'Pasaporte' },
+    { value: '07', label: 'Consumidor Final' },
+]
+
+const customerTypeOptions = [
+    { value: 'regular', label: 'Persona natural' },
+    { value: 'final_consumer', label: 'Consumidor final' },
+]
+
+
 export function CustomerFormModal({ isOpen, currentCustomer, onClose, onSubmit }: Props) {
 	const methods = useForm<CustomerFormData>({
 		resolver: zodResolver(customerSchema),
@@ -49,16 +62,30 @@ export function CustomerFormModal({ isOpen, currentCustomer, onClose, onSubmit }
 	} = methods
 
 	React.useEffect(() => {
-		if (isOpen && currentCustomer) {
-			reset({
-				firstName: currentCustomer.firstName || '',
-				// ... other fields
-			})
-		} else if (isOpen && !currentCustomer) {
-			reset({
-                firstName: '',
-                // ... other fields
-            })
+		if (isOpen) {
+			if (currentCustomer) {
+				reset({
+					firstName: currentCustomer.firstName || '',
+					lastName: currentCustomer.lastName || '',
+					email: currentCustomer.email || '',
+					phone: currentCustomer.phone || '',
+					address: currentCustomer.address || '',
+					identificationType: currentCustomer.identificationType,
+					identificationNumber: currentCustomer.identificationNumber,
+					customerType: currentCustomer.customerType,
+				})
+			} else {
+				reset({
+					firstName: '',
+					lastName: '',
+					email: '',
+					phone: '',
+					address: '',
+					identificationType: '05', // Default to Cédula
+					identificationNumber: '',
+					customerType: 'regular', // Default to regular
+				})
+			}
 		}
 	}, [isOpen, currentCustomer, reset])
 
@@ -107,10 +134,29 @@ export function CustomerFormModal({ isOpen, currentCustomer, onClose, onSubmit }
 									Información Personal
 								</CardTitle>
 							</CardHeader>
-
-							<UniversalFormField control={control} name='firstName' label='Nombres' placeholder='Ingresa los nombres' type='text' required />
-							
+							<div className='grid grid-cols-2 gap-4'>
+								<UniversalFormField control={control} name='firstName' label='Nombres' placeholder='Ingresa los nombres' type='text' required />
+								<UniversalFormField control={control} name='lastName' label='Apellidos' placeholder='Ingresa los apellidos' type='text' required />
+							</div>
+							<UniversalFormField control={control} name='email' label='Correo Electrónico' placeholder='ejemplo@correo.com' type='email' />
+							<UniversalFormField control={control} name='phone' label='Teléfono' placeholder='+593987654321' type='text' />
+							<UniversalFormField control={control} name='address' label='Dirección' placeholder='Av. Principal 123' type='textarea' />
 						</Card>
+
+						<Card className='border-none bg-transparent p-0 shadow-none'>
+							<CardHeader className='p-0'>
+								<CardTitle className='flex items-center gap-2 text-lg'>
+									<Icons.clipboardData className='h-4 w-4' />
+									Información de Identificación
+								</CardTitle>
+							</CardHeader>
+							<div className='grid grid-cols-2 gap-4'>
+								<UniversalFormField control={control} name='customerType' label='Tipo de Cliente' type='select' options={customerTypeOptions} required />
+								<UniversalFormField control={control} name='identificationType' label='Tipo de Identificación' type='select' options={identificationTypeOptions} required />
+							</div>
+							<UniversalFormField control={control} name='identificationNumber' label='Número de Identificación' placeholder='1234567890' type='text' required />
+						</Card>
+
 					</form>
 				</FormProvider>
 
