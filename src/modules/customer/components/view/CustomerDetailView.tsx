@@ -9,7 +9,7 @@ interface Props {
 }
 
 export function CustomerDetailView({ customerId }: Props) {
-	const { customer, purchases, sales, quotes, proformas, isLoading } = useCustomerDetail(customerId)
+	const { customer, purchases, sales, isLoading } = useCustomerDetail(customerId)
 
 	if (isLoading) {
 		return <div>Loading...</div>
@@ -34,23 +34,11 @@ export function CustomerDetailView({ customerId }: Props) {
 				</CardContent>
 			</Card>
 
-			<Tabs defaultValue='purchases'>
+			<Tabs defaultValue='sales'>
 				<TabsList>
-					<TabsTrigger value='purchases'>Purchases</TabsTrigger>
 					<TabsTrigger value='sales'>Sales</TabsTrigger>
-					<TabsTrigger value='quotes'>Quotes</TabsTrigger>
-					<TabsTrigger value='proformas'>Proformas</TabsTrigger>
+					<TabsTrigger value='purchases'>Purchases</TabsTrigger>
 				</TabsList>
-				<TabsContent value='purchases'>
-					<Card>
-						<CardHeader>
-							<CardTitle>Purchases</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<pre>{JSON.stringify(purchases, null, 2)}</pre>
-						</CardContent>
-					</Card>
-				</TabsContent>
 				<TabsContent value='sales'>
 					<Card>
 						<CardHeader>
@@ -61,23 +49,13 @@ export function CustomerDetailView({ customerId }: Props) {
 						</CardContent>
 					</Card>
 				</TabsContent>
-				<TabsContent value='quotes'>
+				<TabsContent value='purchases'>
 					<Card>
 						<CardHeader>
-							<CardTitle>Quotes</CardTitle>
+							<CardTitle>Purchases</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<pre>{JSON.stringify(quotes, null, 2)}</pre>
-						</CardContent>
-					</Card>
-				</TabsContent>
-				<TabsContent value='proformas'>
-					<Card>
-						<CardHeader>
-							<CardTitle>Proformas</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<pre>{JSON.stringify(proformas, null, 2)}</pre>
+							<pre>{JSON.stringify(purchases, null, 2)}</pre>
 						</CardContent>
 					</Card>
 				</TabsContent>

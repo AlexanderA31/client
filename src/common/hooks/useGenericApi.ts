@@ -145,13 +145,19 @@ export const useGenericApi = <T, CreateT, UpdateT>(config: ApiConfig) => {
 
 	// ✅ Versión corregida de useCustomQueryEndpoint
 	const useCustomQueryEndpoint = useCallback(
-		(endpointKey: string, rawQueryParams: Record<string, any> = {}) => {
+		(
+			endpointKey: string,
+			options: {
+				urlParams?: Record<string, any>
+				queryParams?: Record<string, any>
+			} = {}
+		) => {
 			const endpoint = config.endpoints?.[endpointKey]
 			if (!endpoint || endpoint.method !== 'GET')
 				throw new Error(`Endpoint '${endpointKey}' no configurado o no es tipo GET`)
 
-			// Clonar y normalizar los parámetros
-			const queryParams = { ...rawQueryParams }
+			// Extraer y normalizar queryParams
+			const queryParams = { ...(options.queryParams || {}) }
 
 			// Serializar filters si existe y es un objeto
 			if (queryParams.filters && typeof queryParams.filters === 'object') {
@@ -171,14 +177,14 @@ export const useGenericApi = <T, CreateT, UpdateT>(config: ApiConfig) => {
 				)
 			}
 
-			const queryKey = buildQueryKey(queryParams, endpointKey)
+			const queryKey = buildQueryKey({ ...options.urlParams, ...queryParams }, endpointKey)
 
 			return useQuery({
 				queryKey,
 				queryFn: async () => {
 					return await apiService.executeRequest<T>(endpoint, {
-						// Pasar los parámetros ya serializados
-						queryParams,
+						urlParams: options.urlParams,
+						queryParams: queryParams,
 					})
 				},
 				retry: 2,

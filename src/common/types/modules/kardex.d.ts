@@ -6,6 +6,7 @@ import { MetaDataPagination, MetaResponse } from '@/common/types/pagination'
 interface I_BaseKardex {
 	product: I_Product
 	user: I_User
+	customerId?: string
 	movementType:
 		| 'purchase'
 		| 'return_in'
