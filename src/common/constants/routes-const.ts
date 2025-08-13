@@ -19,7 +19,7 @@ export const ROUTE_PATH = {
 		PRODUCT: '/dashboard/product',
 		SALES: '/dashboard/sales',
 		REPORTS: '/dashboard/reports',
-		CUSTOMER: '/dashboard/customers',
+		CUSTOMERS: '/dashboard/customers',
 		USER: '/dashboard/user',
 		BRANDS: '/dashboard/brand',
 		KARDEX: '/dashboard/kardex',

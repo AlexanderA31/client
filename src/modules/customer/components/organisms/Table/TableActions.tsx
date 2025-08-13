@@ -18,7 +18,7 @@ export const TableActions = ({ recordData, onEdit, onHardDelete }: Props) => {
 	const router = useRouter()
 
 	const handleViewDetails = useCallback(() => {
-		router.push(`${ROUTE_PATH.ADMIN.CUSTOMER}/${recordData.id}`)
+		router.push(`${ROUTE_PATH.ADMIN.CUSTOMERS}/${recordData.id}`)
 	}, [router, recordData.id])
 
 	const handleEdit = useCallback(() => {
