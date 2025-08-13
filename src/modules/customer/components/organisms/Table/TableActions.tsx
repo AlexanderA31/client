@@ -9,25 +9,25 @@ import { ROUTE_PATH } from '@/common/constants/routes-const'
 import { useCallback } from 'react'
 
 interface Props {
-	recordData: I_Customer
-	onEdit: (recordData: I_Customer) => void
-	onHardDelete: (recordData: I_Customer) => void
+	customerData: I_Customer
+	onEdit: (customerData: I_Customer) => void
+	onHardDelete: (customerData: I_Customer) => void
 }
 
-export const TableActions = ({ recordData, onEdit, onHardDelete }: Props) => {
+export const TableActions = ({ customerData, onEdit, onHardDelete }: Props) => {
 	const router = useRouter()
 
 	const handleViewDetails = useCallback(() => {
-		router.push(`${ROUTE_PATH.ADMIN.CUSTOMERS}/${recordData.id}`)
-	}, [router, recordData.id])
+		router.push(`${ROUTE_PATH.ADMIN.CUSTOMERS}/${customerData.id}`)
+	}, [router, customerData.id])
 
 	const handleEdit = useCallback(() => {
-		onEdit(recordData)
-	}, [onEdit, recordData])
+		onEdit(customerData)
+	}, [onEdit, customerData])
 
 	const handleDelete = useCallback(() => {
-		onHardDelete(recordData)
-	}, [onHardDelete, recordData])
+		onHardDelete(customerData)
+	}, [onHardDelete, customerData])
 
 	return (
 		<DropdownMenu>
