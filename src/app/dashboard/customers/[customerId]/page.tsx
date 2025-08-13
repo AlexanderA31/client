@@ -8,7 +8,7 @@ import { CustomerDetailView } from '@/modules/customer/components/view/CustomerD
 
 export default function CustomerDetailPage() {
 	const params = useParams()
-	const customerId = params.id as string
+	const customerId = params.customerId as string
 
 	return (
 		<RoleGuard requiredRole={[ALLOW_ROLES.ADMIN, ALLOW_ROLES.MANAGER]}>
